@@ -1,0 +1,19 @@
+author:
+  name: mugenmelon
+  email: mugenmelon@gmail.com
+
+theme: minima
+minima:
+  social_links:
+    - title: YouTube
+      icon: youtube
+      url: https://youtube.com/@mugenmelon
+    - title: Twitch
+      icon: twitch
+      url: https://twitch.tv/mugenmelon
+    - title: GitHub
+      icon: github
+      url: https://github.com/mugenmelon
+    - title: X
+      icon: x-twitter
+      url: https://x.com/mugenmelon
