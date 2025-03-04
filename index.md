@@ -1,5 +1,6 @@
-<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
+
+# About
 
 Software engineer developing an action RPG in his free time. Also makes tutorials & rants about programming or something.
 
