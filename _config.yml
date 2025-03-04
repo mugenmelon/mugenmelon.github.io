@@ -1,6 +1,7 @@
 theme: minima
+
 minima:
-  skin: auto
+  skin: dark
   social_links:
     - title: YouTube
       icon: youtube
