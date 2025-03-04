@@ -10,7 +10,6 @@ description: >-
 
 minima:
   skin: auto
-  show_excerpts: true
   social_links:
     - title: YouTube
       icon: youtube
