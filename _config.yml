@@ -1,10 +1,16 @@
-plugins:
-  - jekyll-remote-theme
-
 remote_theme: jekyll/minima
 
+title: mugenmelon
+author:
+  name: mugenmelon
+  email: mugenmelon@gmail.com
+description: >-
+  Homepage of mugenmelon, a software engineer developing an action RPG in Unreal Engine as a solo indie developer.
+  He also streams on Twitch, creates tutorials & videos on YouTube and provides hot takes about programming.
+
 minima:
-  skin: dark
+  skin: auto
+  show_excerpts: true
   social_links:
     - title: YouTube
       icon: youtube
