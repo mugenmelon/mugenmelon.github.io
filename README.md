@@ -1,11 +1,9 @@
 <link rel="stylesheet" href="/assets/style.css">
 
-# mugenmelon
 Software engineer developing an action RPG in his free time. Also makes tutorials & rants about programming or somethin'.
 
-| Platform | Link                                               |
-|----------|----------------------------------------------------|
-| YouTube  | [@mugenmelon](https://www.youtube.com/@mugenmelon) |
-| Twitch   | [mugenmelon](https://www.twitch.tv/mugenmelon)     |
-| GitHub   | [mugenmelon](https://github.com/mugenmelon)        |
-| X        | [mugenmelon](https://x.com/mugenmelon)             |
+# Links
+- YouTube [@mugenmelon](https://www.youtube.com/@mugenmelon)
+- Twitch [mugenmelon](https://www.twitch.tv/mugenmelon)
+- GitHub [mugenmelon](https://github.com/mugenmelon)
+- X [mugenmelon](https://x.com/mugenmelon)
