@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/assets/style.css">
 
-Software engineer developing an action RPG in his free time. Also makes tutorials & rants about programming or somethin'.
+Software engineer developing an action RPG in his free time. Also makes tutorials & rants about programming or something.
 
 # Links
 - YouTube [@mugenmelon](https://www.youtube.com/@mugenmelon)
