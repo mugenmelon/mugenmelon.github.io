@@ -1,9 +1,6 @@
-author:
-  name: mugenmelon
-  email: mugenmelon@gmail.com
-
 theme: minima
 minima:
+  skin: auto
   social_links:
     - title: YouTube
       icon: youtube
