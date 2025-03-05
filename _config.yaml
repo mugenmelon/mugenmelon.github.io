@@ -23,3 +23,6 @@ minima:
     - title: X
       icon: x-twitter
       url: https://x.com/mugenmelon
+    - title: Epic Dev Community
+      icon: code
+      url: https://dev.epicgames.com/community/profile/pM6Ek/mugenmelon
