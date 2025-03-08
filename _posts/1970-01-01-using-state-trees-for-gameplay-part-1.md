@@ -5,12 +5,13 @@ tags: gamedev unreal-engine state-tree game-architecture gameplay tutorial bluep
 
 # Under construction
 
-{% raw %}
 {% if page.tags.size > 0 %}
-    <style>
-        .post-meta::after {
-            content: "Tags: {{ page.tags | join: ', ' }}";
-        }
-    </style>
+    {% raw %}
+        <style>
+            .post-meta::after {
+                content: "Tags: {{ page.tags | join: ', ' }}";
+                display: block;
+            }
+        </style>
+    {% endraw %}
 {% endif %}
-{% endraw %}
