@@ -1,3 +1,12 @@
 {% if page.diagrams %}
     {% include mermaid.html %}
 {% endif %}
+
+{% if page.tags.size > 0 %}
+    <style>
+        .post-meta::after {
+            content: "Tags: {{ page.tags | join: ', ' }}";
+            display: block;
+        }
+    </style>
+{% endif %}
