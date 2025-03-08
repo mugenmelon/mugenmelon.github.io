@@ -1,6 +1,4 @@
 remote_theme: jekyll/minima@43f3ed0
-plugins:
-  - jekyll-archives
 
 title: mugenmelon
 author:
@@ -10,7 +8,7 @@ description: >-
   Software engineer developing an action RPG in his free time.
   Also makes tutorials & rants about programming or something.
 
-permalink: pretty
+permalink: none
 
 defaults:
   - scope:
@@ -25,7 +23,7 @@ defaults:
       layout: post
 
 minima:
-  skin: auto
+  skin: dark
   social_links:
     - title: YouTube
       icon: youtube
@@ -42,12 +40,3 @@ minima:
     - title: Epic Dev Community
       icon: dev
       url: https://dev.epicgames.com/community/profile/pM6Ek/mugenmelon
-
-jekyll-archives:
-  enabled:
-    - categories
-    - tags
-  layout: archive
-  permalinks:
-    tag: '/tag/:name/'
-    category: '/category/:name/'
