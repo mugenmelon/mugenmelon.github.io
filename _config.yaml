@@ -1,4 +1,6 @@
 remote_theme: jekyll/minima@43f3ed0
+plugins:
+  - jekyll-archives
 
 title: mugenmelon
 author:
@@ -40,3 +42,8 @@ minima:
     - title: Epic Dev Community
       icon: dev
       url: https://dev.epicgames.com/community/profile/pM6Ek/mugenmelon
+
+jekyll-archives:
+  enabled:
+    - categories
+    - tags
