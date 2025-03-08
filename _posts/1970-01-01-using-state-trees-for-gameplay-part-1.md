@@ -15,3 +15,12 @@ graph TD;
     B-->D;
     C-->D;
 ```
+
+<pre class="mermaid">
+    graph LR
+    A --- B
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner);
+</pre>
+
+{% include mermaid.html %}
