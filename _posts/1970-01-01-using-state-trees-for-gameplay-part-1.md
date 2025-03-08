@@ -22,3 +22,6 @@ Testing mermaid plugin here:
     B-->C[fa:fa-ban forbidden]
     B-->D(fa:fa-spinner loading...);
 </pre>
+
+Testing blueprintue here
+<iframe src="https://blueprintue.com/render/9lgzodh3/" scrolling="no" allowfullscreen></iframe>
