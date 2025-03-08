@@ -1,7 +1,7 @@
 ---
 title: Using StateTrees for Gameplay (Part 1)
 categories: gamedev unreal-engine
-diagrams: false
+diagrams: true
 # modified_date: 1970-01-01
 ---
 
