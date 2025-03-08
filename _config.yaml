@@ -8,6 +8,18 @@ description: >-
   Software engineer developing an action RPG in his free time.
   Also makes tutorials & rants about programming or something.
 
+defaults:
+  - scope:
+      path: ""
+    values:
+      author:
+        - mugenmelon
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: post
+
 minima:
   skin: auto
   social_links:
