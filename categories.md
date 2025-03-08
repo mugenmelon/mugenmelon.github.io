@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Categories
-permalink: /categories/
+permalink: categories
 ---
 
 {% for category in site.categories %}
-  <h2 id="{{ category[0] }}">{{ category[0] | capitalize }}</h2>
+  <h2 id="{{ category[0] }}">{{ category[0] }}</h2>
   <ul>
     {% for post in category[1] %}
       <li>

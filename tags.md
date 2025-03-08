@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Tags
-permalink: /tags/
+permalink: tags
 ---
 
 {% for tag in site.tags %}
-  <h2 id="{{ tag[0] }}">{{ tag[0] | capitalize }}</h2>
+  <h2 id="{{ tag[0] }}">{{ tag[0] }}</h2>
   <ul>
     {% for post in tag[1] %}
       <li>

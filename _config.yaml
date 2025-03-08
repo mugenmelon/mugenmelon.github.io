@@ -23,7 +23,7 @@ defaults:
       layout: post
 
 minima:
-  skin: dark
+  skin: auto
   social_links:
     - title: YouTube
       icon: youtube
