@@ -10,18 +10,15 @@ mermaid: true
 Testing mermaid plugin here:
 
 ```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+    graph LR
+    A --- B
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner loading...);
 ```
 
 <pre class="mermaid">
     graph LR
     A --- B
     B-->C[fa:fa-ban forbidden]
-    B-->D(fa:fa-spinner);
+    B-->D(fa:fa-spinner loading...);
 </pre>
-
-{% include mermaid.html %}
