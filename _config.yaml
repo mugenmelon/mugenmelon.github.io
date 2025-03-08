@@ -10,7 +10,7 @@ description: >-
   Software engineer developing an action RPG in his free time.
   Also makes tutorials & rants about programming or something.
 
-permalink: none
+permalink: pretty
 
 defaults:
   - scope:
