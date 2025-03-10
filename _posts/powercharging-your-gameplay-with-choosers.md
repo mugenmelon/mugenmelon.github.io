@@ -1,4 +1,4 @@
 ---
 title: Powercharging Your Gameplay With Choosers
-tags: gamedev unreal-engine chooser game-architecture gameplay tutorial
+tags: gamedev unreal-engine game-architecture tutorial
 ---
