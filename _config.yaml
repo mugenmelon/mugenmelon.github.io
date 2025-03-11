@@ -22,7 +22,6 @@ defaults:
     values:
       layout: post
 
-# TODO: Discord link
 minima:
   skin: auto
   social_links:
