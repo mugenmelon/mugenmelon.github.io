@@ -3,8 +3,6 @@ layout: home
 list_title: Latest Posts
 ---
 
-## About
-
 Software engineer by day, game developer by night.
 Making an action RPG in Unreal Engine and sharing any useful/crazy ideas on programming, game design and game architecture here.
 I try to apply best practices of software development to games - with varying success - while avoiding enterprise software brainrot.
