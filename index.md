@@ -1,6 +1,6 @@
 ---
 layout: home
-title: About
+title: Home
 list_title: Latest Posts
 ---
 
