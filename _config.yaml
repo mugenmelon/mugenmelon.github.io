@@ -13,14 +13,11 @@ permalink: none
 defaults:
   - scope:
       path: ""
-    values:
-      author:
-        - mugenmelon
-  - scope:
-      path: ""
       type: "posts"
     values:
       layout: post
+      author:
+        - mugenmelon
 
 minima:
   skin: auto
