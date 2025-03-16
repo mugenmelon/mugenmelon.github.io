@@ -22,7 +22,7 @@
       <ul>
         {%- for post in filtered_posts -%}
           <li>
-            {%- include post-link.html post=post show_published_date=false -%}
+            {%- include post-link.html post=post show_published_date=true -%}
           </li>
         {%- endfor -%}
       </ul>
