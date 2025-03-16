@@ -7,9 +7,9 @@
                 {%- for post in series_posts -%}
                 <li>
                     {%- if post.url == page.url -%}
-                        <strong>Part {{ post.series_part }}: {%- include post-link.html post=post show_published_date=true -%} (Current)</strong>
+                        <strong>Part {{ post.series_part }}: {% include post-link.html post=post show_published_date=true %} (Current)</strong>
                     {%- else -%}
-                        Part {{ post.series_part }}: {%- include post-link.html post=post show_published_date=true -%}
+                        Part {{ post.series_part }}: {% include post-link.html post=post show_published_date=true -%}
                     {%- endif -%}
                 </li>
                 {%- endfor -%}

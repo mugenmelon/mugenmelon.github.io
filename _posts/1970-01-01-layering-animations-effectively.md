@@ -2,6 +2,6 @@
 title: Layering Animations Effectively
 tags: gamedev unreal-engine animation tutorial
 published: true
-series: game-ai-framework
+series: Game AI Framework
 series_part: 3
 ---
