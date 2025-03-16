@@ -2,3 +2,6 @@
 {% if include.show_published_date -%}
     <small>{{ include.post.date | date: "%B %-d, %Y" }}</small>
 {%- endif -%}
+{%- if include.show_excerpt -%}
+    <p>{{ include.post.excerpt }}</p>
+{%- endif -%}
