@@ -15,7 +15,7 @@ permalink: tags
         <ul>
             {%- for post in tag_posts -%}
                 <li>
-                    {%- include post-link.html post=post show_published_date=true show_excerpt=true -%}
+                    {%- include post-link.html post=post show_published_date=true -%}
                 </li>
             {%- endfor -%}
         </ul>
