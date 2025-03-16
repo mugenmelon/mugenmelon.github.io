@@ -18,6 +18,7 @@ defaults:
       layout: post
       author:
         - mugenmelon
+      meta_tags: true
 
 minima:
   skin: auto
