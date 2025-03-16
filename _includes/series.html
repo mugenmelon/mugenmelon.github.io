@@ -1,0 +1,49 @@
+{%- if page.series -%}
+  <div class="series-navigation">
+    <h4>This post is part of the "{{ page.series | replace: '-', ' ' | capitalize }}" series</h4>
+    
+    <div class="series-links">
+      {%- assign series_posts = site.posts | where: "series", page.series | sort: "series_part" -%}
+      
+      {%- for post in series_posts -%}
+        {%- if post.url == page.url -%}
+          {%- assign prev_index = forloop.index0 | minus: 1 -%}
+          {%- assign next_index = forloop.index0 | plus: 1 -%}
+          
+          {%- if prev_index >= 0 -%}
+            {%- assign prev_post = series_posts[prev_index] -%}
+            <div class="prev-link">
+              <span>Previous:</span>
+              <a href="{{ prev_post.url }}">{{ prev_post.title }}</a>
+            </div>
+          {%- endif -%}
+          
+          {%- if next_index < series_posts.size -%}
+            {%- assign next_post = series_posts[next_index] -%}
+            <div class="next-link">
+              <span>Next:</span>
+              <a href="{{ next_post.url }}">{{ next_post.title }}</a>
+            </div>
+          {%- endif -%}
+          
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    
+    <div class="series-all-posts">
+      <h5>All posts in this series:</h5>
+      <ul>
+      {%- for post in series_posts -%}
+        <li>
+          {%- if post.url == page.url -%}
+            <strong>Part {{ post.series_part }}: {{ post.title }} (Current)</strong>
+          {%- else -%}
+            Part {{ post.series_part }}: <a href="{{ post.url }}">{{ post.title }}</a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
