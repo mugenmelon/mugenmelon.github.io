@@ -1,7 +1,7 @@
 ---
 title: (Mis)understanding State Machines
 tags: gamedev game-architecture analysis
-published: true
+published: false
 meta_tags: true
 modified_date: 1970-01-01
 ---
