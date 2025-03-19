@@ -19,6 +19,7 @@ defaults:
       author:
         - mugenmelon
       meta_tags: true
+      published: true
 
 minima:
   skin: auto
