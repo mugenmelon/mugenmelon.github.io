@@ -16,8 +16,6 @@ defaults:
       type: "posts"
     values:
       layout: post
-      author:
-        - mugenmelon
       meta_tags: true
       published: true
 
