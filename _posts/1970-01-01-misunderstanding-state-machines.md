@@ -2,6 +2,7 @@
 title: (Mis)understanding State Machines
 tags: gamedev game-architecture analysis
 related_tags: game-architecture
+published: true
 ---
 
 In this article I outline a common (mis)understanding of finite state machines (FSMs) - particularly regarding game development - 
