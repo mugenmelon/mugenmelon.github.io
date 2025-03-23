@@ -18,10 +18,10 @@ A few quick Google searches for FSMs in game development reveal among others the
 A more general search for the original Gang of Four's "state design pattern" shows that
 > The state pattern is a behavioral software design pattern that allows an object to alter its behavior when its internal state changes. [^4]
 
-And even Unreal Engine's documentation for their FSM equivalent states that
+And even Unreal Engine's documentation for their FSM equivalent (StateTree) states that
 > StateTree is a general-purpose hierarchical state machine that combines the Selectors from behavior trees with States and Transitions from state machines. With StateTree, you can create highly performant logic that stays flexible and organized. [^5]
 
-When searching for concrete examples/tutorials for how to use this pattern in game development we are often met with some variation of the classic "enemy AI chasing the player" use case:
+When searching for concrete examples/tutorials for how to apply this pattern to game development we are often met with some variation of the classic "enemy AI chasing the player" use case:
 <pre class="mermaid">
 ---
 title: Chase player and attack
@@ -35,6 +35,8 @@ stateDiagram-v2
     Chase --> Idle: lost sight of player
     Attack --> Chase: player out of range
 </pre>
+
+I believe all of the above (and many others) share one thing in common: They are putting the cart before the horse. They focus on the *outcome of applying the pattern* over the arguably more important *application of the pattern itself*.
 
 ## Footnotes
 
