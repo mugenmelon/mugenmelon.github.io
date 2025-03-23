@@ -17,7 +17,7 @@ defaults:
     values:
       layout: post
       meta_tags: true
-      published: false
+      published: true
 
 minima:
   skin: auto
