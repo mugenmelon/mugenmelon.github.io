@@ -17,9 +17,13 @@ A few quick Google searches for FSMs in game development reveal among others the
 
 > Thanks to a finite state machine we can define complex behaviors and encapsulate them into mini single interactions which we will call state. [^3]
 
-A more general search for the Gang of Four's "state design pattern" shows that
+A more general search for the original Gang of Four's "state design pattern" shows that
 
 > The state pattern is a behavioral software design pattern that allows an object to alter its behavior when its internal state changes. [^4]
+
+And even Unreal Engine's documentation for their FSM equivalent states that
+
+> StateTree is a general-purpose hierarchical state machine that combines the Selectors from behavior trees with States and Transitions from state machines. With StateTree, you can create highly performant logic that stays flexible and organized. [^5]
 
 ## Footnotes
 
@@ -30,3 +34,5 @@ A more general search for the Gang of Four's "state design pattern" shows that
 [^3]: Source: [Game Developer Tips](https://gamedevelopertips.com/finite-state-machine-game-developers/)
 
 [^4]: Source: [Wikipedia](https://en.wikipedia.org/wiki/State_pattern)
+
+[^5]: Source: [Unreal Engine Documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/state-tree-in-unreal-engine)
