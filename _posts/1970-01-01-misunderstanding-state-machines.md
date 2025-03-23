@@ -29,7 +29,7 @@ And even Unreal Engine's documentation for their FSM equivalent states that
 
 When searching for concrete examples/tutorials for how to use this pattern in game development we are often met with some variation of the classic "enemy AI chasing the player" use case:
 
-```mermaid
+<pre class="mermaid">
 ---
 title: Chase player and attack
 ---
@@ -40,6 +40,7 @@ stateDiagram-v2
     Chase --> Idle: lost sight of player
     Attack --> Chase: player is out of attack range
 ```
+</pre>
 
 ## Footnotes
 
