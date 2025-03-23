@@ -29,7 +29,7 @@ title: Chase player and attack
 stateDiagram-v2
     direction LR
 
-    [*] --> Idle
+    [*] --> Idle: start
     Idle --> Chase: can see player
     Chase --> Attack: player in range
     Chase --> Idle: lost sight of player
