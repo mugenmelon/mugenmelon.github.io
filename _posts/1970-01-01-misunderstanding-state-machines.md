@@ -2,6 +2,8 @@
 title: (Mis)understanding State Machines
 tags: gamedev game-architecture analysis
 related_tags: game-architecture
+diagrams: true
+published: true
 ---
 
 In this article I outline a common (mis)understanding of finite state machines (FSMs) - particularly regarding game development - 
@@ -24,6 +26,20 @@ A more general search for the original Gang of Four's "state design pattern" sho
 And even Unreal Engine's documentation for their FSM equivalent states that
 
 > StateTree is a general-purpose hierarchical state machine that combines the Selectors from behavior trees with States and Transitions from state machines. With StateTree, you can create highly performant logic that stays flexible and organized. [^5]
+
+When searching for concrete examples/tutorials for how to use this pattern in game development we are often met with some variation of the classic "enemy AI chasing the player" use case:
+
+```mermaid
+---
+title: Chase player and attack
+---
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Chase: can see player
+    Chase --> Attack: player is in attack range
+    Chase --> Idle: lost sight of player
+    Attack --> Chase: player is out of attack range
+```
 
 ## Footnotes
 
