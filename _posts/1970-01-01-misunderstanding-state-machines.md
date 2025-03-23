@@ -36,9 +36,9 @@ stateDiagram-v2
 
     [*] --> Idle
     Idle --> Chase: can see player
-    Chase --> Attack: player is in attack range
+    Chase --> Attack: player in range
     Chase --> Idle: lost sight of player
-    Attack --> Chase: player is out of attack range
+    Attack --> Chase: player out of range
 </pre>
 
 ## Footnotes
