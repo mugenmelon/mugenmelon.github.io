@@ -15,10 +15,18 @@ A few quick Google searches for FSMs in game development reveal among others the
 
 > State machines help you untangle hairy code by enforcing a very constrained structure on it. [^2]
 
+> Thanks to a finite state machine we can define complex behaviors and encapsulate them into mini single interactions which we will call state. [^3]
 
+A more general search for the Gang of Four's "state design pattern" shows that
+
+> The state pattern is a behavioral software design pattern that allows an object to alter its behavior when its internal state changes. [^4]
 
 ## Footnotes
 
 [^1]: Source: [Game Manual 0](https://gm0.org/en/latest/docs/software/concepts/finite-state-machines.html)
 
 [^2]: Source: [Game Programming Patterns](https://gameprogrammingpatterns.com/state.html) (great read!)
+
+[^3]: Source: [Game Developer Tips](https://gamedevelopertips.com/finite-state-machine-game-developers/)
+
+[^4]: Source: [Wikipedia](https://en.wikipedia.org/wiki/State_pattern)
