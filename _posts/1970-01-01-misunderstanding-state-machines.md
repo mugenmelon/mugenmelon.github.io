@@ -2,7 +2,6 @@
 title: (Mis)understanding State Machines
 tags: gamedev game-architecture analysis
 related_tags: game-architecture
-published: true
 ---
 
 In this article I outline a common (mis)understanding of finite state machines (FSMs) - particularly regarding game development - 
@@ -15,6 +14,8 @@ A few quick Google searches for FSMs in game development reveal among others the
 > Finite State Machines (FSM) are often used while programming in order to allow for more complex series of actions. [^1]
 
 > State machines help you untangle hairy code by enforcing a very constrained structure on it. [^2]
+
+
 
 ## Footnotes
 
