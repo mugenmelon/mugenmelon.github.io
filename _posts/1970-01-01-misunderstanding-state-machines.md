@@ -30,13 +30,15 @@ stateDiagram-v2
     direction LR
 
     [*] --> Idle: start
-    Idle --> Chase: can see player
+    Idle --> Chase: gained sight of player
     Chase --> Attack: player in range
     Chase --> Idle: lost sight of player
     Attack --> Chase: player out of range
 </pre>
 
-I believe all of the above (and many others) share one thing in common: They are putting the cart before the horse. They focus on the *outcome of applying the pattern* over the arguably more important *application of the pattern itself*.
+I believe all of the above examples (and many others) share one thing in common: They are putting the cart before the horse. They focus on the *outcome of applying the pattern* over the arguably more important *application of the pattern itself*. What then tends to happen is that a beginner (or a "professional") may blindly follow the examples provided - or worse try to backwards enginner their way to the pattern - without grasping the fundamental concept of why exactly FSMs provide all of these benefits. This results in a neverending loop of applying this pattern wrongly.
+
+I would even go so far as to say that much of the disdain towards FSMs and many of the hellish "spaghetti automatons" that one hears about also stem from this problem.
 
 ## Footnotes
 
