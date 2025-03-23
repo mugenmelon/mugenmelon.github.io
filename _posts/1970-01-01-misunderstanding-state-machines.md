@@ -34,6 +34,8 @@ When searching for concrete examples/tutorials for how to use this pattern in ga
 title: Chase player and attack
 ---
 stateDiagram-v2
+    direction LR
+
     [*] --> Idle
     Idle --> Chase: can see player
     Chase --> Attack: player is in attack range
