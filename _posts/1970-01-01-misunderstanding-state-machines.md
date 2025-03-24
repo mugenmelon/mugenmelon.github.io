@@ -48,7 +48,7 @@ While it is true that FSMs provide all of the above benefits such as:
 - Encapsulation
 - Flexibility & organization
 
-They only do so when *applied correctly (both technically & functionally)*. Otherwise there is a large risk of exactly the opposite: A large, complex "god" FSM as an obstacle that programmers have to avoid at all costs. This is where I believe much of the bad reputation[^6] of FSMs stems from.
+They only do so when *applied correctly* (both *technically* & *functionally*). Otherwise there is a large risk of exactly the opposite: A large, complex "god" FSM as an obstacle that programmers have to avoid at all costs. This is where I believe much of the bad reputation[^6] of FSMs stems from.
 
 What tends to follow is that a beginner programmer takes the provided examples at face value without grasping the fundamental concepts of why exactly FSMs provide all of these benefits. And it may work just fine at first, but eventually falls apart as soon as any real complexity is involved.[^7]
 
