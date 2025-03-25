@@ -117,8 +117,7 @@ if (health <= 0)
 }
 ```
 
-OK, cool, this still works somewhat. The state space has increased to `[true, false] x [0, 1, ..., 99, 100] = 202`.[^11] But remember, an FSM brings an unknown overhead of `N` which may or may not be more than that.
-
+OK, cool, this still works somewhat. The state space has increased to `[true,false] x [0,1,...,99,100] = 202`[^11] but remember that an FSM brings an unknown overhead of `N` which may or may not be more than that.
 
 ## Footnotes
 
@@ -132,4 +131,4 @@ OK, cool, this still works somewhat. The state space has increased to `[true, fa
 [^8]: Based on a true story  
 [^9]: Overhead in terms of complexity & effort, not cartesian product  
 [^10]: I.e. a lot of floating point numbers  
-[^11]: It is a floating point number, but for the sake of simplicity we only count the relevant integers, of which there are 101 including the 0.  
+[^11]: It is a floating point number but for the sake of simplicity we only count the relevant integers, of which there are 101 including the 0.  
