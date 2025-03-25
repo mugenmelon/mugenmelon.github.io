@@ -57,23 +57,21 @@ What tends to follow is that a beginner programmer takes the provided examples a
 
 What also tends to follow is that a know-it-all "professional" attempts to implement this pattern in a large enterprise platform and completely misses the mark, resulting in hundreds of thousands of € in missed revenue and a very disgruntled team of developers that has to clean up his mess after he was let go.[^8]
 
-At this point I would really like to dive deep and provide a concrete example of what typically happens when we follow the previously described mantra, but I am too lazy to spend time on something I know is terribly wrong. I believe many of you will already have an intuition about FSMs and just how bad they can get. So I will omit constructing a specific example at this time.
-
 ## ...And Now the Horse Before the Cart
 
 For this section I will presume a very basic understanding of FSMs and their building blocks: *states* and *transitions*. However, I will make one adjustment to the terminology to be more accurate. *States* are henceforth called *state-labels*. This is to avoid confusion with the *program state*, i.e. the set of all variables and their current values also called "data". Another important reason will be revealed at a later point.
 
-### Back to Square One
+### To Be or Not To Be?
 
 Let us begin where it hurts the most: *Do I even need a state machine?*
 
-FSMs - like most programming patterns - are but one tool in your toolbelt. We must not confuse every problem for a nail just because what we have is a hammer. Sometimes the indirection of an FSM is too much overhead. Sometimes you cannot afford to use an FSM just because the set of all possible state-labels is too small and will never grow larger.
+FSMs - like most programming patterns - are but one tool in your toolbelt. We must not confuse every problem for a nail just because what we have is a hammer. Sometimes the indirection of an FSM is too much overhead. Sometimes you cannot afford to use an FSM just because the set of all possible state-labels and transitions is too small and will never grow larger.
 
 A commonly used example is the classic:
 
 <pre class="mermaid">
 ---
-title: Train station turnstile (basic)
+title: Train station turnstile
 ---
 stateDiagram-v2
     direction LR
@@ -85,24 +83,42 @@ stateDiagram-v2
 
 The turnstile unlocks as soon as the fee is paid and locks again once the passenger has passed through it. Do you see a problem?
 
-The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels will ever increase. The mistake we made here is to think of the state-labels *first* when what we *should* have done is to think of our state first.
+The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels or transitions will ever increase. But *when* should we use an FSM?
 
-### A Better Train Station Turnstile
+### Step 1: Reduce
 
-So let us try thinking about our state by adjusting the turnstile example somewhat. I want you to take a moment and completely forget about FSMs, state-labels and transitions in order to focus entirely on the functional specification of our turnstile.
+I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction (FSM --> boolean) logically means an expansion in the other (boolean --> FSM). But is that *always* the case? Are FSMs cursed to be a bloated pattern? What exactly determines whether something is a *reduction* vs. an *expansion*?
 
-Say our turnstile should work like this:
-- Initially the gate of the turnstile is locked
-- When the fee is paid the turnstile unlocks its gate
-- When a sensor registers a full rotation of the gate it is locked again
-- When unlocked the gate automatically locks after 10 seconds
-- When a sensor registers a rotation in the wrong direction the gate locks and sounds an alert (one-way turnstile)
-- When a sensor registers someone jumping over the turnstile the gate locks and sounds an alert
-- When an employee uses their admin key the turnstile turns off and will not unlock
+The answer is *cardinality*. The *amount* of something. The "something" is up to you to decide: complexity/simplicity, time effort to implement/maintain, flexibility/rigidity, likelihood to change, ease of debugging etc. Moving from greater to smaller cardinality is called reduction. Moving from smaller to greater cardinality is called expansion. A simple boolean variable is easier to implement, maintain and change than an equivalent FSM. So ideally we want to avoid using FSMs whenever it means an expansion in cardinality and use FSMs whenever it means a reduction in cardinality.
 
-Granted I am not familiar with how exactly turnstiles are actually built, but this example provides us with a bit more meat on the bone to chew on than the previous one.
+That's a lot of words just to say: "Use FSMs whenever it's worth it".
 
-Let us take stock of what variables are needed here:
+Sometimes this can be guesstimated by looking at the cartesian product of the set of all possible states. This is also called "state space". In our turnstile example the boolean variable has a state space of 2 because it can assume a set of 2 possible values. The FSM also has a state space of 2 because it has a set of 2 state-labels. So going from 2 to 2 is not an improvement in cardinality. Each FSM also brings a certain amount of overhead (N) with it which would make the comparison `2+N >= 2` and thus not worth going for.[^9]
+
+Videogames uniquely are full of *high cardinality state space*[^10], so let us turn (haha) our turnstile into a digital one:
+
+>Hi Mark, the turnstile you've built is working well! But the playtesters find it somewhat annoying to have to pass through it each time. Can you make it so that the turnstile can be destroyed when you shoot it with your gun? Then the player can just pass through it without having to pay the fee and play an animation.
+
+>Hi Stacy, no problem. I will add a "health" attribute to the turnstile. The code for damage calculation is already implemented, so this seems like the most straightforward approach. Let's see... 100 health should work for now.
+
+The assignment is pretty clear. Our previous turnstile now needs a variable `health` which is clamped between 0 and 100:
+
+```c++
+// Whether the gate is locked.
+bool locked = true;
+// Current health of the turnstile.
+float health = 100;
+...
+// Unlock & destroy turnstile when health is 0.
+if (health <= 0)
+{
+    locked = false;
+    destroySelf();
+}
+```
+
+OK, cool, this still works somewhat. The state space has increased to `[true, false] x [0, 1, ..., 99, 100] = 202`.[^11] But remember, an FSM brings an unknown overhead of `N` which may or may not be more than that.
+
 
 ## Footnotes
 
@@ -113,4 +129,7 @@ Let us take stock of what variables are needed here:
 [^5]: Source: [Unreal Engine Documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/state-tree-in-unreal-engine)  
 [^6]: Just google "are state machines bad"  
 [^7]: A common obstacle is "state explosion", which is a subset of [combinatorial explosion](https://en.wikipedia.org/wiki/Combinatorial_explosion)
-[^8]: Based on a true story
+[^8]: Based on a true story  
+[^9]: Overhead in terms of complexity & effort, not cartesian product  
+[^10]: I.e. a lot of floating point numbers  
+[^11]: It is a floating point number, but for the sake of simplicity we only count the relevant integers, of which there are 101 including the 0.  
