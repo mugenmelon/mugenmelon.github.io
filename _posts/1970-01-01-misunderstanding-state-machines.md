@@ -109,7 +109,7 @@ bool locked = true;
 // Current health of the turnstile.
 float health = 100;
 ...
-// Unlock & destroy turnstile when health is 0.
+// When health is 0 unlock & destroy turnstile.
 if (health <= 0)
 {
     locked = false;
@@ -117,7 +117,7 @@ if (health <= 0)
 }
 ```
 
-OK, cool, this still works somewhat. The state space has increased to `[true,false] x [0,1,...,99,100] = 202`[^11] but remember that an FSM brings an unknown overhead of `N` which may or may not be more than that.
+OK, cool, this still works just fine. The state space has increased to `[true,false] x [0,1,...,99,100] = 202`[^11] but remember that an FSM brings an unknown overhead of `N` which may or may not be more than that.
 
 ## Footnotes
 
