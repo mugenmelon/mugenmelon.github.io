@@ -85,7 +85,7 @@ The turnstile unlocks as soon as the fee is paid and locks again once the passen
 
 The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels or transitions will ever increase. But *when* should we use an FSM?
 
-### Step 1: Reduce
+### Reduce
 
 I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction (FSM --> boolean) logically means an expansion in the other (boolean --> FSM). But is that *always* the case? Are FSMs cursed to be a bloated pattern? What exactly determines whether something is a *reduction* vs. an *expansion*?
 
