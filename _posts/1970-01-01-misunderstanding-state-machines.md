@@ -63,7 +63,7 @@ For this section I will presume a very basic understanding of FSMs and their bui
 
 ### To Be or Not To Be?
 
-Let us begin where it hurts the most: *Do I even need a state machine?*
+Let us begin where it hurts the most: "Do I even *need* a state machine?"
 
 FSMs - like most programming patterns - are but one tool in your toolbelt. We must not confuse every problem for a nail just because what we have is a hammer. Sometimes the indirection of an FSM is too much overhead. Sometimes you cannot afford to use an FSM just because the set of all possible state-labels and transitions is too small and will never grow larger.
 
@@ -83,13 +83,15 @@ stateDiagram-v2
 
 The turnstile unlocks as soon as the fee is paid and locks again once the passenger has passed through it. Do you see a problem?
 
-The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels or transitions will ever increase. But *when* should we use an FSM?
+The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels or transitions will ever increase.
+
+Which leaves us with the question: "So when *do* we use an FSM?".
 
 ### Reduce
 
-I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction (FSM --> boolean) logically means an expansion in the other (boolean --> FSM). But is that *always* the case? Are FSMs cursed to be a bloated pattern? What exactly determines whether something is a *reduction* vs. an *expansion*?
+I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction logically means an expansion in the other. Are FSMs just cursed to be a bloated pattern? Do they always expand the complexity of our projects rather than reduce it? What exactly determines whether something is a *reduction* vs. an *expansion*?
 
-The answer is *cardinality*. The *amount* of something. The "something" is up to you to decide: complexity/simplicity, time effort to implement/maintain, flexibility/rigidity, likelihood to change, ease of debugging etc. Moving from greater to smaller cardinality is called reduction. Moving from smaller to greater cardinality is called expansion. A simple boolean variable is easier to implement, maintain and change than an equivalent FSM. So ideally we want to avoid using FSMs whenever it means an expansion in cardinality and use FSMs whenever it means a reduction in cardinality.
+The answer is *cardinality*. The *amount* of something. Most of the time that something is complexity. A simple boolean variable is less effort, less maintenance and more flexible than an equivalent FSM. So ideally we want to use FSMs whenever it means a reduction in complexity.
 
 That's a lot of words just to say: "Use FSMs whenever it's worth it".
 
