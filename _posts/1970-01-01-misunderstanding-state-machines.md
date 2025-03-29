@@ -85,19 +85,21 @@ The turnstile unlocks as soon as the fee is paid and locks again once the passen
 
 The entire FSM can be reduced to a single boolean variable `locked = true|false`. We are no better served implementing an FSM for this than to simply set and query the `locked` variable in the appropriate functions in the turnstile's program. And it is highly unlikely that the number of state-labels or transitions will ever increase.
 
-Which leaves us with the question: "So when *do* we use an FSM?".
+Having outlined the lower bound of when not to use an FSM now leaves us with the question: "When *do* we use an FSM?".
 
 ### Reduce
 
-I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction logically means an expansion in the other. Are FSMs just cursed to be a bloated pattern? Do they always expand the complexity of our projects rather than reduce it? What exactly determines whether something is a *reduction* vs. an *expansion*?
+I mentioned that the FSM can be "reduced to a single boolean variable" which is actually a critically important detail. A reduction in one direction logically means an increase in the other. So are FSMs just cursed to be a bloated pattern? Do they always increase the complexity of our projects rather than reduce it? What exactly determines whether something is a reduction vs. an increase?
 
-The answer is *cardinality*. The *amount* of something. Most of the time that something is complexity. A simple boolean variable is less effort, less maintenance and more flexible than an equivalent FSM. So ideally we want to use FSMs whenever it means a reduction in complexity.
+The answer is *cardinality*. The amount of something. A simple boolean variable is less effort, less maintenance and more flexibility than an equivalent FSM in virtually all cases. Were we to add another variable would it then be worth it to use this pattern?
 
-That's a lot of words just to say: "Use FSMs whenever it's worth it".
+Sometimes this can be guesstimated by looking at the cartesian product of the set of all relevant states. This is also called *state space*. In our turnstile example the boolean variable has a state space of 2 because it can assume a set of 2 possible values `[true,false]`. The FSM also has a state space of 2 because it has a set of 2 state-labels `[locked,unlocked]`. So going from 2 to 2 is not a reduction in cardinality and it can even be an increase due to the overhead an FSM brings.
 
-Sometimes this can be guesstimated by looking at the cartesian product of the set of all possible states. This is also called "state space". In our turnstile example the boolean variable has a state space of 2 because it can assume a set of 2 possible values. The FSM also has a state space of 2 because it has a set of 2 state-labels. So going from 2 to 2 is not an improvement in cardinality. Each FSM also brings a certain amount of overhead (N) with it which would make the comparison `2+N >= 2` and thus not worth going for.[^9]
+That still does not answer the question when an FSM *should* be used, but at least gives us a hint about the trend we need to follow...
 
-Videogames uniquely are full of *high cardinality state space*[^10], so let us turn (haha) our turnstile into a digital one:
+### High Cardinality State Space
+
+Videogames uniquely are full of *high cardinality state space*[^9], so let us make our turnstile into a digital one:
 
 >Hi Mark, the turnstile you've built is working well! But the playtesters find it somewhat annoying to have to pass through it each time. Can you make it so that the turnstile can be destroyed when you shoot it with your gun? Then the player can just pass through it without having to pay the fee and play an animation.
 
@@ -115,11 +117,11 @@ float health = 100;
 if (health <= 0)
 {
     locked = false;
-    destroySelf();
+    playDestroyAnimation();
 }
 ```
 
-OK, cool, this still works just fine. The state space has increased to `[true,false] x [0,1,...,99,100] = 202`[^11] but remember that an FSM brings an unknown overhead of `N` which may or may not be more than that.
+OK, cool, this works just fine. But wait... the state space has increased to a whopping `[true,false] x [0,1,...,99,100] = 202`![^10] I can do this in an FSM with just 3 states `[locked,unlocked,destroyed]`! Surely this must mean that I have to use an FSM now, right?
 
 ## Footnotes
 
@@ -131,6 +133,6 @@ OK, cool, this still works just fine. The state space has increased to `[true,fa
 [^6]: Just google "are state machines bad"  
 [^7]: A common obstacle is "state explosion", which is a subset of [combinatorial explosion](https://en.wikipedia.org/wiki/Combinatorial_explosion)
 [^8]: Based on a true story  
-[^9]: Overhead in terms of complexity & effort, not cartesian product  
-[^10]: I.e. a lot of floating point numbers  
-[^11]: It is a floating point number but for the sake of simplicity we only count the relevant integers, of which there are 101 including the 0.  
+[^9]: I.e. a lot of floating point numbers  
+[^10]: Don't forget to count the zero!
+
