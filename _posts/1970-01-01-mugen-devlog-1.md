@@ -18,6 +18,8 @@ We will go in-depth on both game design and game architecture, dissecting my way
 
 For questions or feedback contact me through any of the linked channels. Open to making in-depth tutorials on any topic, so reach out!
 
+---
+
 # Game Design
 
 I am neither a professional game designer, nor well versed in current gaming trends & cultures. I have my set of favorite games and let them influence my game design decisions. Some of my all-time favorites and biggest inspirations include:
@@ -37,6 +39,8 @@ I am neither a professional game designer, nor well versed in current gaming tre
 * Legend of Zelda: Twilight Princess
 
 At the same time I try to avoid "copying" any game too much. If the reason for a game design decision is "*Because game X does it*" then I avoid making that decision unless I find a good intrinsic reason for it.
+
+---
 
 ## Game Design Rules
 
@@ -59,6 +63,8 @@ When in doubt: "*You aren't gonna need it*".
 "*The game is fun. The game is a battle.  
 If it's not fun, why bother? If it's not a battle, where's the fun?*"
 
+---
+
 ## Core Design Concepts
 
 Despite following my gut on this, I do have a few "north stars" that I aim at to inform my decisions. The core design concepts I try to follow are:
@@ -72,6 +78,8 @@ Despite following my gut on this, I do have a few "north stars" that I aim at to
 * **Timeless artstyle over realism**
 
 Being fully aware of the potentially massive scope behind them I will leave up for interpretation what these concepts mean *exactly*. My approach is: aim high but be unafraid to miss the mark. That being said let's dive a bit deeper into the current state of the game and its features.
+
+---
 
 ## Movement
 
@@ -106,6 +114,8 @@ At first I did not have running at all, but playing became very cumbersome. Ther
 
 By now I have extended the utility of "running" to also affects gameplay: Putting down an object you are carrying *while* running will instead make you throw the object. This gives a bit of depth without overcomplicating the control scheme.
 
+---
+
 ## Props
 
 Props are interactable objects in the world. This goes for simple props like barrels, but also [weapons](#weapons) and even the [inventory](#inventory). Some props have attributes such as "health" or "damage".
@@ -114,6 +124,8 @@ Props are interactable objects in the world. This goes for simple props like bar
 
 At the moment there is only one *pure* prop in the game: a barrel. It came first because it was the simplest "everyday" object I could come up with for a game world aside from a functionally equivalent crate. This decision bore fruit: The game's entire interaction, state & animation system was prototyped entirely on the basis of picking up, putting down and throwing a barrel.  
 And now they can be broken apart once their "health" attribute reaches 0 when attacked.
+
+---
 
 ## Weapons
 
@@ -157,6 +169,8 @@ In addition to the weapons you have equipped - when they are sheathed - you can 
 * *Greatswords*: Really slow but deals serious damage.
 * *Lanterns*: Provide light, but can be used as a weapon.
 
+---
+
 ## Inventory
 
 Another special type of prop is the inventory. It can store a certain amount of items. That's right: There is no *classic* inventory that the player has. If you want to store items then you need to use an inventory prop such as a backpack. Same rule applies to all NPCs in the game.
@@ -173,7 +187,9 @@ Backpacks are the first and currently only inventory prop. They can be picked up
 
 ### Sweet Itemptation
 
-Right now the only items in the game are [weapons](#weapons). After adding it to your inventory an item can be dropped using the inventory UI widget. At present, this will simply respawn the original item wherever you stand.
+Right now the only items in the game are weapons. After adding it to your inventory an item can be dropped using the inventory UI widget. At present, this will simply respawn the original item wherever you stand.
+
+---
 
 ## Game Time
 
@@ -185,6 +201,8 @@ The system is flexible enough to allow any kind of time-tracking imaginable:
 * Want 3 days in a week? Define unit relations freely
 * Want time to pass slower or faster? Specify a higher/lower multiplier, even while playing
 * Want another time on a different planet? Just define another set of time units
+
+---
 
 ## AI
 
@@ -213,11 +231,15 @@ Each goal in the list of possible goals calculates a score for itself. The highe
 
 Once selected, a goal starts executing its logic: navigating the character and interacting with the world. How granular a goal is and what technology is used to implement it is up to the designer. I personally prefer using small, modular goals and behavior trees for this.
 
+---
+
 # A Brief Respite
 
 If you have read this far: thank you for your interest and attention.
 
 A friendly warning: the road ahead is treacherous and brimming with monsters. We will dive into game architecture and outline a few technical concepts to understand how things are working under the hood and why they work the way they do.
+
+---
 
 # Game Architecture
 
@@ -249,8 +271,16 @@ At other times the one complex feature you had planned is suddenly very easy to 
 
 Your mileage may vary of course. Game architecture is a topic that should always be taken with a large grain of salt. It is crucial that you make your own mistakes and experiences and decide for yourself what is right for your game.
 
+---
+
 ## Code Modules
+
+---
 
 ## Programming Principles
 
+---
+
 ## Game Flow
+
+---
