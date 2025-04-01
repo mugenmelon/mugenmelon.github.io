@@ -1,0 +1,6 @@
+{%- for tag in page.tags -%}
+    {%- if forloop.first -%}
+        <span class="meta-label">Tags: </span>
+    {%- else -%}, {% endif -%}
+    <span>{{ tag }}</span>
+{%- endfor -%}

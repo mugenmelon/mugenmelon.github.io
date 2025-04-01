@@ -1,0 +1,4 @@
+<a href="{{ include.post.url }}">{{ include.post.title }}</a>
+{% if include.show_published_date -%}
+    <small>{{ include.post.date | date: "%B %-d, %Y" }}</small>
+{%- endif -%}

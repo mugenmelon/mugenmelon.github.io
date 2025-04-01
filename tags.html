@@ -1,0 +1,23 @@
+---
+layout: page
+title: Tags
+permalink: tags
+---
+
+{%- assign sorted_tags = site.tags | sort -%}
+{%- for tag in sorted_tags -%}
+    {%- assign tag_name = tag[0] -%}
+    {%- assign tag_posts = tag[1] | sort: 'date' | reverse -%}
+    <details>
+        <summary>
+            <strong>{{ tag_name }}</strong> - {{ tag_posts.size }} post{%- if tag_posts.size > 1 -%}s{%- endif -%}
+        </summary>
+        <ul>
+            {%- for post in tag_posts -%}
+                <li>
+                    {%- include post-link.html post=post show_published_date=true -%}
+                </li>
+            {%- endfor -%}
+        </ul>
+    </details>
+{%- endfor -%}
