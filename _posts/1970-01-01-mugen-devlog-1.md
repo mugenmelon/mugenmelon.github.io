@@ -275,6 +275,35 @@ Your mileage may vary of course. Game architecture is a topic that should always
 
 ## Code Modules
 
+I am making heavy use of modules in my project to promote decoupling and cohesion. From what I have gathered so far, modules seem to generally fall into one of three categories:
+
+* **Library modules**  
+Provides shared utility classes & functions for use in other modules or blueprints.
+
+* **Engine extension modules**  
+Extends existing engine classes & methods but may also hold relevant library code.
+
+* **Feature modules**  
+Entirely new feature that does not exist in the engine.
+
+### Library modules
+
+* **MugenCore**  
+Core library module.  
+Generic utility code that does not fall into any particular functional domain.
+
+### Engine extension modules
+
+* **MugenAbility**  
+Extension of the GameplayAbilies plugin (GAS).  
+Provides an extended `UMugenAbility`, `UMugenAbilityComponent` and improves event communication to and from other engine systems such as AnimNotify, BehaviorTree and EnhancedInput.
+
+* **MugenAI**  
+Extension of generic AI features.  
+Exposes some internal details with an extended `UMugenAIPerceptionSystem` to allow sense introspection and simplifies event communication to AI BrainComponents.
+
+### Feature modules
+
 ---
 
 ## Programming Principles
