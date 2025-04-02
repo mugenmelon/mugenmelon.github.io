@@ -26,17 +26,12 @@ I am neither a professional game designer, nor well versed in current gaming tre
 
 * Dragon's Dogma: Dark Arisen
 * Monster Hunter Freedom Unite
-* Dark Souls 1
+* Dark Souls: Prepare to Die Edition
 * Sekiro
-* Final Fantasy 7
-* Final Fantasy 9
-* Chrono Trigger
-* Legend of Heroes: Trails in the Sky
-* Ys 8: Lacrimosa of Dana
+* Final Fantasy VII & IX
 * Metal Gear Rising: Revengeance
 * Shadow of the Colossus
-* Legend of Zelda: Oracle of Seasons / Time
-* Legend of Zelda: Twilight Princess
+* Legend of Heroes: Trails in the Sky
 
 At the same time I try to avoid "copying" any game too much. If the reason for a game design decision is "*Because game X does it*" then I avoid making that decision unless I find a good intrinsic reason for it.
 
