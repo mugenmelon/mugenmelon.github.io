@@ -355,10 +355,6 @@ Provides `UStateFragmentMap` data asset to enable control of core gameplay logic
 
 ---
 
-## Programming Principles
-
----
-
 ## Game Architecture Flow
 
 ---
