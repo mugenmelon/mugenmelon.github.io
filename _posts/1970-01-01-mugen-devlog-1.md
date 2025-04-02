@@ -338,15 +338,25 @@ Provides an extended `UMugenUserWidget` with a simple "focus" implementation and
 
 ### Game feature modules
 
-* **MugenAIGoal**
+* **MugenAIGoal**  
+Implementation of the aforementioned "AI goal" utility algorithm.  
+Provides a `UAIGoal`, `UBTAIGoal` and `UBTAIGoal_Perception` as well as `UAIGoalSelectionComponent` to enable autonomous selection.
 
-* **MugenEquipment**
+* **MugenEquipment**  
+Implements a generic equipment system.  
+Provides `UEquipmentComponent` and uses GameplayTags to configure equipment slots, their behavior and to expose relevant functionality to other parts of the engine.
 
-* **MugenHitbox**
+* **MugenHitbox**  
+Implements generic hitboxes for e.g. applying damage.  
+Provides `UHitbox` data asset and related functions to configure, target and apply hitboxes. Mainly for use in GameplayAbilities.
 
-* **MugenInventory**
+* **MugenInventory**  
+Implements a generic inventory system.  
+Provides `UInventoryComponent` for configurable per-actor item storage and `UItem` data asset to create item definitions for any object.
 
-* **MugenStateFragment**
+* **MugenStateFragment**  
+Implements a configurable map of gameplay logic for use in state machines.  
+Provides `UStateFragmentMap` data asset to enable control of core gameplay logic to state machines, e.g. granting abilities, applying effects, playing montages etc. Also solves the "state explosion" problem with UE's Chooser plugin.
 
 ---
 
