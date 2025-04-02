@@ -335,7 +335,7 @@ Provides an extended `UMugenUserWidget` with a simple "focus" implementation and
 
 * **MugenAIGoal**  
 Implementation of the aforementioned "AI goal" utility algorithm.  
-Provides a `UAIGoal`, `UBTAIGoal` and `UBTAIGoal_Perception` as well as `UAIGoalSelectionComponent` to enable autonomous selection.
+Provides a `UAIGoal` and subclasses to execute BehaviorTree goals as well as `UAIGoalSelectionComponent` to enable autonomous selection.
 
 * **MugenEquipment**  
 Implements a generic equipment system.  
