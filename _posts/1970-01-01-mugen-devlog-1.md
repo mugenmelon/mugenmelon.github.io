@@ -283,7 +283,7 @@ Provide shared utility classes & functions for use in other modules or blueprint
 * **Engine extension modules**  
 Extend existing engine classes & methods but may also hold relevant library code.
 
-* **Feature modules**  
+* **Game feature modules**  
 Entirely new feature that does not exist in the engine.
 
 What follows is a quick overview of current code modules and their respective functionalities.
@@ -336,7 +336,17 @@ Adds more configurable options to sweep trace targeting with `UTargetingSelectio
 Extension of UI widgets.  
 Provides an extended `UMugenUserWidget` with a simple "focus" implementation and other extended UI atomics such as `UMugenButton` and `UMugenListView`.
 
-### Feature modules
+### Game feature modules
+
+* **MugenAIGoal**
+
+* **MugenEquipment**
+
+* **MugenHitbox**
+
+* **MugenInventory**
+
+* **MugenStateFragment**
 
 ---
 
@@ -344,6 +354,6 @@ Provides an extended `UMugenUserWidget` with a simple "focus" implementation and
 
 ---
 
-## Game Flow
+## Game Architecture Flow
 
 ---
