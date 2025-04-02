@@ -278,13 +278,15 @@ Your mileage may vary of course. Game architecture is a topic that should always
 I am making heavy use of modules in my project to promote decoupling and cohesion. From what I have gathered so far, modules seem to generally fall into one of three categories:
 
 * **Library modules**  
-Provides shared utility classes & functions for use in other modules or blueprints.
+Provide shared utility classes & functions for use in other modules or blueprints.
 
 * **Engine extension modules**  
-Extends existing engine classes & methods but may also hold relevant library code.
+Extend existing engine classes & methods but may also hold relevant library code.
 
 * **Feature modules**  
 Entirely new feature that does not exist in the engine.
+
+What follows is a quick overview of current code modules and their respective functionalities.
 
 ### Library modules
 
@@ -302,13 +304,37 @@ Provides an extended `UMugenAbility`, `UMugenAbilityComponent` and improves even
 Extension of generic AI features.  
 Exposes some internal details with an extended `UMugenAIPerceptionSystem` to allow sense introspection and simplifies event communication to AI BrainComponents.
 
-* **MugenAnimation**
+* **MugenAnimation**  
 Extension of generic animation features.  
 Enables event communication from animation assets using an extended `UMugenSkeletalMeshComponent` and provides utility functions to synchronize animations and manage their lifecycle.
 
-* **MugenBehaviorTree**
+* **MugenBehaviorTree**  
 Extension of BehaviorTrees.  
 Provides extended functionality for BehaviorTree nodes with `UBTDecorator_MugenBlackboardBase`, `UBTService_MugenBlackboardBase`, `UBTMugenTaskNode` and implements additional generically useful nodes.
+
+* **MugenFramework**  
+Extension of Unreal Engine's framework.  
+Provides light-weight extensions of core framework classes like `AMugenPawn`, `AMugenPlayerController`, `AMugenPlayerState` etc. Avoids any usage of `ACharacter`.
+
+* **MugenInput**  
+Extension of EnhancedInput plugin.  
+Implements a few useful InputModifiers and exposes utility functions to blueprints.
+
+* **MugenMovement**  
+Extension of Movement components.  
+Provides extended `UMugenMovementComponent` and `UMugenPawnMovementComponent` and avoids any usage of `UCharacterMovementComponent`.
+
+* **MugenStateTree**  
+Extension of StateTree plugin.  
+Provides generically useful StateTree nodes (conditions, functions, tasks) and enhances the capabilities of StateTrees as general-purpose hierarchical state machines with `UMugenStateTreeComponent` and `FSTTask_State`.
+
+* **MugenTargeting**  
+Extension of TargetingSystem plugin.  
+Adds more configurable options to sweep trace targeting with `UTargetingSelectionTask_MugenTrace` and exposes targeting results to blueprints and GameplayAbilities.
+
+* **MugenUI**  
+Extension of UI widgets.  
+Provides an extended `UMugenUserWidget` with a simple "focus" implementation and other extended UI atomics such as `UMugenButton` and `UMugenListView`.
 
 ### Feature modules
 
