@@ -302,6 +302,14 @@ Provides an extended `UMugenAbility`, `UMugenAbilityComponent` and improves even
 Extension of generic AI features.  
 Exposes some internal details with an extended `UMugenAIPerceptionSystem` to allow sense introspection and simplifies event communication to AI BrainComponents.
 
+* **MugenAnimation**
+Extension of generic animation features.  
+Enables event communication from animation assets using an extended `UMugenSkeletalMeshComponent` and provides utility functions to synchronize animations and manage their lifecycle.
+
+* **MugenBehaviorTree**
+Extension of BehaviorTrees.  
+Provides extended functionality for BehaviorTree nodes with `UBTDecorator_MugenBlackboardBase`, `UBTService_MugenBlackboardBase`, `UBTMugenTaskNode` and implements additional generically useful nodes.
+
 ### Feature modules
 
 ---
