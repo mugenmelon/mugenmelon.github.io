@@ -356,7 +356,7 @@ Provides `UInventoryComponent` for configurable per-actor item storage and `UIte
 
 * **MugenStateFragment**  
 Implements a configurable map of gameplay logic for use in state machines.  
-Provides `UStateFragmentMap` data asset to enable control of core gameplay logic to state machines, e.g. granting abilities, applying effects, playing montages etc. Also solves the "state explosion" problem with UE's Chooser plugin.
+Provides `UStateFragmentMap` data asset to enable control of core gameplay logic to state machines, e.g. granting abilities, applying effects, playing montages etc. Also solves the "state explosion" problem when used with UE's Chooser plugin.
 
 ---
 
