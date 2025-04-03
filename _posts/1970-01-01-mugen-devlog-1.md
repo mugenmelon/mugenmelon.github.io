@@ -81,20 +81,20 @@ Being fully aware of the potentially massive scope behind them I will leave up f
 Currently a very simple implementation of the basic locomotion states:
 
 <pre class="mermaid">
----
-title: Locomotion States
----
-stateDiagram-v2
-
+flowchart LR
     Idle
     Walk
     Run
 
-    [*] --> Idle
-    Idle --> Walk: velocity > 0
-    Walk --> Idle: velocity == 0
-    Walk --> Run: run input held
-    Run --> Walk: run input released
+    Idle e1@-->|velocity > 0| Walk
+    Walk e2@-->|velocity == 0| Idle
+    Walk e3@-->|has run tag| Run
+    Run e4@-->|no run tag| Walk
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+    e4@{ animate: true }
 </pre>
 
 ### Take a Walk
@@ -137,9 +137,6 @@ Weapons can be sheathed and drawn. In order to attack with your weapon you must 
 The current flow of how weapons work looks roughly like this:
 
 <pre class="mermaid">
----
-title: Weapon Flow
----
 flowchart
     start(("Start"))
     no-weapon["No weapon equipped"]
@@ -360,9 +357,6 @@ Provides `UStateFragmentMap` data asset to enable control of core gameplay logic
 The way data flows through the game illustrates the architecture in several layers. Let's first look at how a human player's data (their input) flows from the input device all the way to cause some action in-game.
 
 <pre class="mermaid">
----
-title: Controller Layer Data Flow
----
 flowchart
     input-device["`
         **Input Device**
