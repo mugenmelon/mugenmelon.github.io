@@ -353,45 +353,57 @@ Provides `UInventoryComponent` for configurable per-actor item storage and `UIte
 Implements a configurable map of gameplay logic for use in state machines.  
 Provides `UStateFragmentMap` data asset to enable control of core gameplay logic to state machines, e.g. granting abilities, applying effects, playing montages etc. Also solves the "state explosion" problem when used with UE's Chooser plugin.
 
-### Why the Effort?
-
-You may notice that all of these modules...#TODO
-
 ---
 
 ## Game Data Flow
 
-The way data flows through the game illustrates the architecture in several layers. Let's look at how a human player's data (their input) flows first and then see how AI fits into the picture.
+The way data flows through the game illustrates the architecture in several layers. Let's first look at how a human player's data (their input) flows from the input device all the way to cause some action in-game.
 
 <pre class="mermaid">
 ---
-title: Human Player Data Flow
+title: Controller Layer Data Flow
 ---
 flowchart
-    input-device
+    input-device["`
+        **Input Device**
+        Gamepad, keyboard, mouse
+    `"]
 
-    subgraph controller-layer
-        enhanced-input
-        player-controller
+    subgraph controller-layer["`**Controller Layer**`"]
+        enhanced-input["`
+            **Enhanced Input**
+            Filters and modifies two types of input data: *raw* input and *action* input.
+        `"]
+        subgraph player-controller-group["`**Player Controller Group**`"]
+            player-state["`
+                **Player State**
+                Holds a player's current data, e.g. which game component is in focus.
+            `"]
+            player-controller["`
+                **Player Controller**
+                In-game agent of a human player. Uses *Player State* to hold player data. 
+            `"]
+            player-controller --o player-state
+        end
 
-        subgraph possession-comps
-            camera-spring-arm-comp
-            inventory-widget-comp
+        subgraph possession-comps["`**Possession Components**`"]
+            camera-spring-arm-comp["`**Camera Spring Arm Component**`"]
+            inventory-widget-comp["`**Inventory Widget Component**`"]
         end
     end
 
-    subgraph ai-controller-layer
-        ai-controller
+    subgraph pawn-layer["`**Pawn Layer**`"]
+        pawn["`
+            **Pawn**
+            The *Pawn* currently possessed by the *Player Controller*.
+        `"]
     end
 
-    subgraph pawn-layer
-        pawn
-    end
-
-    input-device e1@==> enhanced-input e2@==> player-controller
-    player-controller e3@==> camera-spring-arm-comp
-    player-controller e4@==> inventory-widget-comp
-    player-controller e5@==> pawn
+    input-device e1@==> enhanced-input
+    enhanced-input e2@==> player-controller
+    player-controller e3@===> camera-spring-arm-comp
+    player-controller e4@===> inventory-widget-comp
+    player-controller e5@====> pawn
 
     e1@{ animate: true }
     e2@{ animate: true }
