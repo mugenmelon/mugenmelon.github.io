@@ -353,8 +353,51 @@ Provides `UInventoryComponent` for configurable per-actor item storage and `UIte
 Implements a configurable map of gameplay logic for use in state machines.  
 Provides `UStateFragmentMap` data asset to enable control of core gameplay logic to state machines, e.g. granting abilities, applying effects, playing montages etc. Also solves the "state explosion" problem when used with UE's Chooser plugin.
 
+### Why the Effort?
+
+You may notice that all of these modules...#TODO
+
 ---
 
-## Game Architecture Flow
+## Game Data Flow
+
+The way data flows through the game illustrates the architecture in several layers. Let's look at how a human player's data (their input) flows first and then see how AI fits into the picture.
+
+<pre class="mermaid">
+---
+title: Human Player Data Flow
+---
+flowchart
+    input-device
+
+    subgraph controller-layer
+        enhanced-input
+        player-controller
+
+        subgraph possession-comps
+            camera-spring-arm-comp
+            inventory-widget-comp
+        end
+    end
+
+    subgraph ai-controller-layer
+        ai-controller
+    end
+
+    subgraph pawn-layer
+        pawn
+    end
+
+    input-device e1@==> enhanced-input e2@==> player-controller
+    player-controller e3@==> camera-spring-arm-comp
+    player-controller e4@==> inventory-widget-comp
+    player-controller e5@==> pawn
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+    e4@{ animate: true }
+    e5@{ animate: true }
+</pre>
 
 ---
