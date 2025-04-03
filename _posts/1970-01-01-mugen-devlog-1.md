@@ -82,14 +82,16 @@ Currently a very simple implementation of the basic locomotion states:
 
 <pre class="mermaid">
 flowchart LR
-    Idle
-    Walk
-    Run
+    start@{ shape: sm-circ }
+    idle["`**Idle**`"]
+    walk["`**Walk**`"]
+    run["`**Run**`"]
 
-    Idle e1@-->|velocity > 0| Walk
-    Walk e2@-->|velocity == 0| Idle
-    Walk e3@-->|has run tag| Run
-    Run e4@-->|no run tag| Walk
+    start --> idle
+    idle e1@-->|velocity > 0| walk
+    walk e2@-->|velocity == 0| idle
+    walk e3@-->|has run tag| run
+    run e4@-->|no run tag| walk
 
     e1@{ animate: true }
     e2@{ animate: true }
@@ -134,24 +136,31 @@ Equipping weapons happens entirely in-game with no UI. When you pick up a weapon
 
 Weapons can be sheathed and drawn. In order to attack with your weapon you must draw it beforehand. This is intentional so that the act of drawing your weapon carries strategic weight in battle. Heavy weapons take longer to draw than light ones.
 
-The current flow of how weapons work looks roughly like this:
+The current flow of how weapons work looks roughly like this, switching between different states (blue) through actions (red):
 
 <pre class="mermaid">
 flowchart
-    start(("Start"))
-    no-weapon["No weapon equipped"]
-    pickup-weapon["Pick up weapon"]
-    has-weapon["Weapon equipped"]
-    draw-weapon["Draw weapon"]
-    holding-weapon["Holding weapon"]
-    sheathe-weapon["Sheathe weapon"]
-    drop-weapon["Drop weapon"]
-    attack["Attack"]
+    start@{ shape: sm-circ }
+    no-weapon["`No weapon equipped`"]:::blueNode
+    pickup-weapon["`Pick up weapon`"]:::redNode
+    has-weapon["`Weapon equipped`"]:::blueNode
+    draw-weapon["`Draw weapon`"]:::redNode
+    holding-weapon["`Holding weapon`"]:::blueNode
+    sheathe-weapon["`Sheathe weapon`"]:::redNode
+    drop-weapon["`Drop weapon`"]:::redNode
+    attack["`Attack`"]:::redNode
 
-    start --> no-weapon --> pickup-weapon --> holding-weapon
+    start --> no-weapon
+    no-weapon --> pickup-weapon
+    pickup-weapon --> holding-weapon
     holding-weapon --> sheathe-weapon & drop-weapon & attack
-    sheathe-weapon --> has-weapon --> draw-weapon --> holding-weapon
+    sheathe-weapon --> has-weapon
+    has-weapon --> draw-weapon
+    draw-weapon --> holding-weapon
     drop-weapon --> no-weapon
+
+    classDef blueNode fill:#1a3a59,stroke:#4dabf5,stroke-width:2px,color:#e1f5fe
+    classDef redNode fill:#5c2126,stroke:#ff6b6b,stroke-width:2px,color:#ffe9e9
 </pre>
 
 In addition to the weapons you have equipped - when they are sheathed - you can pick up and use an additional "temporary" weapon from the battlefield. Currently there are four weapon types available:
