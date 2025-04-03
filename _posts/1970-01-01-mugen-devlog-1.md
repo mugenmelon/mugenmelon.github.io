@@ -315,7 +315,7 @@ Provides extended functionality for BehaviorTree nodes with `UBTDecorator_MugenB
 
 * **MugenFramework**  
 Extension of Unreal Engine's framework.  
-Provides light-weight extensions of core framework classes like `AMugenPawn`, `AMugenPlayerController`, `AMugenPlayerState` etc. Avoids any usage of `ACharacter`.
+Provides lightweight extensions of core framework classes like `AMugenPawn`, `AMugenPlayerController`, `AMugenPlayerState` etc. Avoids any usage of `ACharacter`.
 
 * **MugenInput**  
 Extension of EnhancedInput plugin.  
@@ -363,7 +363,9 @@ Provides `UStateFragmentMap` data asset to enable control of core gameplay logic
 
 ## Game Data Flow
 
-The way data flows through the game illustrates the architecture in several layers. Let's first look at how a human player's data (their input) flows from the input device all the way to cause some action in-game.
+The way data flows through the game illustrates its architecture in several layers. Let us first look at how a human player's data (their input) flows from the input device all the way to cause some action in-game, and then see how it works for AI agents.
+
+### Player Controller Layer
 
 <pre class="mermaid">
 flowchart
@@ -372,26 +374,29 @@ flowchart
         Gamepad, keyboard, mouse
     `"]
 
-    subgraph controller-layer["`**Controller Layer**`"]
+    subgraph player-controller-layer["`**Player Controller Layer**`"]
         enhanced-input["`
             **Enhanced Input**
             Filters and modifies two types of input data: *raw* input and *action* input.
         `"]
-        subgraph player-controller-group["`**Player Controller Group**`"]
-            player-state["`
-                **Player State**
-                Holds a player's current data, e.g. which game component is in focus.
-            `"]
-            player-controller["`
-                **Player Controller**
-                In-game agent of a human player. Uses *Player State* to hold player data. 
-            `"]
-            player-controller --o player-state
-        end
+        player-state["`
+            **Player State**
+            Holds a player's current state, e.g. which game component is in focus.
+        `"]
+        player-controller["`
+            **Player Controller**
+            In-game representation of a human player.
+        `"]
 
         subgraph possession-comps["`**Possession Components**`"]
-            camera-spring-arm-comp["`**Camera Spring Arm Component**`"]
-            inventory-widget-comp["`**Inventory Widget Component**`"]
+            camera-spring-arm-comp["`
+                **Camera Spring Arm**
+                *Pawn* Component
+            `"]
+            inventory-widget-comp["`
+                **Inventory Widget**
+                *Pawn* Component
+            `"]
         end
     end
 
@@ -404,6 +409,7 @@ flowchart
 
     input-device e1@==> enhanced-input
     enhanced-input e2@==> player-controller
+    player-controller --o player-state
     player-controller e3@===> camera-spring-arm-comp
     player-controller e4@===> inventory-widget-comp
     player-controller e5@====> pawn
@@ -414,5 +420,13 @@ flowchart
     e4@{ animate: true }
     e5@{ animate: true }
 </pre>
+
+The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. *Raw* input is directly forwarded to **Possession Components** or other downstream components. *Action* input sends a gameplay event to the possessed **Pawn**, triggering gameplay abilities.
+
+**Possession Components** are components that are added to a **Pawn** when possessed by the **Player Controller** and removed again when unpossessed. This keeps **Pawn** classes agnostic of "player components" and enables the player to transfer player functionality when switching control to *other* **Pawns**, such as the camera or UI widgets.
+
+As per Unreal Engine convention the **Player State** serves its namesake by storing a player's current state, keeping this responsibility away from the **Player Controller** which orchestrates input.
+
+### Pawn Layer
 
 ---
