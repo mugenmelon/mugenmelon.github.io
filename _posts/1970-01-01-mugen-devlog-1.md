@@ -389,14 +389,8 @@ flowchart
         `"]
 
         subgraph possession-comps["`**Possession Components**`"]
-            camera-spring-arm-comp["`
-                **Camera Spring Arm**
-                *Pawn* Component
-            `"]
-            inventory-widget-comp["`
-                **Inventory Widget**
-                *Pawn* Component
-            `"]
+            camera-spring-arm-comp["`**Camera Spring Arm Component**`"]
+            inventory-widget-comp["`**Inventory Widget Component**`"]
         end
     end
 
@@ -427,6 +421,70 @@ The input going from the **Input Device** is filtered and modified by the **Enha
 
 As per Unreal Engine convention the **Player State** serves its namesake by storing a player's current state, keeping this responsibility away from the **Player Controller** which orchestrates input.
 
-### Pawn Layer
+### Pawn Layer (Model)
+
+<pre class="mermaid">
+flowchart
+    subgraph player-controller-layer["`**Player Controller Layer**`"]
+        player-controller["`
+            **Player Controller**
+            In-game representation of a human player.
+        `"]
+    end
+
+    subgraph pawn-layer["`**Pawn Layer**`"]
+        pawn["`
+            **Pawn**
+            The *Pawn* currently possessed by the *Player Controller*.
+        `"]
+        subgraph pawn-components["`**Pawn Components**`"]
+            ability-comp["`
+                **Ability System Component**
+                Triggers abilities from incoming events and owns gameplay attributes & tags.
+            `"]
+            ability["`
+                **Ability**
+                An ability triggered by gameplay event. Orchestrates *Pawn* components for gameplay logic e.g. PickUp, Sheathe.
+            `"]
+            movement-comp["`
+                **Movement Component**
+                Collects movement input from *Player Controller* and moves the *Pawn* in the world.
+            `"]
+            equipment-comp["`
+                **Equipment Component**
+                Holds equipments slots and currently equipped objects. Broadcasts equipment events.
+            `"]
+        end
+
+        subgraph inventory-actor-group["`**Inventory Actor Group**`"]
+            inventory-actor["`
+                **Inventory Actor**
+                An equippable actor holding an *Inventory Component*.
+            `"]
+            inventory-comp["`
+                **Inventory Component**
+                Holds item slots and currently stored items.
+            `"]
+        end
+    end
+
+    player-controller e1@==> pawn
+    pawn e2@==> ability-comp
+    pawn --o movement-comp
+    pawn --o equipment-comp
+
+    equipment-comp ---o inventory-actor
+    inventory-actor --o inventory-comp
+
+    ability-comp e3@==> ability
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+</pre>
+
+### Pawn Layer (ViewModel)
+
+### Pawn Layer (View)
 
 ---
