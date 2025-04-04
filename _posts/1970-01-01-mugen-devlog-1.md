@@ -83,9 +83,9 @@ Currently a very simple implementation of the basic locomotion states:
 <pre class="mermaid">
 flowchart LR
     start@{ shape: sm-circ }
-    idle["`**Idle**`"]
-    walk["`**Walk**`"]
-    run["`**Run**`"]
+    idle["`**Idle**`"]:::redNode
+    walk["`**Walk**`"]:::yellowNode
+    run["`**Run**`"]:::greenNode
 
     start --> idle
     idle e1@-->|velocity > 0| walk
@@ -97,6 +97,8 @@ flowchart LR
     e2@{ animate: true }
     e3@{ animate: true }
     e4@{ animate: true }
+
+    {% include mermaid-styles.html %}
 </pre>
 
 ### Take a Walk
@@ -136,7 +138,7 @@ Equipping weapons happens entirely in-game with no UI. When you pick up a weapon
 
 Weapons can be sheathed and drawn. In order to attack with your weapon you must draw it beforehand. This is intentional so that the act of drawing your weapon carries strategic weight in battle. Heavy weapons take longer to draw than light ones.
 
-The current flow of how weapons work looks roughly like this, switching between different states (blue) through actions (red):
+The current flow of how weapons work looks roughly like this, switching between different <span style="color:#4dabf5">states</span> through <span style="color:#ff6b6b">actions</span>:
 
 <pre class="mermaid">
 flowchart
@@ -371,13 +373,13 @@ flowchart
     input-device["`
         **Input Device**
         Gamepad, keyboard, mouse
-    `"]
+    `"]:::yellowNode
 
     subgraph player-controller-layer["`**Player Controller Layer**`"]
         enhanced-input["`
             **Enhanced Input**
             Filters and modifies two types of input data: *raw* input and *action* input.
-        `"]
+        `"]:::yellowNode
         player-state["`
             **Player State**
             Holds a player's current state, e.g. which game component is in focus.
