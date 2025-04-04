@@ -430,7 +430,7 @@ The input going from the **Input Device** is filtered and modified by the **Enha
 
 As per Unreal Engine convention the **Player State** serves its namesake by storing a player's current state, keeping this responsibility away from the **Player Controller** which orchestrates input.
 
-### Pawn Layer (Model)
+### Pawn Model Layer
 
 <pre class="mermaid">
 flowchart
@@ -441,7 +441,7 @@ flowchart
         `"]:::blueNode
     end
 
-    subgraph pawn-layer["`**Pawn Layer**`"]
+    subgraph pawn-model-layer["`**Pawn Model Layer**`"]
         pawn["`
             **Pawn**
             The *Pawn* currently possessed by the *Player Controller*.
@@ -451,51 +451,60 @@ flowchart
                 **Ability System Component**
                 Triggers abilities from incoming events and owns gameplay attributes & tags.
             `"]:::redNode
-            ability["`
-                **Ability**
-                An ability triggered by gameplay event. Orchestrates *Pawn* components for gameplay logic e.g. PickUp, Sheathe.
-            `"]:::redNode
-            equipment-comp["`
-                **Equipment Component**
-                Holds equipments slots and currently equipped objects. Broadcasts equipment events.
-            `"]:::blueNode
             movement-comp["`
                 **Movement Component**
                 Collects movement input from *Player Controller* and moves the *Pawn* in the world.
             `"]:::blueNode
+            equipment-comp["`
+                **Equipment Component**
+                Holds equipments slots and currently equipped objects. Broadcasts equipment events.
+            `"]:::blueNode
         end
 
-        subgraph inventory-actor-group["`**Inventory Actor Group**`"]
-            inventory-actor["`
-                **Inventory Actor**
-                An equippable actor holding an *Inventory Component*.
-            `"]:::blueNode
-            inventory-comp["`
-                **Inventory Component**
-                Holds item slots and currently stored items.
-            `"]:::blueNode
-        end
+        ability["`
+            **Ability**
+            An ability triggered by gameplay event. Orchestrates *Pawn* components for gameplay logic e.g. PickUp, Sheathe.
+        `"]:::redNode
+        ability-targets["`
+            **Ability Targets**
+            Objects/actors being targeted by an ability.
+        `"]:::blueNode
+
+        inventory-actor["`
+            **Inventory Actor**
+            An equippable actor holding an *Inventory Component*.
+        `"]:::blueNode
+        inventory-comp["`
+            **Inventory Component**
+            Holds item slots and currently stored items.
+        `"]:::blueNode
     end
 
     player-controller e1@==> pawn
     pawn e2@==> ability-comp
-    pawn --o movement-comp
+    pawn e3@==> movement-comp
     pawn --o equipment-comp
 
-    equipment-comp ---o inventory-actor
+    equipment-comp --o inventory-actor
     inventory-actor --o inventory-comp
 
-    ability-comp e3@==> ability
+    ability-comp e4@==> ability
+    ability-comp --o ability-targets
 
     e1@{ animate: true }
     e2@{ animate: true }
     e3@{ animate: true }
+    e4@{ animate: true }
 
     {% include mermaid-styles.html %}
 </pre>
 
-### Pawn Layer (ViewModel)
+Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. The separation between these layers is not as clear-cut as with other other software.
 
-### Pawn Layer (View)
+Illustrated here are the components that make up the *Model* layer.
+
+### Pawn ViewModel Layer
+
+### Pawn View Layer
 
 ---
