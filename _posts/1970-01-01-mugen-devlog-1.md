@@ -138,19 +138,19 @@ Equipping weapons happens entirely in-game with no UI. When you pick up a weapon
 
 Weapons can be sheathed and drawn. In order to attack with your weapon you must draw it beforehand. This is intentional so that the act of drawing your weapon carries strategic weight in battle. Heavy weapons take longer to draw than light ones.
 
-The current flow of how weapons work looks roughly like this, switching between different <span style="color:#4dabf5">states</span> through <span style="color:#ff6b6b">actions</span>:
+The current flow of how weapons work looks roughly like this, switching between different <span class="blue">states</span> through <span class="red">actions</span>:
 
 <pre class="mermaid">
 flowchart
     start@{ shape: sm-circ }
-    no-weapon["`No weapon equipped`"]:::blueNode
-    pickup-weapon["`Pick up weapon`"]:::redNode
-    has-weapon["`Weapon equipped`"]:::blueNode
-    draw-weapon["`Draw weapon`"]:::redNode
-    holding-weapon["`Holding weapon`"]:::blueNode
-    sheathe-weapon["`Sheathe weapon`"]:::redNode
-    drop-weapon["`Drop weapon`"]:::redNode
-    attack["`Attack`"]:::redNode
+    no-weapon["`**No weapon equipped**`"]:::blueNode
+    pickup-weapon["`**Pick up weapon**`"]:::redNode
+    has-weapon["`**Weapon equipped**`"]:::blueNode
+    draw-weapon["`**Draw weapon**`"]:::redNode
+    holding-weapon["`**Holding weapon**`"]:::blueNode
+    sheathe-weapon["`**Sheathe weapon**`"]:::redNode
+    drop-weapon["`**Drop weapon**`"]:::redNode
+    attack["`**Attack**`"]:::redNode
 
     start --> no-weapon
     no-weapon --> pickup-weapon
