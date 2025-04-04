@@ -159,8 +159,7 @@ flowchart
     draw-weapon --> holding-weapon
     drop-weapon --> no-weapon
 
-    classDef blueNode fill:#1a3a59,stroke:#4dabf5,stroke-width:2px,color:#e1f5fe
-    classDef redNode fill:#5c2126,stroke:#ff6b6b,stroke-width:2px,color:#ffe9e9
+    {% include mermaid-styles.html %}
 </pre>
 
 In addition to the weapons you have equipped - when they are sheathed - you can pick up and use an additional "temporary" weapon from the battlefield. Currently there are four weapon types available:
@@ -382,11 +381,11 @@ flowchart
         player-state["`
             **Player State**
             Holds a player's current state, e.g. which game component is in focus.
-        `"]
+        `"]:::blueNode
         player-controller["`
             **Player Controller**
             In-game representation of a human player.
-        `"]
+        `"]:::blueNode
 
         subgraph possession-comps["`**Possession Components**`"]
             camera-spring-arm-comp["`**Camera Spring Arm Component**`"]
@@ -398,7 +397,7 @@ flowchart
         pawn["`
             **Pawn**
             The *Pawn* currently possessed by the *Player Controller*.
-        `"]
+        `"]:::blueNode
     end
 
     input-device e1@==> enhanced-input
@@ -413,6 +412,8 @@ flowchart
     e3@{ animate: true }
     e4@{ animate: true }
     e5@{ animate: true }
+
+    {% include mermaid-styles.html %}
 </pre>
 
 The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. *Raw* input is directly forwarded to **Possession Components** or other downstream components. *Action* input sends a gameplay event to the possessed **Pawn**, triggering gameplay abilities.
@@ -429,42 +430,42 @@ flowchart
         player-controller["`
             **Player Controller**
             In-game representation of a human player.
-        `"]
+        `"]:::blueNode
     end
 
     subgraph pawn-layer["`**Pawn Layer**`"]
         pawn["`
             **Pawn**
             The *Pawn* currently possessed by the *Player Controller*.
-        `"]
+        `"]:::blueNode
         subgraph pawn-components["`**Pawn Components**`"]
             ability-comp["`
                 **Ability System Component**
                 Triggers abilities from incoming events and owns gameplay attributes & tags.
-            `"]
+            `"]:::redNode
             ability["`
                 **Ability**
                 An ability triggered by gameplay event. Orchestrates *Pawn* components for gameplay logic e.g. PickUp, Sheathe.
-            `"]
+            `"]:::redNode
             movement-comp["`
                 **Movement Component**
                 Collects movement input from *Player Controller* and moves the *Pawn* in the world.
-            `"]
+            `"]:::blueNode
             equipment-comp["`
                 **Equipment Component**
                 Holds equipments slots and currently equipped objects. Broadcasts equipment events.
-            `"]
+            `"]:::blueNode
         end
 
         subgraph inventory-actor-group["`**Inventory Actor Group**`"]
             inventory-actor["`
                 **Inventory Actor**
                 An equippable actor holding an *Inventory Component*.
-            `"]
+            `"]:::blueNode
             inventory-comp["`
                 **Inventory Component**
                 Holds item slots and currently stored items.
-            `"]
+            `"]:::blueNode
         end
     end
 
@@ -481,6 +482,8 @@ flowchart
     e1@{ animate: true }
     e2@{ animate: true }
     e3@{ animate: true }
+
+    {% include mermaid-styles.html %}
 </pre>
 
 ### Pawn Layer (ViewModel)
