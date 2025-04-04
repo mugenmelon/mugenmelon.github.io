@@ -390,8 +390,14 @@ flowchart
         `"]:::blueNode
 
         subgraph possession-comps["`**Possession Components**`"]
-            camera-spring-arm-comp["`**Camera Spring Arm Component**`"]
-            inventory-widget-comp["`**Inventory Widget Component**`"]
+            camera-spring-arm-comp["`
+                **Camera Spring Arm Component**
+                Rotates & zooms the player's camera.
+            `"]:::yellowNode
+            inventory-widget-comp["`
+                **Inventory Widget Component**
+                Shows items in inventory as a UI widget.
+            `"]:::yellowNode
         end
     end
 
@@ -418,7 +424,7 @@ flowchart
     {% include mermaid-styles.html %}
 </pre>
 
-The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. *Raw* input is directly forwarded to **Possession Components** or other downstream components. *Action* input sends a gameplay event to the possessed **Pawn**, triggering gameplay abilities.
+The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. <span class="yellow">Raw</span> input is directly forwarded to **Possession Components** or other downstream components. <span class="red">Action</span> input sends a gameplay event to the possessed **Pawn's**, triggering gameplay abilities.
 
 **Possession Components** are components that are added to a **Pawn** when possessed by the **Player Controller** and removed again when unpossessed. This keeps **Pawn** classes agnostic of "player components" and enables the player to transfer player functionality when switching control to *other* **Pawns**, such as the camera or UI widgets.
 
@@ -449,13 +455,13 @@ flowchart
                 **Ability**
                 An ability triggered by gameplay event. Orchestrates *Pawn* components for gameplay logic e.g. PickUp, Sheathe.
             `"]:::redNode
-            movement-comp["`
-                **Movement Component**
-                Collects movement input from *Player Controller* and moves the *Pawn* in the world.
-            `"]:::blueNode
             equipment-comp["`
                 **Equipment Component**
                 Holds equipments slots and currently equipped objects. Broadcasts equipment events.
+            `"]:::blueNode
+            movement-comp["`
+                **Movement Component**
+                Collects movement input from *Player Controller* and moves the *Pawn* in the world.
             `"]:::blueNode
         end
 
