@@ -459,6 +459,10 @@ flowchart
                 **Equipment Component**
                 Holds equipments slots and currently equipped objects. Broadcasts equipment events.
             `"]:::blueNode
+            hitbox-comp["`
+                **Hitbox Component**
+                Holds & resolves hitbox assets for equipped weapons & executed attacks.
+            `"]:::blueNode
         end
 
         ability["`
@@ -483,6 +487,7 @@ flowchart
     player-controller e1@==> pawn
     pawn e2@==> ability-comp
     pawn e3@==> movement-comp
+    pawn --o hitbox-comp
     pawn --o equipment-comp
 
     equipment-comp --o inventory-actor
@@ -499,9 +504,15 @@ flowchart
     {% include mermaid-styles.html %}
 </pre>
 
-Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. The separation between these layers is not as clear-cut as with other other software.
+Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. While the separation into these layers is not as clear-cut as with other other software it is still useful to be aware of the intended reponsibilities of your game components.
 
-Illustrated here are the components that make up the *Model* layer.
+Illustrated here are the components that make up the *Model* layer, which owns and maintains all gameplay-related data. Input from the **Player Controller** flows to the **Movement Component** and **Ability System Component**. Depending on the gameplay event contained in the input the **Ability System Component** triggers various **Abilities**.
+
+**Abilities**  orchestrate all of the above components to implement almost every piece of gameplay logic, such as executing some targeting logic to find **Target Actors** in the world and instructing the **Equipment Component** to equip those targets to a particular equipment slot. Or they may instruct the **Equipment Component** to get the **Inventory Component** of the currently equipped **Inventory Actor** in order to store some item.
+
+It is important to point out that **Abilities** do not instruct on anything related to *visual* representation. An **Ability** should be agnostic of the visuals as to avoid strong coupling to any particular representation of the ability. While a "swing sword" ability may look different for different pawns, the internal gameplay-logic remains largely the same. Thus an **Ability** should only manipulate data within the *Model* layer it resides in to implement any given gameplay logic.
+
+But how do we then make this *Model* layer cause visual changes in the game?
 
 ### Pawn ViewModel Layer
 
