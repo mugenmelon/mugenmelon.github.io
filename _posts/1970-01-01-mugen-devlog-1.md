@@ -448,7 +448,7 @@ flowchart
             The *Pawn* currently possessed by the *Player Controller*.
         `"]:::blueNode
         ability-comp["`
-            **Ability System Component**
+            **Ability Component**
             Triggers abilities from incoming events and owns gameplay attributes & tags.
         `"]:::redNode
         movement-comp["`
@@ -466,7 +466,7 @@ flowchart
         `"]:::redNode
         ability-targets["`
             **Ability Targets**
-            Objects/actors being targeted by an ability.
+            Objects or actors being targeted by an ability.
         `"]:::blueNode
 
         inventory-actor["`
@@ -500,7 +500,7 @@ flowchart
 
 Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. While the separation into these layers is not as clear-cut as with other other software it is still useful to be aware of the intended reponsibilities of your game components. Expect a few discrepancies here as videogames are a heavily visual & interactive medium which often blurs the lines.
 
-Illustrated here are some of the components that make up the *Model* layer, which owns and mutates all gameplay-logic related data. Input from the **Player Controller** flows to the **Movement Component** and **Ability System Component**. Depending on the gameplay event contained in the input the **Ability System Component** triggers various **Abilities**.
+Illustrated here are some of the components that make up the *Model* layer, which owns and mutates all gameplay-logic related data. Input from the **Player Controller** flows to the **Movement Component** and **Ability Component**. Depending on the gameplay event contained in the input the **Ability Component** triggers various **Abilities**.
 
 **Abilities**  orchestrate all of the above components to implement almost every piece of gameplay logic, such as executing some targeting logic to find **Target Actors** in the world and instructing the **Equipment Component** to equip those targets to a particular equipment slot. Or they may instruct the **Equipment Component** to get the **Inventory Component** of the currently equipped **Inventory Actor** in order to store some item.
 
@@ -514,7 +514,7 @@ But how do we then make this *Model* layer cause visual changes in the game?
 flowchart TB
     subgraph pawn-model-layer["`**Pawn Model Layer**`"]
         ability-comp["`
-            **Ability System Component**
+            **Ability Component**
             Triggers abilities from incoming events and owns gameplay attributes & tags.
         `"]:::redNode
         movement-comp["`
@@ -544,6 +544,10 @@ flowchart TB
 
     {% include mermaid-styles.html %}
 </pre>
+
+The *Model* layer is reduced to a finite amount of states using a central **State Tree Component**. This component takes in events and binds to any relevant data from the *Model* layer to achieve central state management. This component sits at the heart of all gameplay & visual logic: depending on the current state it grants abilities, applies gameplay effects, plays animations and links anim class layers.
+
+This may seem very monolithic. However the **State Tree Component** has 3 separate StateTrees running in parallel. This avoids common issues with state machines, such as "state explosion" and keeps responsibilities separate.
 
 ### Pawn View Layer
 
