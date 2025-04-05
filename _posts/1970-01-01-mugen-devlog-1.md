@@ -610,4 +610,75 @@ Having arrived at the end of our small journey, let us take a look at where AI f
 
 ### AI Controller Layer
 
+<pre class="mermaid">
+flowchart TB
+    subgraph ai-controller-layer["`**AI Controller Layer**`"]
+        ai-controller["`
+            **AI Controller**
+            In-game representation of an artificial player.
+        `"]:::blueNode
+        subgraph what["`**What can I do?**`"]
+            ai-perception-comp["`
+                **AI Perception Component**
+                Senses in-game impulses, e.g. sight or hearing.
+            `"]:::purpleNode
+        end
+        subgraph which["`**Which should I do?**`"]
+            ai-goal-selection-comp["`
+                **AI Goal Selection Component**
+                Stores AI goals and selects which one to execute.
+            `"]:::purpleNode
+        end
+        subgraph how["`**How do I do it?**`"]
+            behavior-tree-comp["`
+                **Behavior Tree Component**
+                Simulates input by navigating and activating abilities.
+            `"]:::purpleNode
+            blackboard-comp["`
+                **Blackboard Component**
+                Data cache for AI calculations.
+            `"]:::purpleNode
+            path-following-comp["`
+                **Path Following Component**
+                Instructs how to navigate in-game.
+            `"]:::purpleNode
+        end
+    end
+
+    subgraph pawn-layer["`**Pawn Layer**`"]
+        pawn["`
+            **Pawn**
+            The *Pawn* currently possessed by the *AI Controller*.
+        `"]:::blueNode
+    end
+
+    ai-controller --o what
+    what e1@==> which
+    which e2@==> how
+    how e3@==> pawn
+
+    behavior-tree-comp --o blackboard-comp
+    behavior-tree-comp --o path-following-comp
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+</pre>
+
+As with the **Player Controller** the **AI Controller** slots in at the same level right before the **Pawn**. This makes sense as it is an artifical proxy for a human player. As described in the [AI section](#ai) the algorithm attempts to answers 3 questions: *What can I do? Which should I do? How do I do it*?
+
+*"What can I do?"* is answered by the **AI Perception Component**. It uses sense configuration to sense (sight, hearing etc.) relevant objects and events in the game world. When something was sensed successfully an event is broadcast to the next layer.
+
+*"Which should I do?"* is answered by the **AI Goal Selection Component**. It registers a set of AI goals that each calculate a score. The higher the score, the more likely that the goal will be selected. These goals can be provided e.g. by the previous layer's **AI Perception Component** events or passed via other methods: configuration, world context or even manually by a designer. Once a goal is selected it begins execution. AI goals can be implemented in multiple different ways to answer the last question.
+
+*"How do I do it?"* is answered by the **Behavior Tree Component**. While AI goals can also be implemented using StateTrees or plain Blueprints I opted for BehaviorTrees due to their gracefull handling of fallback behavior as well as their dynamicity to inject BehaviorTrees at runtime. The BehaviorTree uses both the **Blackboard Component** and **Path Following Component** to "calculate the world", navigate around it and execute abilities much like a human player would do.
+
+---
+
+# End of a Chapter, Beginning of a Book
+
+Truly if you have come this far: Thank you very much for your valuable time. I hope you will get *something* useful out of this wall of text. But more than that I hope that I have somewhat piqued your interest to know *more*.
+
+I'd be grateful if you joined me on this long journey.
+
 ---
