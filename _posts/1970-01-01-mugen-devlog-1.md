@@ -447,20 +447,18 @@ flowchart
             **Pawn**
             The *Pawn* currently possessed by the *Player Controller*.
         `"]:::blueNode
-        subgraph pawn-components["`**Pawn Components**`"]
-            ability-comp["`
-                **Ability System Component**
-                Triggers abilities from incoming events and owns gameplay attributes & tags.
-            `"]:::redNode
-            movement-comp["`
-                **Movement Component**
-                Collects movement input from *Player Controller* and moves the *Pawn* in the world.
-            `"]:::blueNode
-            equipment-comp["`
-                **Equipment Component**
-                Holds equipments slots and currently equipped objects. Broadcasts equipment events.
-            `"]:::blueNode
-        end
+        ability-comp["`
+            **Ability System Component**
+            Triggers abilities from incoming events and owns gameplay attributes & tags.
+        `"]:::redNode
+        movement-comp["`
+            **Movement Component**
+            Collects movement input from *Player Controller* and moves the *Pawn* in the world.
+        `"]:::blueNode
+        equipment-comp["`
+            **Equipment Component**
+            Holds equipments slots and currently equipped objects. Broadcasts equipment events.
+        `"]:::blueNode
 
         ability["`
             **Ability**
@@ -511,6 +509,41 @@ It is important to point out that **Abilities** do not instruct on anything rela
 But how do we then make this *Model* layer cause visual changes in the game?
 
 ### Pawn ViewModel Layer
+
+<pre class="mermaid">
+flowchart TB
+    subgraph pawn-model-layer["`**Pawn Model Layer**`"]
+        ability-comp["`
+            **Ability System Component**
+            Triggers abilities from incoming events and owns gameplay attributes & tags.
+        `"]:::redNode
+        movement-comp["`
+            **Movement Component**
+            Collects movement input from *Player Controller* and moves the *Pawn* in the world.
+        `"]:::blueNode
+        equipment-comp["`
+            **Equipment Component**
+            Holds equipments slots and currently equipped objects. Broadcasts equipment events.
+        `"]:::blueNode
+    end
+
+    subgraph pawn-viewmodel-layer["`**Pawn ViewModel Layer**`"]
+        state-tree-comp["`
+            **State Tree Component**
+            Reduces *Model* layer state to a finite amount of states.
+        `"]:::blueNode
+    end
+
+    ability-comp e1@==> state-tree-comp
+    movement-comp e2@==> state-tree-comp
+    equipment-comp e3@==> state-tree-comp
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+
+    {% include mermaid-styles.html %}
+</pre>
 
 ### Pawn View Layer
 
