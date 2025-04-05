@@ -425,13 +425,13 @@ flowchart
     {% include mermaid-styles.html %}
 </pre>
 
-The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. <span class="yellow">Raw</span> input is directly forwarded to **Possession Components** or other downstream components. <span class="red">Action</span> input sends a gameplay event to the possessed **Pawn**, triggering gameplay abilities.
+The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. <span class="yellow">Raw</span> input is directly forwarded to **Possession Components** or other downstream components.
 
 **Possession Components** are components that are added to a **Pawn** when possessed by the **Player Controller** and removed again when unpossessed. This keeps **Pawn** classes agnostic of "player components" and enables us to transfer player functionality when switching control to *other* **Pawns**, such as the camera or UI widgets.
 
 As per Unreal Engine convention the **Player State** serves its namesake by storing a player's current state, keeping this responsibility away from the **Player Controller** which orchestrates input.
 
-### Pawn Model Layer
+### Model Layer
 
 <pre class="mermaid">
 flowchart
@@ -442,7 +442,7 @@ flowchart
         `"]:::blueNode
     end
 
-    subgraph pawn-model-layer["`**Pawn Model Layer**`"]
+    subgraph model-layer["`**Model Layer**`"]
         pawn["`
             **Pawn**
             The *Pawn* currently possessed by the *Player Controller*.
@@ -508,11 +508,11 @@ It is important to point out that **Abilities** do not instruct on anything rela
 
 But how do we then make this *Model* layer cause visual changes in the game?
 
-### Pawn ViewModel Layer
+### ViewModel Layer
 
 <pre class="mermaid">
 flowchart TB
-    subgraph pawn-model-layer["`**Pawn Model Layer**`"]
+    subgraph model-layer["`**Model Layer**`"]
         ability-comp["`
             **Ability Component**
             Triggers abilities from incoming events and owns gameplay attributes & tags.
@@ -527,10 +527,18 @@ flowchart TB
         `"]:::blueNode
     end
 
-    subgraph pawn-viewmodel-layer["`**Pawn ViewModel Layer**`"]
+    subgraph viewmodel-layer["`**ViewModel Layer**`"]
         state-tree-comp["`
             **State Tree Component**
-            Reduces *Model* layer state to a finite amount of states.
+            Reduces *Model* layer state to a finite amount of states and controls gameplay & visual logic.
+        `"]:::blueNode
+        state-tree-action["`
+            **StateTree: Action**
+            Controls states such as *PickUp*, *PutDown*, *Draw*, *Sheathe*, *Attack* etc.
+        `"]:::redNode
+        state-tree-state["`
+            **StateTree: State**
+            Controls states such as *Default*, *Hold*, *Idle*, *Walk*, *Run* etc.
         `"]:::blueNode
     end
 
@@ -538,17 +546,68 @@ flowchart TB
     movement-comp e2@==> state-tree-comp
     equipment-comp e3@==> state-tree-comp
 
+    state-tree-comp e4@==> state-tree-action
+    state-tree-comp e5@==> state-tree-state
+
     e1@{ animate: true }
     e2@{ animate: true }
     e3@{ animate: true }
+    e4@{ animate: true }
+    e5@{ animate: true }
 
     {% include mermaid-styles.html %}
 </pre>
 
 The *Model* layer is reduced to a finite amount of states using a central **State Tree Component**. This component takes in events and binds to any relevant data from the *Model* layer to achieve central state management. This component sits at the heart of all gameplay & visual logic: depending on the current state it grants abilities, applies gameplay effects, plays animations and links anim class layers.
 
-This may seem very monolithic. However the **State Tree Component** has 3 separate StateTrees running in parallel. This avoids common issues with state machines, such as "state explosion" and keeps responsibilities separate.
+This may seem very monolithic at first. However the **State Tree Component** consists of 2 separate StateTrees running in parallel: one responsible for <span class="blue">states</span> and the other for <span class="red">actions</span>. This avoids common issues with state machines such as "state explosion" and allows layering states on top of each other without the need for complex hierarchies. For example, you can <span class="red">draw</span> and <span class="red">sheathe</span> your weapons *while* <span class="blue">running</span>.
 
-### Pawn View Layer
+### View Layer
+
+<pre class="mermaid">
+flowchart TB
+    subgraph model-layer["`**Model Layer**`"]
+        movement-comp["`
+            **Movement Component**
+            Collects movement input from *Player Controller* and moves the *Pawn* in the world.
+        `"]:::blueNode
+    end
+
+    subgraph viewmodel-layer["`**ViewModel Layer**`"]
+        state-tree-comp["`
+            **State Tree Component**
+            Reduces *Model* layer state to a finite amount of states and controls gameplay & visual logic.
+        `"]:::blueNode
+    end
+
+    subgraph view-layer["`**View Layer**`"]
+        skeletal-mesh-comp["`
+            **Skeletal Mesh Component**
+            Animatable visual representation of the owning actor.
+        `"]:::greenNode
+        anim-blueprint["`
+            **Animation Blueprint**
+            Collects *Model* and *ViewModel* data to control animation behavior.
+        `"]:::greenNode
+    end
+
+    skeletal-mesh-comp --o anim-blueprint
+
+    movement-comp e1@===> anim-blueprint
+    state-tree-comp e2@===> anim-blueprint
+
+    e1@{ animate: true }
+    e2@{ animate: true }
+
+    {% include mermaid-styles.html %}
+</pre>
+
+At the end of the game data flow we arrive in the *View* layer which mainly uses an **Animation Blueprint** to pull animation-relevant data from the prior two layers. In this case, the **Animation Blueprint** is receiving the current movement speed from the **Movement Component** and the current state hierarchy from the **State Tree Component** to control animation slots & layers. The **State Tree Component** then tells the **Animation Blueprint** what assets to play.
+
+These diagrams do not show the full picture. As I mentioned before, the lines are blurred and not everything flows perfectly in accordance with MVVM. In reality the **Skeletal Mesh Component** will "bubble up" events back to the **Ability** to trigger certain sections of it at certain timings using *Anim Notifies*, which is not illustrated here.
+
+Having arrived at the end of our small journey, let us take a look at where AI falls into place.
+
+### AI Controller Layer
 
 ---
