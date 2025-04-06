@@ -14,7 +14,7 @@ I have spent the last 4 years learning Unreal Engine from a software engineer's 
 
 *YouTube embed here*
 
-We will go in-depth on both game design and game architecture, dissecting my way of designing the prototype as a one-man-army game designer & programmer. I apologize in advance for the length of this first devlog, since it contains the results of 4 years of learning. Upcoming devlogs will be a lot smaller and more focused.
+We will go in-depth on both game design and game architecture, dissecting my approach to designing the prototype as a one-man-army game designer & programmer. I apologize in advance for the length of this first devlog, since it contains the results of 4 years of learning. Upcoming devlogs will be a lot shorter and more focused.
 
 For questions or feedback contact me through any of the linked channels. Open to make in-depth tutorials on any topic, so reach out!
 
@@ -22,7 +22,7 @@ For questions or feedback contact me through any of the linked channels. Open to
 
 # Game Design
 
-I am neither a professional game designer, nor well versed in current gaming trends & cultures. I have my set of favorite games and let them influence my game design decisions. Some of my all-time favorites and biggest inspirations include:
+I am neither a professional game designer nor well versed in current gaming trends & cultures. I have my favorite games and let them influence my game design decisions. Some of my all-time favorites and biggest inspirations include:
 
 * Dragon's Dogma: Dark Arisen
 * Monster Hunter Freedom Unite
@@ -33,7 +33,7 @@ I am neither a professional game designer, nor well versed in current gaming tre
 * Shadow of the Colossus
 * Legend of Heroes: Trails in the Sky
 
-At the same time I try to avoid "copying" any game too much. If the reason for a game design decision is "*Because game X does it*" then I avoid making that decision unless I find a good intrinsic reason for it.
+At the same time I try to avoid copying any game too much. If the reason for a game design decision is *"Because game X does it"* then I avoid making that decision unless I find a good intrinsic reason for it.
 
 ---
 
@@ -50,13 +50,13 @@ Build the core of your game *first*, worry about secondary features later.
 What is most important? Play the game and decide with your gut.
 
 3. **No rigid design document**  
-Do not plan ahead, you'll get it wrong.  
-Polaris approach: Aim only at your core principles.  
-When in doubt: "*You aren't gonna need it*".
+Do not plan ahead, you'll likely get it wrong.  
+North star approach: Aim only at your core principles.  
+When in doubt: *"You aren't gonna need it"*.
 
 4. **Follow the fun**  
-"*The game is fun. The game is a battle.  
-If it's not fun, why bother? If it's not a battle, where's the fun?*"
+*"The game is fun. The game is a battle.  
+If it's not fun, why bother? If it's not a battle, where's the fun?"*
 
 ---
 
@@ -66,22 +66,22 @@ Despite following my gut on this, I do have a few "north stars" that I aim at to
 
 * **Meaningful exploration, treacherous journeys and cozy sojourns between**
 * **The world & its inhabitants should feel alive**
-* **Adapting AI partners & enemies**
+* **Adaptable & intricate AI partners & enemies**
 * **Battle: Knowledge, preparation, strategy, then action**
 * **Equipment & items should be scarce and matter**
 * **Dynamic gameplay-driven music & audio**
 * **Timeless artstyle over realism**
 
-Being fully aware of the potentially massive scope behind them I will leave up for interpretation what these concepts mean *exactly*. My approach is: aim high but be unafraid to miss the mark. For full disclosure I should also list the things I do *not* care about in game development. If you are looking for advice or examples on any of these then you should take anything written on this page with a large grain of salt:
+Being fully aware of the massive scope behind them I will leave up for interpretation what these concepts mean *exactly*. My approach is: aim high but be unafraid to miss the mark. For full disclosure I should also list the things I do *not* care about in game development. If you are looking for advice or examples on any of these then you should take anything written on this page with a large grain of salt:
 
 * **Networking & online features**  
-Very low priority feature. The game must shine on its own first. Couch co-op would be more important.
+Very low priority feature. The game must shine on its own first.
 * **High fidelity visuals**  
 This is a "good enough" topic for me. No need for much fancy flourish. A solid artstyle applied consistently is better.
 * **High speed performance**  
 Another "good enough" topic. *Unmeasured* optimization is the root of all evil.
 * **Platform compatibility**  
-Not planning to release on any other platform at the moment.
+Not planning to release on any other platform other than PC at the moment.
 * **Economic viability**  
 This project is financially independent and does not exist for economic gain.
 
@@ -114,36 +114,35 @@ flowchart LR
     {% include mermaid-styles.html %}
 </pre>
 
-### Take a Walk
+### Learn to Walk
 
 I believe that taking things slow sometimes is an important part of games, especially ones that are heavy in story & world building. That was my reasoning for having a dedicated slow walk. Yes, I am talking about the infamous "RP walk". Aura farming *is* a core game mechanic.
 
 To me there is something inherently wrong with zooming past content as quickly as the game will allow you to. It feels like a sign that the content is just not as interesting as it probably should be. Open world games suffer heavily from this.
 
-### Gotta Go Fast
+### Before You Run
 
 At first I did not have running at all, but playing became very cumbersome. There is a delicate balance to strike here between slow & methodical vs. fast & aggressive.
 
-By now I have extended the utility of "running" to also affects gameplay: Putting down an object you are carrying *while* running will instead make you throw the object. This gives a bit of depth without overcomplicating the control scheme.
+By now I have extended the utility of "running" to also affects gameplay: Putting down an object you are carrying *while* running will instead make you throw the object. This gives it a bit of depth without overcomplicating the control scheme.
 
 ---
 
 ## Props
 
-Props are interactable objects in the world. This goes for simple props like barrels, but also [weapons](#weapons) and even the [inventory](#inventory). Some props have attributes such as "health" or "damage".
+Props are interactable objects in the world. This goes for simple props like barrels, but also [weapons](#weapons) and even the [inventory](#inventory) of the player & NPCs. Some props have attributes such as "health" or "damage".
 
 ### Barrelatively Useful
 
-At the moment there is only one *pure* prop in the game: a barrel. It came first because it was the simplest "everyday" object I could come up with for a game world aside from a functionally equivalent crate. This decision bore fruit: The game's entire interaction, state & animation system was prototyped entirely on the basis of picking up, putting down and throwing a barrel.  
-And now they can be broken apart once their "health" attribute reaches 0 when attacked.
+At the moment there is only one *pure* prop in the game: a barrel. It came first because it was the simplest "everyday" object I could come up with for a game world. This decision bore fruit: The game's entire interaction, state & animation system was prototyped entirely on the basis of picking up and putting down a barrel. And now they can even be broken apart when an attack reduces their "health" to 0.
 
 ---
 
 ## Weapons
 
-A special type of prop with an obvious use case: combat. I really enjoyed how *Dragon's Dogma* handled weapons, but would like to take it a few steps further.
+A special type of prop with a simple use case: combat. I really enjoyed how *Dragon's Dogma* handled weapons, but would like to take it a few steps further.
 
-### Remember the Basics of CQC!
+### Remember the Basics of CQC
 
 You can equip up to 2 one-hand weapons, or 1 two-handed weapon. When no weapons are equipped, your fists serve as your weapon instead. There are no hard limits on one-handed weapons: You can equip any weapon in either your primary or secondary hand.
 
@@ -181,15 +180,15 @@ flowchart
 In addition to the weapons you have equipped - when they are sheathed - you can pick up and use an additional "temporary" weapon from the battlefield. Currently there are four weapon types available:
 
 * *Fists*: Your default weapon. Fast but low damage.
-* *Swords*: Balance between speed & damage. Deadly when dual-wielding.
+* *Swords*: Balance between speed & damage.
 * *Greatswords*: Really slow but deals serious damage.
-* *Lanterns*: Provide light, but can be used as a weapon.
+* *Lanterns*: Mainly provides light, but can be used as a weapon.
 
 ---
 
 ## Inventory
 
-Another special type of prop is the inventory. It can store a certain amount of items. That's right: There is no *classic* inventory that the player has. If you want to store items then you need to use an inventory prop such as a backpack. Same rule applies to all NPCs in the game.
+Another special type of prop is the inventory. Unsurprisingly it can store a certain amount of items. That's right: There is no *classic* inventory that the player has. If you want to store items then you need to use an inventory prop such as a backpack. Same rule applies to all NPCs in the game.
 
 Inventories have a limited numbers of item slots by design. The goal is to discourage hoarding and encourage strategic thinking like:
 
@@ -197,13 +196,13 @@ Inventories have a limited numbers of item slots by design. The goal is to disco
 * Should I pick up this item or I leave it and come back later?
 * Can I safely leave my backpack here, or does it contain something valuable?
 
-### Backpack It Up!
+### Backpacks
 
-Backpacks are the first and currently only inventory prop. They can be picked up and dropped like any other prop. Exactly as with weapons you can also "draw" and "sheathe" your backpack in order to view or hide the items within. After drawing your backpack it occupies both of your hands, so you cannot use any weapons while in your inventory!
+Backpacks are the first and currently only inventory prop. They can be picked up and dropped like any other prop. Exactly as with weapons you can also "draw" and "sheathe" your backpack in order to view or hide the items within. After drawing your backpack it occupies both of your hands, so you cannot use any weapons while rummaging through your inventory!
 
-### Sweet Itemptation
+### Items
 
-Right now the only items in the game are weapons. After adding it to your inventory an item can be dropped using the inventory UI widget. At present, this will simply respawn the original item wherever you stand.
+Right now the only items in the game are weapons. After adding one to your inventory an item can be dropped using the inventory UI widget. At present this will simply respawn the original item wherever you stand.
 
 ---
 
@@ -215,8 +214,8 @@ The system is flexible enough to allow any kind of time-tracking imaginable:
 
 * Want to use the term "lunar cycle" instead? Time units can be named freely
 * Want 3 days in a week? Define unit relations freely
-* Want time to pass slower or faster? Specify a higher/lower multiplier, even while playing
-* Want another time on a different planet? Just define another set of time units
+* Want time to pass slower or faster? Specify a higher/lower multiplier, even at runtime
+* Want another time on a different planet? Just add another set of time units
 
 ---
 
@@ -229,21 +228,21 @@ My philosophy on AI is:
 
 Therefore every game design feature I have listed so far is not exclusive to either human or AI players. Anyone can move & navigate the world, interact with props and use weapons & inventories.
 
-The current AI agents autonomously roaming the game world are a simple implementation of the AI system, but use every single feature of the game's AI "tech stack". For fear of getting too technical now, I will only roughly outline how an AI in the game works by answering 3 simple questions.
+The current AI agents autonomously roaming the game world are a simple implementation of the AI system, but they use every single feature of the game's AI "tech stack". For fear of getting too technical now, I will only roughly outline how an AI in the game works by answering 3 simple questions.
 
-### What Are All the Things I Can Do?
+### What Could I Do?
 
-AI agents receive "impulses" (called "goals") from all kinds of sources. Each goal represents "a thing I can do". One such source is their sense of sight.
+AI agents receive "impulses" (called "goals") from all kinds of sources. Each goal represents "a thing I could do". One such source is their sense of sight.
 
-For example, when an AI agent sees a barrel it receives a goal to "pick up the barrel". Each agent tracks a list of goals. Some of them are goals that are *always* available as fallback behavior, such as roaming around the world at random.
+For example, when an AI agent sees a barrel it receives a goal to "pick up the barrel". Each agent tracks a list of goals. Some of them are *always* available as fallback behavior, such as roaming around the world at random.
 
 These goals are individually configurable per AI agent: A different AI agent may never want to pick up a barrel.
 
-### Which of Those Things Should I Do?
+### Which Should I Do?
 
-Each goal in the list of possible goals calculates a score for itself. The higher the score, the more important the goal. The AI selects the goal with the highest score and tries to execute it.
+Each goal in the list constantly calculates a score for itself. The higher the score, the more important the goal. The AI selects the goal with the highest score and tries to execute it.
 
-### How Do I Do the Thing?
+### How Do I Do It?
 
 Once selected, a goal starts executing its logic: navigating the character and interacting with the world. How granular a goal is and what technology is used to implement it is up to the designer. I personally prefer using small, modular goals and behavior trees for this.
 
@@ -253,7 +252,7 @@ Once selected, a goal starts executing its logic: navigating the character and i
 
 If you have read this far: thank you for your interest and attention.
 
-A friendly warning: the road ahead is treacherous and brimming with monsters. We will dive into game architecture and outline a few technical concepts to understand how things are working under the hood and why they work the way they do.
+A friendly warning: the road ahead is treacherous and brimming with monsters. We will dive into game architecture and outline a few technical concepts to understand how things work under the hood and why they work.
 
 ---
 
