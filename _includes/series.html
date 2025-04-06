@@ -7,12 +7,16 @@
                 {%- for post in series_posts -%}
                 <li>
                     {%- if post.url == page.url -%}
-                        <strong>Part {{ post.series_part }}: {% include post-link.html post=post show_published_date=true %} (Current)</strong>
+                        <strong>Part {{ post.series_part }}: {% include post-link.html post=post show_published_date=true %}</strong>
                     {%- else -%}
                         Part {{ post.series_part }}: {% include post-link.html post=post show_published_date=true -%}
                     {%- endif -%}
                 </li>
                 {%- endfor -%}
+                {%- assign last_post = series_posts.last -%}
+                {%- if last_post.series_finale != true -%}
+                    <li>Part {{ last_post.series_part | plus: 1 }}: Coming soon...</li>
+                {%- endif -%}
             </ul>
         </div>
     {%- endif -%}
