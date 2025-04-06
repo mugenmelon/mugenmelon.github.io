@@ -439,7 +439,7 @@ flowchart
 
 The input going from the **Input Device** is filtered and modified by the **Enhanced Input** plugin before being handed over to the **Player Controller**. <span class="yellow">Raw</span> input is directly forwarded to **Possession Components** or other downstream components.
 
-**Possession Components** are components that are added to a **Pawn** when possessed by the **Player Controller** and removed again when unpossessed. This keeps **Pawn** classes agnostic of "player components" and enables us to transfer player functionality when switching control to *other* **Pawns**, such as the camera or UI widgets.
+**Possession Components** are components that are added to a **Pawn** when possessed by the **Player Controller** and removed again when unpossessed. This keeps **Pawn** classes agnostic of "player components" and enables us to transfer player functionality (such as the camera or UI widgets) when switching control to *other* **Pawns**.
 
 As per Unreal Engine convention the **Player State** serves its namesake by storing a player's current state, keeping this responsibility away from the **Player Controller** which orchestrates input.
 
@@ -510,11 +510,11 @@ flowchart
     {% include mermaid-styles.html %}
 </pre>
 
-Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. While the separation into these layers is not as clear-cut as with other other software it is still useful to be aware of the intended reponsibilities of your game components. Expect a few discrepancies here as videogames are a heavily visual & interactive medium which often blurs the lines.
+Akin to the MVVM pattern the **Pawn** layer can itself be separated into 3 technical layers: *Model*, *ViewModel* and *View*. While the separation into these layers is not as clear-cut as with other other software it is still useful to be aware of the intended reponsibilities of your game components. Expect a few discrepancies here as videogames are a heavily visual & interactive medium which often forces us to blur the lines.
 
 Illustrated here are some of the components that make up the *Model* layer, which owns and mutates all gameplay-logic related data. Input from the **Player Controller** flows to the **Movement Component** and **Ability Component**. Depending on the gameplay event contained in the input the **Ability Component** triggers various **Abilities**.
 
-**Abilities**  orchestrate all of the above components to implement almost every piece of gameplay logic, such as executing some targeting logic to find **Target Actors** in the world and instructing the **Equipment Component** to equip those targets to a particular equipment slot. Or they may instruct the **Equipment Component** to get the **Inventory Component** of the currently equipped **Inventory Actor** in order to store some item.
+**Abilities**  orchestrate all of the above components to implement almost every piece of gameplay logic, such as targeting to find **Target Actors** in the world and instructing the **Equipment Component** to equip those targets to a particular equipment slot. Or they may instruct the **Equipment Component** to get the **Inventory Component** of the currently equipped **Inventory Actor** in order to store some item.
 
 It is important to point out that **Abilities** do not instruct on anything related to *visual* representation. An **Ability** should be agnostic of the visuals as to avoid strong coupling to any particular representation of the ability. While a "swing sword" ability may look different for different pawns, the internal gameplay-logic remains largely the same. Thus an **Ability** should only mutate data within the *Model* layer it resides in to implement any given gameplay logic.
 
@@ -570,9 +570,9 @@ flowchart TB
     {% include mermaid-styles.html %}
 </pre>
 
-The *Model* layer is reduced to a finite amount of states using a central **State Tree Component**. This component takes in events and binds to any relevant data from the *Model* layer to achieve central state management. This component sits at the heart of all gameplay & visual logic: depending on the current state it grants abilities, applies gameplay effects, plays animations and links anim class layers.
+The *Model* layer is reduced to a finite amount of states using a central **State Tree Component**. It takes in events and binds to any relevant data from the *Model* layer to achieve central state management, thus sits at the heart of all gameplay & visual logic: depending on the current state it grants abilities, applies gameplay effects, plays animations and links anim class layers.
 
-This may seem very monolithic at first. However the **State Tree Component** consists of 2 separate StateTrees running in parallel: one responsible for <span class="blue">states</span> and the other for <span class="red">actions</span>. This avoids common issues with state machines such as "state explosion" and allows layering states on top of each other without the need for complex hierarchies. For example, you can <span class="red">draw</span> and <span class="red">sheathe</span> your weapons *while* <span class="blue">running</span>.
+This may seem monolithic at first. However, the **State Tree Component** consists of 2 separate StateTrees running in parallel: one responsible for <span class="blue">states</span> and the other for <span class="red">actions</span>. This avoids common issues with state machines such as "state explosion" and allows layering states on top of each other without the need for complex hierarchies. For example, you can <span class="red">draw</span> and <span class="red">sheathe</span> your weapons *while* <span class="blue">running</span>.
 
 ### View Layer
 
@@ -614,7 +614,7 @@ flowchart TB
     {% include mermaid-styles.html %}
 </pre>
 
-At the end of the game data flow we arrive in the *View* layer which mainly uses an **Animation Blueprint** to pull animation-relevant data from the prior two layers. In this case, the **Animation Blueprint** is receiving the current movement speed from the **Movement Component** and the current state hierarchy from the **State Tree Component** to control animation slots & layers. The **State Tree Component** then tells the **Animation Blueprint** what assets to play.
+At the end of the game data flow we arrive in the *View* layer which mainly uses an **Animation Blueprint** to pull animation-related data from the prior two layers. In this case, the **Animation Blueprint** is receiving the current movement speed from the **Movement Component** and the current state hierarchy from the **State Tree Component** to control animation slots & layers. The **State Tree Component** then tells the **Animation Blueprint** what assets to play.
 
 These diagrams do not show the full picture. As I mentioned before, the lines are blurred and not everything flows perfectly in accordance with MVVM. In reality the **Skeletal Mesh Component** will "bubble up" events back to the **Ability** to trigger certain sections of it at certain timings using *Anim Notifies*, which is not illustrated here.
 
@@ -675,22 +675,22 @@ flowchart TB
     e1@{ animate: true }
     e2@{ animate: true }
     e3@{ animate: true }
+
+    {% include mermaid-styles.html %}
 </pre>
 
-As with the **Player Controller** the **AI Controller** slots in at the same level right before the **Pawn**. This makes sense as it is an artifical proxy for a human player. As described in the [AI section](#ai) the algorithm attempts to answers 3 questions: *What can I do? Which should I do? How do I do it*?
+As with the **Player Controller** the **AI Controller** slots in at the same level right before the **Pawn**. This makes sense since it is an artifical proxy for a human player. As described in the [AI section](#ai) the algorithm attempts to answers 3 questions: *"What could I do? Which should I do? How do I do it?"*
 
-*"What can I do?"* is answered by the **AI Perception Component**. It uses sense configuration to sense (sight, hearing etc.) relevant objects and events in the game world. When something was sensed successfully an event is broadcast to the next layer.
+*"What can I do?"* is answered by the **AI Perception Component**. It is configured to sense (sight, hearing etc.) relevant objects and events in the game world. When something relevant was sensed successfully an event is broadcast to the next layer.
 
-*"Which should I do?"* is answered by the **AI Goal Selection Component**. It registers a set of AI goals that each calculate a score. The higher the score, the more likely that the goal will be selected. These goals can be provided e.g. by the previous layer's **AI Perception Component** events or passed via other methods: configuration, world context or even manually by a designer. Once a goal is selected it begins execution. AI goals can be implemented in multiple different ways to answer the last question.
+*"Which should I do?"* is answered by the **AI Goal Selection Component**. It hold a set of AI goals that each calculate a score. The higher the score, the more likely that the goal will be selected. These goals can be provided e.g. by the previous layer's **AI Perception Component** events or passed via other methods: configuration, world context or even manually by a designer. Once a goal is selected it begins execution. AI goals can be implemented in multiple different ways to answer the last question.
 
-*"How do I do it?"* is answered by the **Behavior Tree Component**. While AI goals can also be implemented using StateTrees or plain Blueprints I opted for BehaviorTrees due to their gracefull handling of fallback behavior as well as their dynamicity to inject BehaviorTrees at runtime. The BehaviorTree uses both the **Blackboard Component** and **Path Following Component** to "calculate the world", navigate around it and execute abilities much like a human player would do.
+*"How do I do it?"* is answered by the **Behavior Tree Component**. While AI goals can also be implemented using StateTrees or plain Blueprints I opted for behavior trees due to their graceful handling of fallback behavior and ability to dynamically inject behavior trees at runtime. The behavior tree uses both the **Blackboard Component** and **Path Following Component** to "calculate the world", navigate around it and execute abilities much like a human player would do.
 
 ---
 
 # End of a Chapter, Start of a Book
 
-Truly if you have come this far: Thank you very much for your valuable time. I hope you have gotten *something* useful out these ramblings of an insane fool. But more than that I hope that I have somewhat piqued your interest to know more. You can see what I am working on next on the [Kanban]({% link kanban.md %}) page.
-
-I'd be grateful if you joined me on this long journey ahead.
+Thank you very much for your valuable time. I hope you have gotten *something* useful out of the ramblings of an insane fool. But more than that I hope that I have somewhat piqued your interest to know more. You can see what I work on next on the [Kanban]({% link kanban.md %}) page.
 
 ---
