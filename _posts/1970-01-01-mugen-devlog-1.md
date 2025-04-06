@@ -72,7 +72,20 @@ Despite following my gut on this, I do have a few "north stars" that I aim at to
 * **Dynamic gameplay-driven music & audio**
 * **Timeless artstyle over realism**
 
-Being fully aware of the potentially massive scope behind them I will leave up for interpretation what these concepts mean *exactly*. My approach is: aim high but be unafraid to miss the mark. That being said let's dive a bit deeper into the current state of the game and its features.
+Being fully aware of the potentially massive scope behind them I will leave up for interpretation what these concepts mean *exactly*. My approach is: aim high but be unafraid to miss the mark. For full disclosure I should also list the things I do *not* care about in game development. If you are looking for advice or examples on any of these then you should take anything written on this page with a large grain of salt:
+
+* **Networking & online features**  
+Very low priority feature. The game must shine on its own first. Couch co-op would be more important.
+* **High fidelity visuals**  
+This is a "good enough" topic for me. No need for much fancy flourish. A solid artstyle applied consistently is better.
+* **High speed performance**  
+Another "good enough" topic. *Unmeasured* optimization is the root of all evil.
+* **Platform compatibility**  
+Not planning to release on any other platform at the moment.
+* **Economic viability**  
+This project is financially independent and does not exist for economic gain.
+
+That being said let's dive a bit deeper into the current state of the game and its features.
 
 ---
 
@@ -675,10 +688,10 @@ As with the **Player Controller** the **AI Controller** slots in at the same lev
 
 ---
 
-# End of a Chapter, Beginning of a Book
+# End of a Chapter, Start of a Book
 
-Truly if you have come this far: Thank you very much for your valuable time. I hope you will get *something* useful out of this wall of text. But more than that I hope that I have somewhat piqued your interest to know *more*.
+Truly if you have come this far: Thank you very much for your valuable time. I hope you have gotten *something* useful out these ramblings of an insane fool. But more than that I hope that I have somewhat piqued your interest to know more. You can see what I am working on next on the [Kanban]({% link kanban.md %}) page.
 
-I'd be grateful if you joined me on this long journey.
+I'd be grateful if you joined me on this long journey ahead.
 
 ---
