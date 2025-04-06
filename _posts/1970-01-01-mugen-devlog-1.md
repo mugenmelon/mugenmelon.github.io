@@ -18,6 +18,8 @@ We will go in-depth on both game design and game architecture, dissecting my app
 
 For questions or feedback contact me through any of the linked channels. Open to make in-depth tutorials on any topic, so reach out!
 
+{% include toc.md %}
+
 ---
 
 # Game Design
