@@ -281,10 +281,10 @@ Getting blocked by tech is frustrating. Creative freedom is the goal.
 
 * **Emergent systems**  
 Modular code and clean boundaries often work in unexpected ways.  
-Sometimes they solve problems you didn't even think you had.  
+Sometimes they solve problems you didn't even know you had.  
 At other times the one complex feature you had planned is suddenly very easy to build.
 
-Your mileage may vary of course. Game architecture is a topic that should always be taken with a large grain of salt. It is crucial that you make your own mistakes and experiences and decide for yourself what is right for your game.
+Your mileage may vary of course. Game architecture is a topic that should always be taken with a large grain of salt. It is crucial that you make your own mistakes and experiences and decide for yourself what is right for you and your game.
 
 ---
 
