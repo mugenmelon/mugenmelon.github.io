@@ -691,6 +691,6 @@ As with the **Player Controller** the **AI Controller** slots in at the same lev
 
 # End of a Chapter, Start of a Book
 
-Thank you very much for your valuable time. I hope you have gotten *something* useful out of the ramblings of an insane fool. But more than that I hope that I have somewhat piqued your interest to know more. You can see what I work on next on the [Kanban]({% link kanban.md %}) page.
+Thank you very much for your valuable time. I hope you have gotten *something* useful out of it. But more than that I hope that I have somewhat piqued your interest to know more. Check out what I'm working on next on the [Kanban]({% link kanban.md %}) page.
 
 ---
