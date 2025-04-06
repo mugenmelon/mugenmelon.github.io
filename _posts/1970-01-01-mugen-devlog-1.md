@@ -8,7 +8,7 @@ diagrams: true
 published: true
 ---
 
-Hi, thank you for visiting and welcome to my first devlog!
+In this devlog I will introduce the prototype's game design & game architecture.
 
 I have spent the last 4 years learning Unreal Engine from a software engineer's perspective while building a very early prototype of what will hopefully be a fun action RPG. It took a long time and while I have made many mistakes along the way I feel that the project is at a point where I can start talking about it and sharing progress. This post is a complementary deep-dive into the first devlog on my YouTube channel:
 
