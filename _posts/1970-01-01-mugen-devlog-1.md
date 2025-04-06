@@ -53,7 +53,7 @@ What is most important? Play the game and decide with your gut.
 
 3. **No rigid design document**  
 Do not plan ahead, you'll likely get it wrong.  
-North star approach: Aim only at your core principles.  
+North star approach: Aim only at your core concepts.  
 When in doubt: *"You aren't gonna need it"*.
 
 4. **Follow the fun**  
@@ -116,15 +116,9 @@ flowchart LR
     {% include mermaid-styles.html %}
 </pre>
 
-### Learn to Walk
-
 I believe that taking things slow sometimes is an important part of games, especially ones that are heavy in story & world building. That was my reasoning for having a dedicated slow walk. Yes, I am talking about the infamous "RP walk". Aura farming *is* a core game mechanic.
 
-To me there is something inherently wrong with zooming past content as quickly as the game will allow you to. It feels like a sign that the content is just not as interesting as it probably should be. Open world games suffer heavily from this.
-
-### Before You Run
-
-At first I did not have running at all, but playing became very cumbersome. There is a delicate balance to strike here between slow & methodical vs. fast & aggressive.
+To me there is something inherently wrong with zooming past content as quickly as the game will allow you to. It feels like a sign that the content is just not as interesting as it probably should be. Open world games suffer heavily from this. At first I did not even have running at all, but playing became very cumbersome. There is a delicate balance to strike here between slow & methodical vs. fast & aggressive.
 
 By now I have extended the utility of "running" to also affects gameplay: Putting down an object you are carrying *while* running will instead make you throw the object. This gives it a bit of depth without overcomplicating the control scheme.
 
@@ -134,8 +128,6 @@ By now I have extended the utility of "running" to also affects gameplay: Puttin
 
 Props are interactable objects in the world. This goes for simple props like barrels, but also [weapons](#weapons) and even the [inventory](#inventory) of the player & NPCs. Some props have attributes such as "health" or "damage".
 
-### Barrelatively Useful
-
 At the moment there is only one *pure* prop in the game: a barrel. It came first because it was the simplest "everyday" object I could come up with for a game world. This decision bore fruit: The game's entire interaction, state & animation system was prototyped entirely on the basis of picking up and putting down a barrel. And now they can even be broken apart when an attack reduces their "health" to 0.
 
 ---
@@ -143,8 +135,6 @@ At the moment there is only one *pure* prop in the game: a barrel. It came first
 ## Weapons
 
 A special type of prop with a simple use case: combat. I really enjoyed how *Dragon's Dogma* handled weapons, but would like to take it a few steps further.
-
-### Remember the Basics of CQC
 
 You can equip up to 2 one-hand weapons, or 1 two-handed weapon. When no weapons are equipped, your fists serve as your weapon instead. There are no hard limits on one-handed weapons: You can equip any weapon in either your primary or secondary hand.
 
@@ -198,11 +188,7 @@ Inventories have a limited numbers of item slots by design. The goal is to disco
 * Should I pick up this item or I leave it and come back later?
 * Can I safely leave my backpack here, or does it contain something valuable?
 
-### Backpacks
-
-Backpacks are the first and currently only inventory prop. They can be picked up and dropped like any other prop. Exactly as with weapons you can also "draw" and "sheathe" your backpack in order to view or hide the items within. After drawing your backpack it occupies both of your hands, so you cannot use any weapons while rummaging through your inventory!
-
-### Items
+Backpacks are the first and currently only inventory prop. They can be picked up and dropped like any other prop. Exactly as with weapons you can also "draw" and "sheathe" your backpack in order to view or hide the items within. After drawing your backpack it occupies both of your hands, so you cannot use any weapons while rummaging through your inventory.
 
 Right now the only items in the game are weapons. After adding one to your inventory an item can be dropped using the inventory UI widget. At present this will simply respawn the original item wherever you stand.
 
@@ -247,14 +233,6 @@ Each goal in the list constantly calculates a score for itself. The higher the s
 ### How Do I Do It?
 
 Once selected, a goal starts executing its logic: navigating the character and interacting with the world. How granular a goal is and what technology is used to implement it is up to the designer. I personally prefer using small, modular goals and behavior trees for this.
-
----
-
-# A Brief Respite
-
-If you have read this far: thank you for your interest and attention.
-
-A friendly warning: the road ahead is treacherous and brimming with monsters. We will dive into game architecture and outline a few technical concepts to understand how things work under the hood and why they work.
 
 ---
 
@@ -631,7 +609,7 @@ flowchart TB
             **AI Controller**
             In-game representation of an artificial player.
         `"]:::blueNode
-        subgraph what["`**What can I do?**`"]
+        subgraph what["`**What could I do?**`"]
             ai-perception-comp["`
                 **AI Perception Component**
                 Senses in-game impulses, e.g. sight or hearing.
@@ -683,7 +661,7 @@ flowchart TB
 
 As with the **Player Controller** the **AI Controller** slots in at the same level right before the **Pawn**. This makes sense since it is an artifical proxy for a human player. As described in the [AI section](#ai) the algorithm attempts to answers 3 questions: *"What could I do? Which should I do? How do I do it?"*
 
-*"What can I do?"* is answered by the **AI Perception Component**. It is configured to sense (sight, hearing etc.) relevant objects and events in the game world. When something relevant was sensed successfully an event is broadcast to the next layer.
+*"What could I do?"* is answered by the **AI Perception Component**. It is configured to sense (sight, hearing etc.) relevant objects and events in the game world. When something relevant was sensed successfully an event is broadcast to the next layer.
 
 *"Which should I do?"* is answered by the **AI Goal Selection Component**. It hold a set of AI goals that each calculate a score. The higher the score, the more likely that the goal will be selected. These goals can be provided e.g. by the previous layer's **AI Perception Component** events or passed via other methods: configuration, world context or even manually by a designer. Once a goal is selected it begins execution. AI goals can be implemented in multiple different ways to answer the last question.
 
@@ -691,7 +669,7 @@ As with the **Player Controller** the **AI Controller** slots in at the same lev
 
 ---
 
-# End of a Chapter, Start of a Book
+# End of a Chapter, Beginning of a Book
 
 Thank you very much for your valuable time. I hope you have gotten *something* useful out of it. But more than that I hope that I have somewhat piqued your interest to know more. Check out what I'm working on next on the [Kanban]({% link kanban.md %}) page.
 
