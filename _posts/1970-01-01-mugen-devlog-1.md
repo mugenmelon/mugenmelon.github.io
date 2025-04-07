@@ -10,11 +10,11 @@ published: true
 
 In this devlog I will introduce the prototype's game design & game architecture.
 
-I have spent the last 4 years learning Unreal Engine from a software engineer's perspective while building a very early prototype of what will hopefully be a fun action RPG. It took a long time and while I have made many mistakes along the way I feel that the project is at a point where I can start talking about it and sharing progress. This post is a complementary deep-dive into the first devlog on my YouTube channel:
+I have spent the last 4 years learning Unreal Engine from a software engineer's perspective while building a very early prototype of what will hopefully be a fun action RPG. It took a long time and while I have made and still make many mistakes along the way I feel that the project is at a point where I can start talking about it and sharing progress. This post is a complementary deep-dive into the first devlog on my YouTube channel:
 
 *YouTube embed here*
 
-We will go in-depth on both game design and game architecture, dissecting my approach to designing the prototype as a one-man-army game designer & programmer. I apologize in advance for the length of this first devlog, since it contains the results of 4 years of learning. Upcoming devlogs will be a lot shorter and more focused.
+We will go in-depth on both game design and game architecture, dissecting my approach to designing the prototype as a one-man-army game designer & programmer. I apologize in advance for the length of this first devlog, since it contains the results of 4 years of solo learning. Upcoming devlogs will be a lot shorter and more focused. Do note that this is still very much a prototype and *everything* is subject to change.
 
 For questions or feedback contact me through any of the linked channels. Open to make in-depth tutorials on any topic, so reach out!
 
