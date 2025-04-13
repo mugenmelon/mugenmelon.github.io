@@ -124,6 +124,12 @@ By now I have extended the utility of "running" to also affects gameplay: Puttin
 
 ---
 
+## Camera
+
+TODO!!!
+
+---
+
 ## Props
 
 Props are interactable objects in the world. This goes for simple props like barrels, but also [weapons](#weapons) and even the [inventory](#inventory) of the player & NPCs. Some props have attributes such as "health" or "damage".
