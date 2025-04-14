@@ -1,5 +1,8 @@
 {%- if page.related_tags -%}
   {%- assign related_posts = site.posts | where_exp: "post", "post.url != page.url" -%}
+  {%- if page.series -%}
+    {%- assign related_posts = related_posts | where_exp: "post", "post.series != page.series" -%}
+  {%- endif -%}
   {%- assign filtered_posts = '' | split: '' -%}
   
   {%- for post in related_posts -%}
