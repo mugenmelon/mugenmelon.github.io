@@ -5,7 +5,7 @@ series: Mugen Devlog
 series_part: 1
 related_tags: game-design game-architecture
 diagrams: true
-published: true
+published: false
 ---
 
 In this devlog I introduce my action RPG prototype's game design & architecture.
