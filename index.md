@@ -4,10 +4,10 @@ title: Home
 list_title: Latest Posts
 ---
 
-Professional software engineer trying his hand at one-man-army game development.  
-I work on an action RPG prototype in Unreal Engine and share progress via devlogs. I also post useful and crazy ideas on programming, game design and game architecture.
+A software engineer trying his hand at one-man-army game development.  
+I work on an action RPG prototype in Unreal Engine and share progress via devlogs. I also post useful and crazy ideas on programming, game design and architecture.
 
-For questions or feedback contact me through any of the linked channels. I also take requests to create tutorials, so reach out!
+For questions or feedback contact me through any of the linked channels. I also take requests for tutorials, so reach out!
 
 > The game is fun.  
 > The game is a battle.  
