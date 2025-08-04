@@ -2,7 +2,7 @@
 title: "Improving Program Flow in UE5 C++ & Blueprint"
 tags: gamedev programming unreal-engine c++ blueprint
 related_tags: programming c++ blueprint
-published: false
+published: true
 ---
 
 Why you should never:
@@ -69,7 +69,7 @@ float AttackPower;
 if (GetAttackPower(OwnerActor, AttackPower))
 ```
 
-Read it out loud. "If get attack power". It really doesn't *sound* right, does it?
+Read it aloud: "If get attack power." The grammar is awkward and makes it harder to follow.
 A better approach is to encode the unreliability of the function in its name:
 
 ```cs
@@ -98,7 +98,7 @@ but use a "band-aid" for the return value?
 
 Also how do we know the comment is up-to-date? Maybe the author changed it recently and forgot to update the comment?
 Maybe the author misunderstood what it does in the first place and wrote incorrect documentation?
-The hard truth is in the code, not in the comment.
+The truth is in the code, not in the comment.
 
 Can we make our return value self-documenting instead?
 
@@ -141,9 +141,13 @@ The point of `TOptional` is to *force* the caller to check it or to provide a fa
 If you attempt to call `GetValue` on an empty `TOptional` your program will crash. Deservedly. 
 This makes for safer (and in my opinion more aesthetically pleasing) function design. A user *cannot* use the function in a wrong way.
 
-**Careful!** `TOptional` provides a *copy* of what you pass to it.  
-If you require a reference *use a reference*.  
-If you require a pointer *use a pointer and do a `nullptr` check*.
+**Caution!**
+You can overengineer your functions with `TOptional`. It is likely not appropriate to use it with the following return types:
+- Types that already model failure
+    - pointers -> `nullptr`
+    - indices -> `INDEX_NONE`
+    - some structs -> e.g. `FGameplayTag::EmptyTag`
+- Types that are expensive to copy, but this is the same limitation as out parameters
 
 But what about functions that have no out parameters?
 

@@ -8,7 +8,6 @@ diagrams: true
 <pre class="mermaid">
 kanban
     ["`**Backlog**`"]
-        ["`**Why You Should Be Using Static Mesh Sockets**`"]
         ["`**Supercharge Your Game with Choosers**`"]
         ["`**Bulletproof Your Code with Scoped Structs**`"]
         ["`**Using StateTree to Drive Core Gameplay Logic**`"]
@@ -26,7 +25,7 @@ kanban
         ["`**Composition vs. Inheritance**`"]
         ["`**Mugen Game Architecture**`"]
     ["`**In Progress**`"]
-    ["`**QA**`"]
-        ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
+        ["`**Why You Should Be Using Static Mesh Sockets**`"]
     ["`**Done**`"]
+        ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
 </pre>
