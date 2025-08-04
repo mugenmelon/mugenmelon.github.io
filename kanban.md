@@ -5,15 +5,27 @@ permalink: kanban
 diagrams: true
 ---
 
-What I am currently working on sorted by priority.
-
----
-
 <pre class="mermaid">
 kanban
     ["`**Backlog**`"]
+        ["`**Supercharge Your Gameplay with Choosers**`"]
+        ["`**Bulletproof Your Code with Scoped Structs**`"]
+        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
+        ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
+        ["`**The Spec Pattern: Making Engine Features Editable**`"]
+        ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
+        ["`**Dynamic AI with AIGoals and Perception**`"]
+        
+        ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**`"]
+        ["`**A Strict Data-Driven Approach to UE5**`"]
+        ["`**How to Problem-Solve Like a Programmer**`"]
+        ["`**System-Thinking for Game Development**`"]
+        ["`**How MVVM Can Apply to Game Development**`"]
+        ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**`"]
+        ["`**Composition vs. Inheritance Demystified**`"]
+        ["`**Mugen Game Architecture**`"]
     ["`**In Progress**`"]
-        ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
-    ["`**QA**`"]
+        ["`**Why You Should Be Using Static Mesh Sockets**`"]
     ["`**Done**`"]
+        ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
 </pre>

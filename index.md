@@ -6,4 +6,9 @@ list_title: Latest Posts
 
 Software engineer exploring game development as a craft.
 
-I work on an action RPG prototype in Unreal Engine and post useful and/or crazy approaches to game programming, game-system design, and problem-solving.
+I am developing a single-player action RPG prototype in Unreal Engine and post about:
+- 📐 Problem-solving and design patterns
+- 🛠️ Advanced and unconventional game programming techniques  
+- 🎮 AI and emergent gameplay system design
+
+{% include final-words.md %}
