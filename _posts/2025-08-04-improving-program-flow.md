@@ -48,19 +48,18 @@ That may not sound like much of an issue aside from the aesthetic aspect. But wh
 
 ```cs
 float AttackPower;
-// I either forgot the if, or I simply decided it is not necessary
+// I either forgot the if, or I unknowingly decided it is not necessary
 GetAttackPower(OwnerActor, AttackPower);
 ApplyDamageToSelf(AttackPower);
 ```
 
-What is the value of `AttackPower` here? It depends on whether `GetAttackPower` **succeeded** or **failed**.
-Our `AttackPower` variable is uninitialized. It contains garbage memory i.e. some random stack value.
-If `GetAttackPower` **fails** we apply this value in our damage calculation, causing a hard to track bug. Ouch!
+The value of `AttackPower` here is unpredictable - it depends entirely on whether `GetAttackPower` **succeeded** or **failed**.
+Because the variable is uninitialized it contains garbage memory.
+If `GetAttackPower` **fails** we apply a random value in our damage calculation, causing a hard to track bug. Ouch!
 
 ## Readability
 
-I believe that readable code is preferable to less readable code. 
-And part of readability is using appropriate words and correct grammar.
+Readable code is preferable to less readable code. And part of readability is using appropriate words and correct grammar.
 
 Take another look at our function call:
 
@@ -357,7 +356,7 @@ EResult ApplyDamageOfAnyActor(const TArray<AActor*>& OwnerActors)
 ```
 
 We keep trying each owner actor in order of occurrence until one succeeds to apply its damage.
-This gives you valuable fallback semantics (if first one doesn't work then try second one, if second one doesn't work try third one...) but the snippet does not make this obvious.
+This gives us valuable fallback semantics (if first one doesn't work then try second one, if second one doesn't work try third one...) but the function body does not make this obvious.
 In my project I opted to provide the following utility for these cases:
 
 ```cs
@@ -474,4 +473,4 @@ The unconnected `False` pin now automatically returns `Failure`. Nice!
 Complexity management and maintainable code is not about what's in your brain but rather what you can leave out of it.  
 The best function is one that *cannot* fail. The second best is one that openly tells you it can.
 
-Thanks for reading. Follow me on all socials linked below for more!
+Thanks for reading! {% include final-words.md %}
