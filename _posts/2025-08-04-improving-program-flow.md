@@ -5,11 +5,7 @@ related_tags: programming c++ blueprint
 published: true
 ---
 
-Why you should never:
-```cs
-return true;
-```
-And what to do instead.
+Why you should never `return true;` and what to do instead.
 
 {% include toc.md %}
 
