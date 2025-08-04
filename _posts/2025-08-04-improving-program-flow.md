@@ -400,7 +400,7 @@ EResult DoSomethingWithFirstSuccessfulGameplayTag(const FGameplayTagContainer& C
 In [The Problem & Solution in Blueprint](#the-problem--solution-in-blueprint) we established that `TOptional` is not
 supported in Blueprint and that we can instead use `EResult`, `ExpandEnumAsExec` and out parameters to get a similar effect.
 
-The following utility method makes it *very easy* to wrap a C++ function returning `TOptional` and convert it into the Blueprint-compatible flow:
+The following utility function makes it *very easy* to wrap a C++ function returning `TOptional` and convert it into the Blueprint-compatible flow:
 
 ```cs
 template <typename ValueType>
