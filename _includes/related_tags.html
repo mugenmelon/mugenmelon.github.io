@@ -1,4 +1,4 @@
-{%- if page.related_tags -%}
+{%- if page.tags -%}
   {%- assign related_posts = site.posts | where_exp: "post", "post.url != page.url" -%}
   {%- if page.series -%}
     {%- assign related_posts = related_posts | where_exp: "post", "post.series != page.series" -%}
@@ -6,15 +6,16 @@
   {%- assign filtered_posts = '' | split: '' -%}
   
   {%- for post in related_posts -%}
-    {%- assign has_tag = false -%}
-    {%- for tag in post.tags -%}
-      {%- if page.related_tags contains tag -%}
-        {%- assign has_tag = true -%}
-        {%- break -%}
+    {%- assign tag_match_count = 0 -%}
+    {%- for tag in page.tags -%}
+      {%- if post.tags contains tag -%}
+        {%- assign tag_match_count = tag_match_count | plus: 1 -%}
       {%- endif -%}
     {%- endfor -%}
     
-    {%- if has_tag -%}
+    {%- assign current_tags_match = tag_match_count == page.tags.size -%}
+    {%- assign post_tags_match = tag_match_count == post.tags.size -%}
+    {%- if current_tags_match or post_tags_match -%}
       {%- assign filtered_posts = filtered_posts | push: post -%}
     {%- endif -%}
   {%- endfor -%}
