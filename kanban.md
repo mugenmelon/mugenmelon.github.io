@@ -8,13 +8,13 @@ diagrams: true
 <pre class="mermaid">
 kanban
     ["`**Backlog**`"]
-        ["`**Supercharge Your Gameplay with Choosers**`"]
         ["`**Bulletproof Your Code with Scoped Structs**`"]
-        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
         ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
         ["`**The Spec Pattern: Making Engine Features Editable**`"]
         ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
         ["`**Dynamic AI with AIGoals and Perception**`"]
+        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
+        ["`**Supercharge Your Gameplay with Choosers**`"]
         
         ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**`"]
         ["`**A Strict Data-Driven Approach to UE5**`"]
