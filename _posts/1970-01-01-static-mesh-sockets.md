@@ -1,6 +1,6 @@
 ---
 title: "Why You Should Be Using Static Mesh Sockets"
-tags: gamedev programming unreal-engine c++
+tags: gamedev programming unreal-engine c++ animation
 published: true
 ---
 
@@ -8,7 +8,7 @@ Work in progress.
 
 {% include toc.md %}
 
-# What Are Static Mesh Sockets
+# What Are Static Mesh Sockets?
 
 ## How to Define Them
 
@@ -17,6 +17,8 @@ Work in progress.
 # Concrete Use Cases
 
 ## Offset Sockets
+
+## Animating in Sequencer
 
 ## Hitboxes
 
