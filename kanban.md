@@ -11,6 +11,7 @@ kanban
         ["`**Bulletproof Your Code with Scoped Structs**`"]
         ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
         ["`**The Spec Pattern: Making Engine Features Editable**`"]
+        ["`**Editor Readability: Creating Complex Title Properties**`"]
         ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
         ["`**Dynamic AI with AIGoals and Perception**`"]
         ["`**Using StateTree to Drive Core Gameplay Logic**`"]
