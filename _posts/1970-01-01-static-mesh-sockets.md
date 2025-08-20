@@ -1,6 +1,6 @@
 ---
 title: "Why You Should Be Using Static Mesh Sockets"
-tags: gamedev programming unreal-engine c++ animation
+tags: gamedev unreal-engine gameplay animation c++ blueprint
 published: true
 ---
 
@@ -10,7 +10,7 @@ Work in progress.
 
 # What Are Static Mesh Sockets?
 
-If you have spent any time in Unreal Engine you are likely already familiar with *skeletal mesh sockets*.
+If you have spent any amount of time in Unreal Engine you are likely already familiar with *skeletal mesh sockets*.
 
 ![Skeletal mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/skeletal-mesh-socket-example.png' | relative_url }})
 
@@ -51,47 +51,10 @@ Let's have a look at how we can enable some powerful data-driven workflows using
 
 We will start with something familiar: *actor attachment*.
 
-### Basics
+### The Problem with Attachment
 
-To be accurate we should frame this as *scene component attachment*.
-In fact you can never actually attach an actor to another actor, because the engine internally only attaches the actor's *root component* to the other actor's *default attach component*.
-
-```cs
-// Engine-internal function to attach this actor to any given ParentActor.
-// AttachmentRules define certain properties of what should happen with the child actor upon attachment.
-// SocketName specifies the socket (i.e. relative transform) we should attach the child actor to.
-bool AActor::AttachToActor(AActor* ParentActor, const FAttachmentTransformRules& AttachmentRules, FName SocketName)
-{
-    if (RootComponent && ParentActor)
-    {
-        // DefaultAttachComponent most of the time is the ParentActor's SkeletalMeshComponent, but can be overridden to provide any other USceneComponent
-        USceneComponent* ParentDefaultAttachComponent = ParentActor->GetDefaultAttachComponent();
-        if (ParentDefaultAttachComponent)
-        {
-            return RootComponent->AttachToComponent(ParentDefaultAttachComponent, AttachmentRules, SocketName);
-        }
-    }
-    return false;
-}
-```
-
-So all we are really doing is attaching `USceneComponent`s to one another. Internally the engine calls:
-
-```cs
-// ChildComponent = our RootComponent
-// ParentComponent = other actor's DefaultAttachComponent
-ChildComponent->AttachToComponent(ParentComponent, AttachmentRules, Socket)
-```
-
-At some point to do the actual attachment. So from now on I will refer to *parent* and *child* meaning both the component and actor.
-On the blueprint side of things we get very similar functions to do attachment.
-
-![Blueprint attach nodes]({{ '/assets/images/posts/static-mesh-sockets/blueprint-attach-nodes.png' | relative_url }})
-
-### The Problem With Attachment
-
-All of these functions & nodes allow us to specify the parent's *socket name* to attach the child to. Let's look at a small example to demonstrate an issue here.
-I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Hand.Main`.
+All attachment functions & nodes in the engine allow us to specify the parent's *socket name* to attach the child to. Let's look at a small example to demonstrate an issue here.
+I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Prop.Primary`.
 
 ![Pawn sword attachment]({{ '/assets/images/posts/static-mesh-sockets/pawn-sword-attachment.png' | relative_url }})
 
@@ -134,17 +97,17 @@ Great, that worked! But now we have a set of new issues:
 
 Oh boy, fun!
 
-### The Solution
+### The Socket Way
 
 Maybe you already get where I am going with this. It seems we are trying to solve the wrong problem. What do we *actually* need here?
 
 > A relative-to-something transform declared at design time.
 
-That's right! We will *declare a relative-to-our-sword transform at design-time*!
+That's right! We will *declare a relative-to-our-sword transform at design-time*! We tell Unreal: "Hey, when you attach this sword to our pawn's hand make sure you use the hilt instead of the center point".
 
 ![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/sword-offset-socket.png' | relative_url }})
 
-And then use the *inverse transform* of this socket to apply an appropriate offset. We are telling Unreal: "Hey, when you attach this sword to our pawn's hand make sure you use the hilt instead of the center point".
+And then use the *inverse* transform of this socket to apply an appropriate offset.
 
 ![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
 
@@ -200,15 +163,91 @@ Now that attachment is a solved issue we can have some fun with it.
 
 If you wanted to be *really* strict with this you could even use `FGameplayTag` instead of `FName` as parameters to force your designers to use pre-defined gameplay tags for sockets.
 
-## Animating in Sequencer
+## Animating Props with Control Rig in Sequencer
 
-### Animating Props
+If like me you use control rig to animate in sequencer we can also make use of sockets for something else entirely.
+When animating with interactive props is difficult to get the desired results with forward kinematics (FK), especially if you need both hands to stay in contact with the prop at all times.
 
-### Constraints & Sockets to the Rescue
+It is much easier to animate *just the prop* and let the arms *solve themselves* with inverse kinematics (IK). Which makes a lot of sense considering how we actually use props in the real world.
+Nobody thinks about their shoulder, elbow nor wrist when writing with a pen. We think about *what we write* and our arm solves this without our conscious guidance.
+
+To enable this workflow we must first adjust our skeleton to support animating props in *mesh space*.
+
+### Preparing the Skeleton
+
+In order to animate a prop *with minimal influence of other bones* we bring it into *mesh space*. A clearer term for this is *root bone space*.
+We create a dedicated *prop bone* parented to the *root bone*.
+
+![Skeleton prop bone]({{ '/assets/images/posts/static-mesh-sockets/skeleton-prop-bone.png' | relative_url }})
+
+We will attach a prop to this bone *in-game*, but not in sequencer! I recommend adding a well-named socket at this point, e.g. `Socket.Prop.Primary`.
+We also add an appropriate FK control for this bone in our control rig.
+
+And now we are ready to animate with...
+
+### Constraints & Sockets
+
+Let's say we wanted to create an animation to throw a prop, e.g. a barrel. We create a level sequence and add our skeleton & barrel as sequencer tracks. 
+
+![Sequencer with skeleton and barrel]({{ '/assets/images/posts/static-mesh-sockets/sequencer-with-skeleton-and-barrel.png' | relative_url }})
+
+So what do we do with our prop control now? The first step is to make the prop control *follow* your prop using a constraint.
+Select the prop control and constrain it to the barrel. A selection of static mesh sockets will pop up.
+It does not really matter *in this case* but I recommend using an [Offset Socket](#offset-sockets) here. No selection (= center point of your mesh) will do just fine though.
+
+You will see that the prop is now constrained to and animates with the barrel. We animate the barrel - and thus the prop bone - without any parent bone chains to worry about.
+
+![Sequencer prop constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-prop-constraint.gif' | relative_url }})
+
+Great! But what should we do about our IK hand controls? How do we precisely attach them to the barrel?
+We *could* manually position them in each keyframe but... 
+
+- ❌ A lot of work for each frame
+- ❌ Difficult to get precise hand poses
+- ❌ Fragile if we change the animation
+- ❌ Have to repeat all that work if we change the mesh or proportions of the barrel
+- ❌ Have to repeat all that work for other throwable props, e.g. a crate, cardboard box etc.
+
+that is a lot of work, hard to get precise poses and very fragile if we change the barrel's transform or its proportions.
+What tool can we use to do this? How about...
+
+> A relative-to-something transform declared at design time.
+
+Déjà vu! We will *declare a relative-to-our-barrel transform at design-time*! We tell Unreal: "Hey, when this barrel moves in sequencer make sure to place the hand IK controls exactly here".
+Much like with our prior attachment example we are *declaring* a transform on the mesh that is ideal for placing your hands on.
+Hence the naming convention `Socket.Grip.Primary` and `Socket.Grip.Secondary` for the main & off hand respectively.
+
+![Barrel grip sockets]({{ '/assets/images/posts/static-mesh-sockets/barrel-grip-sockets.png' | relative_url }})
+
+Now we simply repeat the earlier steps: Select the right hand IK control, constrain it to the barrel at socket `Socket.Grip.Primary`. Conversely for the left hand IK.
+The hand IK controls are now constrained to and animate with the gripping positions on the barrel.
+
+![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-hand-ik-constraint.gif' | relative_url }})
+
+Now we can keyframe our prop & hand IK controls for our throw animation, bake the animation and simply attach a barrel to our prop bone in-game.
+The hands will continue to accurately follow the gripping positions on the barrel.
+
+![Throw animation]({{ '/assets/images/posts/static-mesh-sockets/throw-animation.gif' | relative_url }})
+
+This brings many advantages:
+
+- ✅ No work per frame required, set up constraints once and they remain active for any choosen frames
+- ✅ Easy to set up sockets once for precise hand positions in all animations
+- ✅ When changing the animation hands adjust automatically
+- ✅ When changing the mesh and proportions of the barrel hands adjust automatically
+- ✅ Can easily bake out dedicated animations for other throwable props
 
 ## Hitboxes
 
 ### The Grammar of Space
+
+### Sockets Are Shapes??
+
+### Hitbox Accuracy
+
+### Compatibility with Targeting System
+
+### Final Results
 
 ## More Crazy Ideas
 
