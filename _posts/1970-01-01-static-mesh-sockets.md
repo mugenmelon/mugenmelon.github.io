@@ -4,7 +4,9 @@ tags: gamedev unreal-engine gameplay animation c++ blueprint
 published: true
 ---
 
-Work in progress.
+Static mesh sockets are one of Unreal Engine’s most overlooked features. While most developers are familiar with skeletal mesh sockets for attachments, static mesh sockets open the door to smarter workflows,
+cleaner code, and more flexible design tools. In this article, we’ll explore how to use them for attachments, animation, hitboxes, and beyond - turning a simple concept into a powerful data-driven system that
+makes your game easier to build and more fun to design.
 
 {% include toc.md %}
 
@@ -47,11 +49,11 @@ But that is only the tip of the iceberg. Games are hungry for many different kin
 
 Let's have a look at how we can enable some powerful data-driven workflows using sockets.
 
-## Offset Sockets
+# Offset Sockets
 
 We will start with something familiar: *actor attachment*.
 
-### The Problem with Attachment
+## The Problem with Attachment
 
 All attachment functions & nodes in the engine allow us to specify the parent's *socket name* to attach the child to. Let's look at a small example to demonstrate an issue here.
 I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Prop.Primary`.
@@ -71,7 +73,7 @@ Oh no! That is not how you should ever hold a sword! What happened?
 Whenever we attach a child to a parent we can specify the *parent* socket name, but the child is *always* attached using the *center point of the mesh*.
 When I created the sword mesh in Blender I used the *geometric center* of the mesh as its center point. Unreal will always use this point to do the attachment.
 
-### Common Solutions
+## Common Solutions
 
 The most straightfoward solution would be to go back to Blender and set the center of the sword mesh to the hilt of the sword. And this will work just fine for many projects.
 But there are some issues that we need to be aware of:
@@ -97,7 +99,7 @@ Great, that worked! But now we have a set of new issues:
 
 Oh boy, fun!
 
-### The Socket Way
+## The Socket Way
 
 Maybe you already get where I am going with this. It seems we are trying to solve the wrong problem. What do we *actually* need here?
 
@@ -163,7 +165,7 @@ Now that attachment is a solved issue we can have some fun with it.
 
 If you wanted to be *really* strict with this you could even use `FGameplayTag` instead of `FName` as parameters to force your designers to use pre-defined gameplay tags for sockets.
 
-## Animating Props with Control Rig in Sequencer
+# Animating Props with Control Rig in Sequencer
 
 If like me you use control rig to animate in sequencer we can also make use of sockets for something else entirely.
 When animating with interactive props is difficult to get the desired results with forward kinematics (FK), especially if you need both hands to stay in contact with the prop at all times.
@@ -173,7 +175,7 @@ Nobody thinks about their shoulder, elbow nor wrist when writing with a pen. We 
 
 To enable this workflow we must first adjust our skeleton to support animating props in *mesh space*.
 
-### Preparing the Skeleton
+## Preparing the Skeleton
 
 In order to animate a prop *with minimal influence of other bones* we bring it into *mesh space*. A clearer term for this is *root bone space*.
 We create a dedicated *prop bone* parented to the *root bone*.
@@ -185,7 +187,7 @@ We also add an appropriate FK control for this bone in our control rig.
 
 And now we are ready to animate with...
 
-### Constraints & Sockets
+## Constraints & Sockets
 
 Let's say we wanted to create an animation to throw a prop, e.g. a barrel. We create a level sequence and add our skeleton & barrel as sequencer tracks. 
 
@@ -208,7 +210,6 @@ We *could* manually position them in each keyframe but...
 - ❌ Have to repeat all that work if we change the mesh or proportions of the barrel
 - ❌ Have to repeat all that work for other throwable props, e.g. a crate, cardboard box etc.
 
-that is a lot of work, hard to get precise poses and very fragile if we change the barrel's transform or its proportions.
 What tool can we use to do this? How about...
 
 > A relative-to-something transform declared at design time.
@@ -237,13 +238,13 @@ This brings many advantages:
 - ✅ When changing the mesh and proportions of the barrel hands adjust automatically
 - ✅ Can easily bake out dedicated animations for other throwable props
 
-## Hitboxes
+# Hitboxes
 
 Hitboxes are at the core of most combat systems. You'll want some sort of geometric shape to describe *where* in space your attacks are effective.
 There are a few possible ways to handle this in Unreal Engine but they boil down to two principles: *Overlap checks* and *shape/line traces*.
 In the context of an action combat system traces are often better than overlap checks but the following approach may find use regardless of what you use traces for.
 
-### The Grammar of Space
+## The Grammar of Space
 
 We have explored what we can do with *one* socket, but what happens when we add more sockets to the equation?
 
@@ -266,7 +267,7 @@ Can you guess where I'm going with this? We need
 
 Did I drive that home yet? So let's try this: We will use sockets to define *where our weapons apply damage* and then trace that exact shape!
 
-### Executing the Trace
+## Executing the Trace
 
 Say we wanted to define a hitbox for a greatsword.
 
@@ -319,7 +320,7 @@ Which is similarly easy to implement in blueprint but I would recommend executin
 
 ![Blueprint capsule trace]({{ '/assets/images/posts/static-mesh-sockets/blueprint-capsule-trace.png' | relative_url }})
 
-### Compatibility with TargetingSystem
+## Compatibility with TargetingSystem
 
 In my project I use Unreal's *TargetingSystem* plugin. It provides a data-driven approach to traces by creating *TargetingPreset* assets.
 These assets specify:
@@ -332,7 +333,7 @@ And allow for a very powerful data-driven workflow for *any* tracing needs as we
 Our hitbox shape tracing can be fully automated with a custom *TargetingSelectionTask* by subclassing `UTargetingSelectionTask_Trace` and overriding relevant methods.
 But this is a topic for another day!
 
-### Final Results
+## Final Results
 
 Now that we have a hitbox tracing system in place we can integrate it into our combat system and see the results.
 
@@ -345,7 +346,7 @@ There are multiple advantages we gain from this approach:
 - ✅ Visually define hitboxes directly on the weapon mesh
 - ✅ Each weapon can provide its own unique hitbox
 
-Here are a few more ideas I haven't tried yet but are certainly possible with this workflow:
+Here are a few more ideas I haven't tried yet but that are certainly possible with this workflow:
 
 - ❓ Multiple hitboxes with different effects (e.g. hilt deals blunt damage, blade deals cutting damage)
 - ❓ Damage scaling based on hit location (e.g. very tip of the blade deals less damage than the weighty center)
@@ -353,12 +354,52 @@ Here are a few more ideas I haven't tried yet but are certainly possible with th
 
 Speaking of ideas...
 
-## More Crazy Ideas
-
 # Other Types of Sockets
+
+We had established that sockets in Unreal Engine are really nothing but relative, design-time transforms.
+All of these techniques also apply to *skeletal mesh sockets*, although you have to account for the fact that those can be animated, physically simulated etc.
+
+But the list does not end there.
 
 ## Proxy Actors
 
-## `FTransform` MakeEditWidget
+The term *proxy* means a "stand-in" for something or someone else. Voting by proxy means someone else is voting for you. A proxy server handles requests in place of your own computer/server.
+
+There is a common technique in game development to place *proxy actors* in levels instead of placing actual actors directly.
+By doing so we tell the level "*Something* can spawn here but we won't tell you what it is yet".
+At runtime we can use this proxy actor as a - you guessed it - *relative-to-the-level transform declared at design time* and spawn *any* actor at it.
+
+Now I won't go into detail why you would want to do this, but here are *just a few* advantages:
+
+- ✅ The actual actor is not loaded into memory until it is needed (lower memory footprint)
+- ✅ You can hotswap which actor gets spawned without touching or changing the level
+- ✅ DLCs and mods can easily modify your levels
+
+There is much more to it. What I'm trying to say here: A "socket" does not need to look like or be called a "socket". Really all we are talking about are *relative-to-som-*
+Well, you get it by now. Very useful stuff.
+
+## Transform MakeEditWidget
+
+Another relevant hidden feature in Unreal Engine is using plain `FTransform` (or `Transform` in blueprint) variables with the `MakeEditWidget` meta attribute.
+
+```cs
+UPROPERTY(EditAnywhere, meta=(MakeEditWidget))
+FTransform Transform;
+```
+
+![Blueprint transform widget]({{ '/assets/images/posts/static-mesh-sockets/blueprint-transform-widget.png' | relative_url }})
+
+Which gives us a small widget in the level e.g. on an actor. We can drag it around and place it visually which is better than guessing transform properties in the details panel.
+
+![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/transform-widget-result.png' | relative_url }})
+
+This utility works nicely with *invisible* actors that spawn something else, like trigger shapes or indeed our *proxy actor*.
+Instead of using the transform of the actor directly we specify one or more named transforms to spawn other actors at.
+This gives us another useful data-driven workflow and more flexibility while designing levels. Neat!
 
 # Final Thoughts
+
+Videogames are hungry for transforms. The more you can define at design-time the less you have to worry about runtime calculations, bespoke management systems & code complexity.
+We are visual creatures, computers are not. These techniques help us bridge the gap.
+
+Thanks for reading! {% include final-words.md %}
