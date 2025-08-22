@@ -164,9 +164,11 @@ Now that attachment is solved, we can have some fun with it.
 
 ![Attachment fun]({{ '/assets/images/posts/static-mesh-sockets/attachment-fun.png' | relative_url }})
 
-If we wanted to be really strict with this we could even use `FGameplayTag` instead of `FName` as parameters to force our designers to use pre-defined gameplay tags for sockets.
+Ideally we pick a convention regarding the orientation of our meshes & sockets and strictly follow it.
+For example, Unreal uses x-forward and z-up. It can be helpful to follow this convention.
+In any case being consistent with our transforms is important and will save us headaches going forward.
 
-Depending on our use case we should consider the performance of sequential socket lookups. Technically we are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
+Depending on our use case we should also consider the performance of multiple socket lookups. Technically we are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
 
 - Cache socket transforms after the first lookup (since they do not change)
 - Use `UStaticMesh::GetSocketsByTag` to find all relevant sockets in O(n)
