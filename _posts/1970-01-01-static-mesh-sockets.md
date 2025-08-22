@@ -38,19 +38,19 @@ That way we get all the advantages of gameplay tags and can easily refer to comm
 
 # When to Use Them
 
-The most commonly referred to use case in Unreal Engine documentation & tutorials is of course *actor attachment*.
-But that is only the tip of the iceberg. Games are hungry for many different kinds of transforms and thus sockets can do so much more!
+The most commonly referred to use case in Unreal Engine documentation & tutorials is of course *actor attachment*. I.e. if we wanted to attach something to our static mesh we would use a socket.
+But that is only the tip of the iceberg. Games are hungry for many different kinds of transforms and sockets can do so much more!
 
 Let's have a look at how we can enable some powerful data-driven workflows using sockets.
 
 # Offset Sockets
 
-We will start with something familiar: *actor attachment*.
+We will start with something familiar: *skeletal mesh attachment*.
 
 ## The Problem with Attachment
 
 All attachment functions & nodes in the engine allow us to specify the parent's socket name to attach the child to. Let's look at a small example to demonstrate an issue here.
-I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Prop.Primary`.
+I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Hand.Right`.
 
 ![Pawn sword attachment]({{ '/assets/images/posts/static-mesh-sockets/pawn-sword-attachment.png' | relative_url }})
 
@@ -69,16 +69,25 @@ When I created the sword mesh in Blender I used the *geometric center* of the me
 
 ## Common Solutions
 
-The most straightforward solution would be to go back to Blender and set the origin to the hilt of the sword. And this will work just fine for many projects.
-But there are some issues that we need to be aware of:
+The most straightforward way would be to adjust the location/rotation of our `Socket.Hand.Right` skeletal mesh socket.
+This works just fine depending on the project's complexity. If we only have a few weapon types with similar proportions this is the way to go.
+But we should be aware of a few caveats here:
+
+- ❌ Need to manage dedicated sockets per weapon type...
+- ❌ ...per skeleton...
+- ❌ ...per use case (i.e. sheathed, unsheathed, left hand, right hand).
+- ❌ Weapons with significantly different proportions require extra sockets.
+
+A workflow that solves these issues is to go back to Blender and set the origin to the hilt of the sword. Again, depending on the project's complexity this will work just fine.
+But now there are some other aspects we need to consider:
 
 - ❌ Have to go back-and-forth between Unreal and Blender to adjust center points.
 - ❌ Need to think about where to put the origin for each mesh.
 - ❌ Cannot use the geometric center or center of mass of the mesh (relevant for distance checks, calculating bounds, physics etc.).
-- ❌ When we rotate the sword mesh it now rotates with the hilt as its origin.
+- ❌ When we rotate the sword mesh it now rotates with the hilt as its pivot.
 - ❌ Changes to the origin affect all characters and use cases.
 
-We could also try to provide an offset relative transform for our sword attachment.
+We could also try to provide an explicit offset transform for our sword attachment.
 
 ![Blueprint sword attachment offset transform]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-transform.png' | relative_url }})
 
@@ -87,7 +96,7 @@ We could also try to provide an offset relative transform for our sword attachme
 Great, that worked! But now we have a set of new issues:
 
 - ❌ Have to manually manage offset transforms for different types of weapons with varying proportions 
-- ❌ Have to manually manage offset transforms for different uses cases (e.g. sheathed, unsheathed, left hand, right hand) etc.
+- ❌ Have to manually manage offset transforms for different uses cases etc.
 - ❌ Designers need to understand this new system.
 - ❌ Designers have to guesstimate where the correct transform on the mesh should be.
 
@@ -101,11 +110,11 @@ That's right! We will declare a relative-to-our-sword transform at design-time! 
 ![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/sword-offset-socket.png' | relative_url }})
 
 We then use the inverse transform of this socket to apply an appropriate offset.
-Why the *inverse* transform? Because if we want the hilt to have the same transform as the parent socket we must move the entire mesh in the *opposite* direction.
+Why the *inverse* transform? Because if we want the hilt to overlap with the parent socket we must move the entire mesh in the *opposite* direction.
 
 ![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
 
-![Sword attached correct]({{ '/assets/images/posts/static-mesh-sockets/sword-attached-correct.png' | relative_url }})
+![Sword attached correct 2]({{ '/assets/images/posts/static-mesh-sockets/sword-attached-correct2.png' | relative_url }})
 
 Perfect! The sword is attached correctly and our prior worries about mesh origins & offset transforms are resolved:
 
@@ -151,13 +160,18 @@ And voilá, our worries about attachment are a thing of the past. We can provide
 
 ![Blueprint sword attachment offset socket automatic]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-automatic.png' | relative_url }})
 
-Now that attachment is a solved issue, we can have some fun with it.
+Now that attachment is solved, we can have some fun with it.
 
 ![Attachment fun]({{ '/assets/images/posts/static-mesh-sockets/attachment-fun.png' | relative_url }})
 
 If we wanted to be really strict with this we could even use `FGameplayTag` instead of `FName` as parameters to force our designers to use pre-defined gameplay tags for sockets.
-Depending on our use case we should consider the performance of sequential socket lookups. Technically we are iterating an array of objects multiple times.
-But the old adage applies: Unmeasured performance optimization is the root of all evil.
+
+Depending on our use case we should consider the performance of sequential socket lookups. Technically we are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
+
+- Cache socket transforms after the first lookup (since they do not change)
+- Use `UStaticMesh::GetSocketsByTag` to find all relevant sockets in O(n)
+
+But the old adage applies: *Unmeasured* optimization is the root of all evil.
 
 # Animating Props with Control Rig in Sequencer
 
