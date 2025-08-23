@@ -156,7 +156,7 @@ TOptional<FTransform> UMugenSceneUtil::GetSocketTransform(const USceneComponent*
 }
 ```
 
-And voilá, our worries about attachment are a thing of the past. We can provide some actor-level utilities for these functions (leaving that up to you) and once exposed to blueprint we get:
+And voilá, our worries about attachment are a thing of the past. Once exposed to blueprint we get:
 
 ![Blueprint sword attachment offset socket automatic]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-automatic.png' | relative_url }})
 
@@ -164,11 +164,10 @@ Now that attachment is solved, we can have some fun with it.
 
 ![Attachment fun]({{ '/assets/images/posts/static-mesh-sockets/attachment-fun.png' | relative_url }})
 
-Ideally we pick a convention regarding the orientation of our meshes & sockets and strictly follow it.
-For example, Unreal uses x-forward and z-up. It can be helpful to follow this convention.
-In any case being consistent with our transforms is important and will save us headaches going forward.
+When making heavy use of sockets like this it is recommended to pick a project convention regarding the orientation of meshes & sockets and strictly follow it.
+For example, Unreal Engine uses x-forward and z-up. It can be helpful to orient all meshes & sockets with that in mind. Being consistent with transforms is important and will save us headaches going forward.
 
-Depending on our use case we should also consider the performance of multiple socket lookups. Technically we are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
+Depending on the use case we should also consider performance of multiple socket lookups. We are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
 
 - Cache socket transforms after the first lookup (since they do not change)
 - Use `UStaticMesh::GetSocketsByTag` to find all relevant sockets in O(n)
@@ -177,37 +176,40 @@ But the old adage applies: *Unmeasured* optimization is the root of all evil.
 
 # Animating Props with Control Rig in Sequencer
 
-If like me you use control rig to animate in sequencer we can also make use of sockets for something else entirely.
-When animating with interactive props is difficult to get the desired results with forward kinematics (FK), especially if we need both hands to stay in contact with the prop at all times.
+When using use control rig to animate in sequencer we can also make use of sockets for something else entirely. When animating interactive props it is difficult to get the desired results with forward kinematics (FK).
+A prop is usually attached to one of the hand bones and thus receives influence from the entire chain of bones up to the root bone. This makes animating both hands to stay in contact with the prop at all times challenging.
 
-It is much easier to animate *just the prop* and let the arms solve themselves with inverse kinematics (IK). Which makes a lot of sense considering how we actually use props in the real world.
+It is much easier to animate *just the prop* and let the arms be solved with inverse kinematics (IK). Which makes a lot of sense considering how we actually use props in the real world.
 Nobody thinks about their shoulder, elbow or wrist when writing with a pen. We think about what we write and our arm solves this without our conscious guidance.
 
-To enable this workflow we must first adjust our skeleton to support animating props in *mesh space*.
+To enable this workflow we must first adjust our skeleton to support animating props in an appropriate parent bone space.
 
 ## Preparing the Skeleton
 
-In order to animate a prop with minimal influence of other bones we bring it into mesh space. A clearer term for this is *root bone space*.
-We create a dedicated *prop bone* parented to the *root bone*.
+In order to animate a prop with minimal influence of other bones we must attach it to an appropriate parent bone.
+If we wanted *no influence* of other bones, we could use the root bone as parent. This would keep the prop in place regardless of the skeleton's pose.
+Another helpful option is to use one of the spine bones (e.g. the one closest to the shoulders) to receive influence from the torso but avoid influence from the arms.
+At this point we should also mention the existence of *virtual bones* in Unreal Engine that may find use here, especially if the skeleton we work with was not authored by us.
+
+I will go with option #2. First we create a dedicated *prop bone* parented to the *spine bone*.
 
 ![Skeleton prop bone]({{ '/assets/images/posts/static-mesh-sockets/skeleton-prop-bone.png' | relative_url }})
 
-We will attach a prop to this bone in-game, but not in sequencer! I recommend adding a well-named socket at this point, e.g. `Socket.Prop.Primary`.
-We also add an appropriate FK control for this bone in our control rig.
+We will attach a prop to this bone in-game, but not in sequencer! I recommend adding a well-named socket at this point (e.g. `Socket.Prop.Primary`) and to add an appropriate FK control for this bone in control rig.
 
-And now we are ready to animate with...
+Now we are ready to animate with...
 
 ## Constraints & Sockets
 
-Let's say we wanted to create an animation to throw a prop, e.g. a barrel. We create a level sequence and add our skeleton & barrel as sequencer tracks. 
+Let's say we wanted to create an animation to throw a prop (e.g. a barrel). We create a level sequence and add our skeleton & barrel as sequencer tracks. 
 
 ![Sequencer with skeleton and barrel]({{ '/assets/images/posts/static-mesh-sockets/sequencer-with-skeleton-and-barrel.png' | relative_url }})
 
-So what do we do with our prop control now? The first step is to make the prop control follow our prop using a constraint.
+So what do we do with our prop control now? The first step is to make the prop control follow our prop using a *constraint*.
 Select the prop control and constrain it to the barrel. A selection of static mesh sockets will pop up.
-It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here. No selection (= center point of our mesh) will do just fine though.
+It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here. No selection (= origin of our mesh) will do just fine though.
 
-The prop is now constrained to and animates with the barrel. We animate the barrel - and thus the prop bone - without any parent bone chains to worry about.
+The prop is now constrained to and animates with the barrel. We animate the barrel in world space and thus the prop bone without any parent bone chains to worry about.
 
 ![Sequencer prop constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-prop-constraint.gif' | relative_url }})
 
@@ -220,13 +222,13 @@ We could manually position them in each keyframe but...
 - ❌ Have to repeat all that work if we change the mesh or proportions of the barrel
 - ❌ Have to repeat all that work for other throwable props, e.g. a crate, cardboard box etc.
 
-What tool can we use to do this? How about we declare a relative-to-our-barrel transform at design-time! We tell Unreal: "Hey, when this barrel moves in sequencer make sure to place the hand IK controls exactly here".
+What tool can we use to do this? What if we declare a relative-to-our-barrel transform at design-time? We tell Unreal: "Hey, when this barrel moves in sequencer make sure to place the hand IK controls exactly here".
 Much like with our prior attachment example we are declaring a transform on the mesh that is ideal for placing our hands on.
 Hence the naming convention `Socket.Grip.Primary` and `Socket.Grip.Secondary` for the main & off hand respectively.
 
 ![Barrel grip sockets]({{ '/assets/images/posts/static-mesh-sockets/barrel-grip-sockets.png' | relative_url }})
 
-Now we simply repeat the earlier steps: Select the right hand IK control, constrain it to the barrel at socket `Socket.Grip.Primary`. Conversely for the left hand IK.
+Now we simply repeat the earlier steps: Select the right hand IK control and constrain it to the barrel at socket `Socket.Grip.Primary`. Conversely for the left hand IK.
 The hand IK controls are now constrained to and animate with the gripping positions on the barrel.
 
 ![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-hand-ik-constraint.gif' | relative_url }})
