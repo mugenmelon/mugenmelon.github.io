@@ -12,13 +12,13 @@ Static mesh sockets are one of Unreal Engine’s most overlooked features. While
 
 If you've spent any amount of time in Unreal Engine you are likely already familiar with *skeletal mesh sockets*.
 
-![Skeletal mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/skeletal-mesh-socket-example.png' | relative_url }})
+![Skeletal mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/01-skeletal-mesh-socket-example.png' | relative_url }})
 
 Sockets in principle are transforms (location, rotation & scale) declared at design-time in a "relative-to-something" space.
 In the case of skeletal mesh sockets they define a transform relative to a skeletal mesh.
 It is no surprise then that *static mesh sockets* define a transform relative to a static mesh.
 
-![Static mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/static-mesh-socket-example.png' | relative_url }})
+![Static mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/02-static-mesh-socket-example.png' | relative_url }})
 
 To keep things simple let us set aside a few (but important) differences between skeletal mesh and static mesh sockets for now and only talk of static mesh sockets as per our definition:
 
@@ -30,7 +30,7 @@ What I will show here applies to all types of sockets which we will explore a bi
 
 Very simple once you know how, but easily overlooked. Open up any static mesh in the editor and select the "Socket Manager" tab next to the "Details" tab.
 
-![Socket manager]({{ '/assets/images/posts/static-mesh-sockets/socket-manager.png' | relative_url }})
+![Socket manager]({{ '/assets/images/posts/static-mesh-sockets/03-socket-manager.png' | relative_url }})
 
 The `+` button adds a moveable socket at location `(0,0,0)` to our mesh and allows us to give it a name.
 I recommend using a naming convention compatible with gameplay tags (e.g. `Socket.Type.Variant`) and sticking to it for all of our meshes & sockets.
@@ -52,15 +52,15 @@ We will start with something familiar: *skeletal mesh attachment*.
 All attachment functions & nodes in the engine allow us to specify the parent's socket name to attach the child to. Let's look at a small example to demonstrate an issue here.
 I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Hand.Right`.
 
-![Pawn sword attachment]({{ '/assets/images/posts/static-mesh-sockets/pawn-sword-attachment.png' | relative_url }})
+![Pawn sword attachment]({{ '/assets/images/posts/static-mesh-sockets/04-pawn-sword-attachment.png' | relative_url }})
 
 We can implement this in blueprint like so:
 
-![Blueprint sword attachment simple]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-simple.png' | relative_url }})
+![Blueprint sword attachment simple]({{ '/assets/images/posts/static-mesh-sockets/05-blueprint-sword-attachment-simple.png' | relative_url }})
 
 Which gives us this result in-game.
 
-![Sword attached wrong]({{ '/assets/images/posts/static-mesh-sockets/sword-attached-wrong.png' | relative_url }})
+![Sword attached wrong]({{ '/assets/images/posts/static-mesh-sockets/06-sword-attached-wrong.png' | relative_url }})
 
 Oh no! That is not how you should ever hold a sword! What happened?
 
@@ -89,9 +89,9 @@ But now there are some other aspects we need to consider:
 
 We could also try to provide an explicit offset transform for our sword attachment.
 
-![Blueprint sword attachment offset transform]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-transform.png' | relative_url }})
+![Blueprint sword attachment offset transform]({{ '/assets/images/posts/static-mesh-sockets/07-blueprint-sword-attachment-offset-transform.png' | relative_url }})
 
-![Sword attached correct]({{ '/assets/images/posts/static-mesh-sockets/sword-attached-correct.png' | relative_url }})
+![Sword attached correct]({{ '/assets/images/posts/static-mesh-sockets/08-sword-attached-correct.png' | relative_url }})
 
 Great, that worked! But now we have a set of new issues:
 
@@ -107,15 +107,15 @@ Oh boy, fun!
 Maybe you already get where I am going with this. It seems we are trying to solve the wrong problem. What do we *actually* need here?
 That's right! We can declare a relative-to-our-sword transform at design-time! We tell Unreal: "Hey, when you attach this sword to our pawn's hand make sure you use the hilt instead of the origin".
 
-![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/sword-offset-socket.png' | relative_url }})
+![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/09-sword-offset-socket.png' | relative_url }})
 
 We then use the inverse transform of this socket to apply an appropriate offset.
 Why the *inverse* transform? Since want the offset socket to overlap the parent socket we must offset the entire mesh in the *opposite* direction.
 Hence the naming `Socket.Offset`.
 
-![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
+![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/10-blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
 
-![Sword attached correct 2]({{ '/assets/images/posts/static-mesh-sockets/sword-attached-correct2.png' | relative_url }})
+![Sword attached correct 2]({{ '/assets/images/posts/static-mesh-sockets/11-sword-attached-correct.png' | relative_url }})
 
 Perfect! The sword is attached correctly and our prior worries about mesh origins & offset transforms are resolved:
 
@@ -159,11 +159,11 @@ TOptional<FTransform> GetSocketTransform(const USceneComponent* Component, const
 
 And voilá, our worries about attachment are a thing of the past. Once exposed to blueprint we get:
 
-![Blueprint sword attachment offset socket automatic]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-automatic.png' | relative_url }})
+![Blueprint sword attachment offset socket automatic]({{ '/assets/images/posts/static-mesh-sockets/12-blueprint-sword-attachment-offset-socket-automatic.png' | relative_url }})
 
 Now that attachment is solved, we can have some fun with it.
 
-![Attachment fun]({{ '/assets/images/posts/static-mesh-sockets/attachment-fun.png' | relative_url }})
+![Attachment fun]({{ '/assets/images/posts/static-mesh-sockets/13-attachment-fun.png' | relative_url }})
 
 When making heavy use of sockets like this it is recommended to pick a project convention regarding the orientation of meshes & sockets and strictly follow it.
 For example, Unreal Engine uses x-forward and z-up. It can be helpful to orient all meshes & sockets with that in mind. Being consistent with transforms is important and will save us headaches going forward.
@@ -193,7 +193,7 @@ At this point we should also mention the existence of *virtual bones* in Unreal 
 
 We will go with a spine bone as parent and create a dedicated *prop bone*.
 
-![Skeleton prop bone]({{ '/assets/images/posts/static-mesh-sockets/skeleton-prop-bone.png' | relative_url }})
+![Skeleton prop bone]({{ '/assets/images/posts/static-mesh-sockets/14-skeleton-prop-bone.png' | relative_url }})
 
 We will attach a prop to this bone in-game, but not in sequencer! I recommend adding a well-named socket at this point (e.g. `Socket.Prop.Primary`) and creating an appropriate FK control for this bone in control rig.
 
@@ -208,7 +208,7 @@ Select the prop control and constrain it to the barrel. A selection of static me
 It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here, for instance at the bottom of the barrel. No selection (= origin of the mesh) will do just fine though.  
 Make sure you zero out any offsets within the constraint itself by right-clicking on it in the "Constraints" tab. This is another powerful feature of constraints but for our purposes we do not need it.
 
-![Sequencer prop constraint setup]({{ '/assets/images/posts/static-mesh-sockets/sequencer-prop-constraint-setup.png' | relative_url }})
+![Sequencer prop constraint setup]({{ '/assets/images/posts/static-mesh-sockets/15-sequencer-prop-constraint-setup.png' | relative_url }})
 
 The prop is now constrained to and animates with the barrel. We animate the barrel in world space and thus the prop bone without any parent bone chains to worry about.
 
@@ -225,17 +225,17 @@ What tool can we use to do this? We can declare a relative-to-our-barrel transfo
 Much like with our attachment example we are declaring a transform on the mesh that is ideal for placing our hands on.
 Hence the naming convention `Socket.Grip.Primary` and `Socket.Grip.Secondary` for the main & off hand respectively.
 
-![Barrel grip sockets]({{ '/assets/images/posts/static-mesh-sockets/barrel-grip-sockets.png' | relative_url }})
+![Barrel grip sockets]({{ '/assets/images/posts/static-mesh-sockets/16-barrel-grip-sockets.png' | relative_url }})
 
 Now we simply repeat the earlier steps: Select the right hand IK control and constrain it to the barrel at socket `Socket.Grip.Primary`. Conversely for the left hand IK.
 The hand IK controls are now constrained to and animate with the gripping positions on the barrel.
 
-![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-hand-ik-constraint.gif' | relative_url }})
+![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/17-sequencer-hand-ik-constraint.gif' | relative_url }})
 
 Now we can keyframe the prop & hand IK controls for our throw animation, bake it out to a sequence and simply attach a barrel to our prop bone in-game.
 The hands will continue to accurately follow the gripping positions on the barrel until we need to detach it to enable physics simulation again.
 
-![Throw animation]({{ '/assets/images/posts/static-mesh-sockets/throw-animation.gif' | relative_url }})
+![Throw animation]({{ '/assets/images/posts/static-mesh-sockets/18-throw-animation.gif' | relative_url }})
 
 This brings many advantages:
 
@@ -267,7 +267,7 @@ Can you guess where I'm going with this? Did I drive it home yet? We can use soc
 
 Say we wanted to define a hitbox for a greatsword. We can create 3 sockets `Socket.Hitbox.Origin`, `Socket.Hitbox.Radius` and `Socket.Hitbox.Length` to define a capsule around the blade.
 
-![Greatsword with sockets]({{ '/assets/images/posts/static-mesh-sockets/greatsword-with-sockets.png' | relative_url }})
+![Greatsword with sockets]({{ '/assets/images/posts/static-mesh-sockets/19-greatsword-with-sockets.png' | relative_url }})
 
 This workflow allows us to get a very tight fit around the damaging parts of our weapons.
 Using our code from [Offset Sockets](#offset-sockets) we can provide a small C++ utility to get the required distance between our sockets:
@@ -310,7 +310,7 @@ Which is similarly easy to implement in blueprint but I would recommend executin
 
 Now that we have a hitbox tracing system in place we can integrate it into our combat system and see the results.
 
-![Greatsword swing hitbox]({{ '/assets/images/posts/static-mesh-sockets/greatsword-swing-hitbox.gif' | relative_url }})
+![Greatsword swing hitbox]({{ '/assets/images/posts/static-mesh-sockets/20-greatsword-swing-hitbox.gif' | relative_url }})
 
 There are multiple advantages we gain from this approach:
 
@@ -368,7 +368,7 @@ FTransform MyTransformSocket;
 In blueprint the same can be achieved by declaring a `Transform` variable, making it public and checking "Show 3D Widget" in the variable's details panel.
 This gives us a small widget in the level e.g. on an actor. We can drag it around and place it visually which is better than guessing transform properties in the details panel.
 
-![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/transform-widget-result.png' | relative_url }})
+![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/21-transform-widget-result.png' | relative_url }})
 
 This utility works nicely with invisible actors that spawn something else, like trigger shapes or indeed our proxy actor.
 Instead of using the transform of the actor directly we specify one or more named transforms to spawn other actors at.
