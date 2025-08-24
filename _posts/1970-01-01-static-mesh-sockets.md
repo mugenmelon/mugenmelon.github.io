@@ -38,7 +38,7 @@ That way we get all the advantages of gameplay tags and can easily refer to comm
 
 # When to Use Them
 
-The most commonly referred to use case in Unreal Engine documentation & tutorials is of course *actor attachment*. I.e. if we wanted to attach something to our static mesh we would use a socket.
+The most commonly referred to use case in Unreal Engine documentation & tutorials is of course *attachment*. I.e. if we wanted to attach something to our static mesh we would use a socket.
 But that is only the tip of the iceberg. Games are hungry for many different kinds of transforms and sockets can do so much more!
 
 Let's have a look at how we can enable some powerful data-driven workflows using sockets.
@@ -105,12 +105,13 @@ Oh boy, fun!
 ## The Socket Way
 
 Maybe you already get where I am going with this. It seems we are trying to solve the wrong problem. What do we *actually* need here?
-That's right! We will declare a relative-to-our-sword transform at design-time! We tell Unreal: "Hey, when you attach this sword to our pawn's hand make sure you use the hilt instead of the origin".
+That's right! We can declare a relative-to-our-sword transform at design-time! We tell Unreal: "Hey, when you attach this sword to our pawn's hand make sure you use the hilt instead of the origin".
 
 ![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/sword-offset-socket.png' | relative_url }})
 
 We then use the inverse transform of this socket to apply an appropriate offset.
-Why the *inverse* transform? Because if we want the hilt to overlap with the parent socket we must move the entire mesh in the *opposite* direction.
+Why the *inverse* transform? Since want the offset socket to overlap the parent socket we must offset the entire mesh in the *opposite* direction.
+Hence the naming `Socket.Offset`.
 
 ![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
 
@@ -132,7 +133,7 @@ If we wrap this convention in a few nice C++ functions and expose them to bluepr
 For blueprint projects we can wrap the previous couple of nodes in a blueprint function library.
 
 ```cs
-EResult UMugenSceneUtil::Attach(USceneComponent* Child, USceneComponent* Parent, const FName Socket, const FName OffsetSocket, const FAttachmentTransformRules AttachmentRules)
+EResult Attach(USceneComponent* Child, USceneComponent* Parent, const FName Socket, const FName OffsetSocket, const FAttachmentTransformRules AttachmentRules)
 {
     if (IsValid(Child) && IsValid(Parent))
     {
@@ -150,7 +151,7 @@ EResult UMugenSceneUtil::Attach(USceneComponent* Child, USceneComponent* Parent,
 }
 
 // Only returns a valid transform if the socket truly exists
-TOptional<FTransform> UMugenSceneUtil::GetSocketTransform(const USceneComponent* Component, const FName Socket, const ERelativeTransformSpace Space)
+TOptional<FTransform> GetSocketTransform(const USceneComponent* Component, const FName Socket, const ERelativeTransformSpace Space)
 {
     return IsValid(Component) && !Socket.IsNone() && Component->DoesSocketExist(Socket) ? Component->GetSocketTransform(Socket, Space) : TOptional<FTransform>();
 }
@@ -176,44 +177,42 @@ But the old adage applies: *Unmeasured* optimization is the root of all evil.
 
 # Animating Props with Control Rig in Sequencer
 
-When using use control rig to animate in sequencer we can also make use of sockets for something else entirely. When animating interactive props it is difficult to get the desired results with forward kinematics (FK).
-A prop is usually attached to one of the hand bones and thus receives influence from the entire chain of bones up to the root bone. This makes animating both hands to stay in contact with the prop at all times challenging.
+When using control rig to animate in sequencer we can also make use of sockets for something else entirely. When animating interactive props it is difficult to get the desired results with forward kinematics (FK).
+A prop is usually attached to one of the hand bones and thus receives influence from the entire chain of bones up to the root bone. This makes animating both hands to stay in contact with the prop challenging.
 
 It is much easier to animate *just the prop* and let the arms be solved with inverse kinematics (IK). Which makes a lot of sense considering how we actually use props in the real world.
-Nobody thinks about their shoulder, elbow or wrist when writing with a pen. We think about what we write and our arm solves this without our conscious guidance.
+Nobody consciously thinks about their shoulder, elbow or wrist when writing with a pen.
 
 To enable this workflow we must first adjust our skeleton to support animating props in an appropriate parent bone space.
 
 ## Preparing the Skeleton
 
 In order to animate a prop with minimal influence of other bones we must attach it to an appropriate parent bone.
-If we wanted *no influence* of other bones, we could use the root bone as parent. This would keep the prop in place regardless of the skeleton's pose.
-Another helpful option is to use one of the spine bones (e.g. the one closest to the shoulders) to receive influence from the torso but avoid influence from the arms.
-At this point we should also mention the existence of *virtual bones* in Unreal Engine that may find use here, especially if the skeleton we work with was not authored by us.
+The root and spine bones are good candidates depending on whether you want the prop to move with the spine or not.
+At this point we should also mention the existence of *virtual bones* in Unreal Engine that may find their use here.
 
-I will go with option #2. First we create a dedicated *prop bone* parented to the *spine bone*.
+We will go with a spine bone as parent and create a dedicated *prop bone*.
 
 ![Skeleton prop bone]({{ '/assets/images/posts/static-mesh-sockets/skeleton-prop-bone.png' | relative_url }})
 
-We will attach a prop to this bone in-game, but not in sequencer! I recommend adding a well-named socket at this point (e.g. `Socket.Prop.Primary`) and to add an appropriate FK control for this bone in control rig.
+We will attach a prop to this bone in-game, but not in sequencer! I recommend adding a well-named socket at this point (e.g. `Socket.Prop.Primary`) and creating an appropriate FK control for this bone in control rig.
 
 Now we are ready to animate with...
 
 ## Constraints & Sockets
 
-Let's say we wanted to create an animation to throw a prop (e.g. a barrel). We create a level sequence and add our skeleton & barrel as sequencer tracks. 
-
-![Sequencer with skeleton and barrel]({{ '/assets/images/posts/static-mesh-sockets/sequencer-with-skeleton-and-barrel.png' | relative_url }})
+Let's say we wanted to author an animation to throw a prop (e.g. a barrel). We create a new level sequence and add our skeleton, control rig & barrel as sequencer tracks. 
 
 So what do we do with our prop control now? The first step is to make the prop control follow our prop using a *constraint*.
-Select the prop control and constrain it to the barrel. A selection of static mesh sockets will pop up.
-It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here. No selection (= origin of our mesh) will do just fine though.
+Select the prop control and constrain it to the barrel. A selection of static mesh sockets pops up.
+It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here, for instance at the bottom of the barrel. No selection (= origin of the mesh) will do just fine though.  
+Make sure you zero out any offsets within the constraint itself by right-clicking on it in the "Constraints" tab. This is another powerful feature of constraints but for our purposes we do not need it.
+
+![Sequencer prop constraint setup]({{ '/assets/images/posts/static-mesh-sockets/sequencer-prop-constraint-setup.png' | relative_url }})
 
 The prop is now constrained to and animates with the barrel. We animate the barrel in world space and thus the prop bone without any parent bone chains to worry about.
 
-![Sequencer prop constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-prop-constraint.gif' | relative_url }})
-
-Great! But what should we do about our IK hand controls? How do we precisely attach them to the barrel?
+But what should we do about our IK hand controls? How do we precisely attach them to the barrel?
 We could manually position them in each keyframe but... 
 
 - ❌ A lot of work for each frame
@@ -222,8 +221,8 @@ We could manually position them in each keyframe but...
 - ❌ Have to repeat all that work if we change the mesh or proportions of the barrel
 - ❌ Have to repeat all that work for other throwable props, e.g. a crate, cardboard box etc.
 
-What tool can we use to do this? What if we declare a relative-to-our-barrel transform at design-time? We tell Unreal: "Hey, when this barrel moves in sequencer make sure to place the hand IK controls exactly here".
-Much like with our prior attachment example we are declaring a transform on the mesh that is ideal for placing our hands on.
+What tool can we use to do this? We can declare a relative-to-our-barrel transform at design-time! We tell Unreal: "Hey, when this barrel moves in sequencer make sure to place the hand IK controls exactly here".
+Much like with our attachment example we are declaring a transform on the mesh that is ideal for placing our hands on.
 Hence the naming convention `Socket.Grip.Primary` and `Socket.Grip.Secondary` for the main & off hand respectively.
 
 ![Barrel grip sockets]({{ '/assets/images/posts/static-mesh-sockets/barrel-grip-sockets.png' | relative_url }})
@@ -233,8 +232,8 @@ The hand IK controls are now constrained to and animate with the gripping positi
 
 ![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/sequencer-hand-ik-constraint.gif' | relative_url }})
 
-Now we can keyframe our prop & hand IK controls for our throw animation, bake the animation and simply attach a barrel to our prop bone in-game.
-The hands will continue to accurately follow the gripping positions on the barrel.
+Now we can keyframe the prop & hand IK controls for our throw animation, bake it out to a sequence and simply attach a barrel to our prop bone in-game.
+The hands will continue to accurately follow the gripping positions on the barrel until we need to detach it to enable physics simulation again.
 
 ![Throw animation]({{ '/assets/images/posts/static-mesh-sockets/throw-animation.gif' | relative_url }})
 
@@ -255,20 +254,14 @@ In the context of an action combat system traces are often better than overlap c
 ## The Grammar of Space
 
 We have explored what we can do with *one* socket, but what happens when we add more sockets to the equation?
-
-If we have 2 sockets (i.e. transforms) we can calculate a line that describes a *distance* between them.  
-If we have 3 we can calculate a triangular plane that describes an *area* between them.  
-If we have 4 and more we can calculate a polygon that describes a *volume* between them.
-
-So sockets can be used to declare more than just simple points in space when composed together.
-In fact we don't even need to go that far to achieve basic shapes.
+For instance, if we have 2 sockets (i.e. transforms) we can calculate a line that describes the *distance* between them.
 
 We can calculate a *rectangle* using only 2 sockets: origin and extent.  
 We can calculate a *sphere* using only 2 sockets: origin and radius.  
 We can calculate a *capsule* using only 3 sockets: origin, radius and half-height.
 
-If you are familiar with tracing in Unreal Engine you will notice that those are the basic shapes for sweep traces.
-Can you guess where I'm going with this? Did I drive it home yet? Let's try to use sockets to define where our weapons apply damage and then trace that exact shape!
+If you are familiar with tracing in Unreal Engine you may notice that those are the basic shapes for sweep traces.
+Can you guess where I'm going with this? Did I drive it home yet? We can use sockets to define where our weapons apply damage and then trace that exact shape!
 
 ## Executing the Trace
 
@@ -280,13 +273,11 @@ We can create 3 sockets `Socket.Hitbox.Origin`, `Socket.Hitbox.Radius` and `Sock
 
 ![Greatsword with sockets]({{ '/assets/images/posts/static-mesh-sockets/greatsword-with-sockets.png' | relative_url }})
 
-This workflow allows us to get a very tight fit around the damaging parts of our weapons. If we use a rectangle we could make it even more precise!
-I opted for a capsule here because the player should usually get some leeway with hitboxes.
-
+This workflow allows us to get a very tight fit around the damaging parts of our weapons.
 Using our code from [Offset Sockets](#offset-sockets) we can provide a small C++ utility to get the required distance between our sockets:
 
 ```cs
-TOptional<float> UMugenSceneUtil::GetDistanceBetweenSockets(const USceneComponent* Component, const FName FromSocket, const FName ToSocket)
+TOptional<float> GetDistanceBetweenSockets(const USceneComponent* Component, const FName FromSocket, const FName ToSocket)
 {
     if (const auto From = GetSocketTransform(Component, FromSocket))
     {
@@ -306,7 +297,7 @@ const FGameplayTag OriginSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.
 const FGameplayTag RadiusSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.Hitbox.Radius"));
 const FGameplayTag LengthSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.Hitbox.Length"));
 
-const FTransform CapsuleOrigin = UMugenSceneUtil::GetSocketTransform(WeaponMeshComponent, OriginSocket.GetTagName());
+const FTransform CapsuleOrigin = GetSocketTransform(WeaponMeshComponent, OriginSocket.GetTagName());
 const float CapsuleRadius = GetDistanceBetweenSockets(WeaponMeshComponent, OriginSocket.GetTagName(), RadiusSocket.GetTagName());
 const float CapsuleLength = GetDistanceBetweenSockets(WeaponMeshComponent, OriginSocket.GetTagName(), LengthSocket.GetTagName());
 
@@ -355,8 +346,6 @@ Here are a few more ideas I haven't tried yet but that are certainly possible wi
 - ❓ Damage scaling based on hit location (e.g. very tip of the blade deals less damage than the weighty center)
 - ❓ More complex trace shapes composed out of the basic shapes
 
-Speaking of ideas...
-
 # Other Types of Sockets
 
 We had established that sockets in Unreal Engine are really nothing but relative, design-time transforms.
@@ -366,15 +355,15 @@ But the list does not end there.
 
 ## Proxy Actors
 
-The term *proxy* means a "stand-in" for something or someone else. Voting by proxy means someone else is voting for you. A proxy server handles requests in place of your own computer/server.
+The term *proxy* means a "stand-in" for something or someone else.
 
 There is a common technique in game development to place *proxy actors* in levels instead of placing actual actors directly.
 By doing so we tell the level: "Something can spawn here but we won't tell you what it is yet".
 At runtime we can use this proxy actor as a - you guessed it - relative-to-the-level transform declared at design-time and spawn any actor at it.
 
-Now I won't go into detail why we would want to do this, but here are just a few advantages:
+Now we won't go into detail why we would want to do this, but here are just a few advantages:
 
-- ✅ The actual actor is not loaded into memory until it is needed (lower memory footprint)
+- ✅ The actual actor is not loaded into memory until it is needed
 - ✅ We can hotswap which actor gets spawned without touching or changing the level
 - ✅ DLCs and mods can easily modify our levels
 
@@ -396,7 +385,7 @@ Which gives us a small widget in the level e.g. on an actor. We can drag it arou
 
 ![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/transform-widget-result.png' | relative_url }})
 
-This utility works nicely with *invisible* actors that spawn something else, like trigger shapes or indeed our proxy actor.
+This utility works nicely with invisible actors that spawn something else, like trigger shapes or indeed our proxy actor.
 Instead of using the transform of the actor directly we specify one or more named transforms to spawn other actors at.
 This gives us another useful data-driven workflow and more flexibility while designing levels. Neat!
 
