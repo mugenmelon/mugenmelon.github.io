@@ -254,22 +254,18 @@ In the context of an action combat system traces are often better than overlap c
 ## The Grammar of Space
 
 We have explored what we can do with *one* socket, but what happens when we add more sockets to the equation?
-For instance, if we have 2 sockets (i.e. transforms) we can calculate a line that describes the *distance* between them.
+If we have 2 sockets we can calculate a line that describes the distance between them. Or we can interpret both transforms as points in space that describe a shape:
 
-We can calculate a *rectangle* using only 2 sockets: origin and extent.  
-We can calculate a *sphere* using only 2 sockets: origin and radius.  
-We can calculate a *capsule* using only 3 sockets: origin, radius and half-height.
+We can calculate a *rectangle* using 2 sockets: origin and extent.  
+We can calculate a *sphere* using 2 sockets: origin and radius.  
+We can calculate a *capsule* using 3 sockets: origin, radius and half-height.
 
 If you are familiar with tracing in Unreal Engine you may notice that those are the basic shapes for sweep traces.
 Can you guess where I'm going with this? Did I drive it home yet? We can use sockets to define where our weapons apply damage and then trace that exact shape!
 
 ## Executing the Trace
 
-Say we wanted to define a hitbox for a greatsword.
-
-![Greatsword]({{ '/assets/images/posts/static-mesh-sockets/greatsword.png' | relative_url }})
-
-We can create 3 sockets `Socket.Hitbox.Origin`, `Socket.Hitbox.Radius` and `Socket.Hitbox.Length` to define a capsule around the blade.
+Say we wanted to define a hitbox for a greatsword. We can create 3 sockets `Socket.Hitbox.Origin`, `Socket.Hitbox.Radius` and `Socket.Hitbox.Length` to define a capsule around the blade.
 
 ![Greatsword with sockets]({{ '/assets/images/posts/static-mesh-sockets/greatsword-with-sockets.png' | relative_url }})
 
@@ -310,23 +306,6 @@ GetWorld()->SweepMultiByProfile(Hit, CapsuleOrigin.GetLocation(), CapsuleOrigin.
 
 Which is similarly easy to implement in blueprint but I would recommend executing frequent hitbox traces in C++ instead.
 
-![Blueprint get distance between sockets]({{ '/assets/images/posts/static-mesh-sockets/blueprint-get-distance-between-sockets.png' | relative_url }})
-
-![Blueprint capsule trace]({{ '/assets/images/posts/static-mesh-sockets/blueprint-capsule-trace.png' | relative_url }})
-
-## Compatibility with TargetingSystem
-
-In my project I use Unreal's TargetingSystem plugin. It provides a data-driven approach to traces by creating TargetingPreset assets.
-These assets specify:
-
-- How to trace with TargetingSelectionTasks
-- What filters to apply on the traced hits with TargetingFilterTasks
-- What sorting/ranking to apply on the results with TargetingSortTasks
-
-And allow for a very powerful data-driven workflow for any tracing needs as well as great debugging tools. On top of that we can customize many aspects of these tasks.
-Our hitbox shape tracing can be fully automated with a custom TargetingSelectionTask by subclassing `UTargetingSelectionTask_Trace` and overriding relevant methods.
-But this is a topic for another day!
-
 ## Final Results
 
 Now that we have a hitbox tracing system in place we can integrate it into our combat system and see the results.
@@ -340,15 +319,22 @@ There are multiple advantages we gain from this approach:
 - ✅ Visually define hitboxes directly on the weapon mesh
 - ✅ Each weapon can provide its own unique hitbox
 
-Here are a few more ideas I haven't tried yet but that are certainly possible with this workflow:
+## Compatibility with TargetingSystem
 
-- ❓ Multiple hitboxes with different effects (e.g. hilt deals blunt damage, blade deals cutting damage)
-- ❓ Damage scaling based on hit location (e.g. very tip of the blade deals less damage than the weighty center)
-- ❓ More complex trace shapes composed out of the basic shapes
+In my project I use Unreal's TargetingSystem plugin. It provides a data-driven approach to traces by creating `UTargetingPreset` assets.
+These assets specify:
+
+- How to trace with `UTargetingSelectionTask`
+- What filters to apply on the traced hits with `UTargetingFilterTask`
+- What sorting/ranking to apply on the results with `UTargetingSortTask`
+
+And allow for a very powerful data-driven workflow for any tracing needs as well as great debugging tools. On top of that we can customize many aspects of these tasks.
+Our hitbox shape tracing can be fully automated by subclassing `UTargetingSelectionTask_Trace` and overriding relevant methods.
+But this is a topic for another day!
 
 # Other Types of Sockets
 
-We had established that sockets in Unreal Engine are really nothing but relative, design-time transforms.
+We have established that sockets in Unreal Engine are really nothing but relative, design-time transforms.
 All of these techniques also apply to skeletal mesh sockets, although we have to account for the fact that those can be animated, physically simulated etc.
 
 But the list does not end there.
@@ -376,12 +362,11 @@ Another relevant hidden feature in Unreal Engine is using plain `FTransform` (or
 
 ```cs
 UPROPERTY(EditAnywhere, meta=(MakeEditWidget))
-FTransform Transform;
+FTransform MyTransformSocket;
 ```
 
-![Blueprint transform widget]({{ '/assets/images/posts/static-mesh-sockets/blueprint-transform-widget.png' | relative_url }})
-
-Which gives us a small widget in the level e.g. on an actor. We can drag it around and place it visually which is better than guessing transform properties in the details panel.
+In blueprint the same can be achieved by declaring a `Transform` variable, making it public and checking "Show 3D Widget" in the variable's details panel.
+This gives us a small widget in the level e.g. on an actor. We can drag it around and place it visually which is better than guessing transform properties in the details panel.
 
 ![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/transform-widget-result.png' | relative_url }})
 
