@@ -15,12 +15,13 @@ kanban
     ["`**Backlog**`"]
         ["`**Bulletproof Your Code with Scoped Structs**`"]
         ["`**The Spec Pattern: Making Engine Features Editable**`"]
+        ["`**Editor Readability: Creating Complex Title Properties**`"]
         ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
         ["`**Applying Gameplay Effects Using the Builder Pattern**`"]
         ["`**Dynamic AI with AIGoals and Perception**`"]
         ["`**Using StateTree to Drive Core Gameplay Logic**`"]
         ["`**Supercharge Your Gameplay with Choosers**`"]
-
+        
         ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**`"]
         ["`**A Strict Data-Driven Approach to UE5**`"]
         ["`**How to Problem-Solve Like a Programmer**`"]
