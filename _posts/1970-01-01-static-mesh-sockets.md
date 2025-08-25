@@ -306,8 +306,6 @@ GetWorld()->SweepMultiByProfile(Hit, CapsuleOrigin.GetLocation(), CapsuleOrigin.
 
 Which is similarly easy to implement in blueprint but I would *highly* recommend executing frequent hitbox traces in C++ instead.
 
-## Final Results
-
 Now that we have a hitbox tracing system in place we can integrate it into our combat system and see the results.
 
 ![Greatsword swing hitbox]({{ '/assets/images/posts/static-mesh-sockets/20-greatsword-swing-hitbox.gif' | relative_url }})

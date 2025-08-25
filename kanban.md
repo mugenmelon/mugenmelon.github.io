@@ -6,6 +6,11 @@ diagrams: true
 ---
 
 <pre class="mermaid">
+---
+config:
+    kanban:
+        sectionWidth: 333
+---
 kanban
     ["`**Backlog**`"]
         ["`**Bulletproof Your Code with Scoped Structs**`"]
@@ -28,9 +33,8 @@ kanban
         ["`**Building an Equipment System with Smart Sockets**`"]
         ["`**Mugen Game Architecture**`"]
     ["`**In Progress**`"]
-        ["`**Addendum: Improving Program Flow**
-            Using {} to construct TOptional.
-        `"]
+        ["`**Addendum: Improving Program Flow in UE5 C++ and Blueprint**
+            Using {} to construct TOptional.`"]
         ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
     ["`**Done**`"]
         ["`**Why You Should Be Using Static Mesh Sockets**`"]
