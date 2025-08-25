@@ -255,7 +255,7 @@ In the context of an action combat system traces are often better than overlap c
 We have explored what we can do with *one* socket, but what happens when we add more sockets to the equation?
 If we have 2 sockets we can calculate a line that describes the distance between them. Or we can interpret both transforms as points in space that describe a shape:
 
-We can calculate a *rectangle* using 2 sockets: origin and extent.  
+We can calculate a *box* using 2 sockets: origin and extent.  
 We can calculate a *sphere* using 2 sockets: origin and radius.  
 We can calculate a *capsule* using 3 sockets: origin, radius and half-height.
 
