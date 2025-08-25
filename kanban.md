@@ -8,14 +8,14 @@ diagrams: true
 <pre class="mermaid">
 kanban
     ["`**Backlog**`"]
-        ["`**Supercharge Your Gameplay with Choosers**`"]
         ["`**Bulletproof Your Code with Scoped Structs**`"]
-        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
-        ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
         ["`**The Spec Pattern: Making Engine Features Editable**`"]
         ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
+        ["`**Applying Gameplay Effects Using the Builder Pattern**`"]
         ["`**Dynamic AI with AIGoals and Perception**`"]
-        
+        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
+        ["`**Supercharge Your Gameplay with Choosers**`"]
+
         ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**`"]
         ["`**A Strict Data-Driven Approach to UE5**`"]
         ["`**How to Problem-Solve Like a Programmer**`"]
@@ -23,9 +23,16 @@ kanban
         ["`**How MVVM Can Apply to Game Development**`"]
         ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**`"]
         ["`**Composition vs. Inheritance Demystified**`"]
+        ["`**Improving Gameplay Abilities with Ability Stages**`"]
+        ["`**Gameplay Abilities for Players & Ability-Driven AI**`"]
+        ["`**Building an Equipment System with Smart Sockets**`"]
         ["`**Mugen Game Architecture**`"]
     ["`**In Progress**`"]
-        ["`**Why You Should Be Using Static Mesh Sockets**`"]
+        ["`**Addendum: Improving Program Flow**
+            Using {} to construct TOptional.
+        `"]
+        ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
     ["`**Done**`"]
+        ["`**Why You Should Be Using Static Mesh Sockets**`"]
         ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
 </pre>

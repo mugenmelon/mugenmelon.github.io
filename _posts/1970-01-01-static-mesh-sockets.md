@@ -10,12 +10,12 @@ Static mesh sockets are one of Unreal Engine’s most overlooked features. While
 
 # What Are Static Mesh Sockets?
 
-If you've spent any amount of time in Unreal Engine you are likely already familiar with *skeletal mesh sockets*.
+If you've spent any amount of time in Unreal Engine, you are likely already familiar with *skeletal mesh sockets*.
 
 ![Skeletal mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/01-skeletal-mesh-socket-example.png' | relative_url }})
 
 Sockets in principle are transforms (location, rotation & scale) declared at design-time in a "relative-to-something" space.
-In the case of skeletal mesh sockets they define a transform relative to a skeletal mesh.
+In the case of skeletal mesh sockets they define a transform relative to a parent bone in the skeletal mesh.
 It is no surprise then that *static mesh sockets* define a transform relative to a static mesh.
 
 ![Static mesh socket example]({{ '/assets/images/posts/static-mesh-sockets/02-static-mesh-socket-example.png' | relative_url }})
@@ -50,7 +50,7 @@ We will start with something familiar: *skeletal mesh attachment*.
 ## The Problem with Attachment
 
 All attachment functions & nodes in the engine allow us to specify the parent's socket name to attach the child to. Let's look at a small example to demonstrate an issue here.
-I have a simple pawn with a skeletal mesh. I also have a sword static mesh that I want to attach to my pawn's skeletal mesh at socket `Socket.Hand.Right`.
+We have a simple pawn with a skeletal mesh, and we want to attach a sword static mesh to its `Socket.Hand.Right` socket.
 
 ![Pawn sword attachment]({{ '/assets/images/posts/static-mesh-sockets/04-pawn-sword-attachment.png' | relative_url }})
 
@@ -75,7 +75,7 @@ But we should be aware of a few caveats here:
 
 - ❌ Need to manage dedicated sockets per weapon type...
 - ❌ ...per skeleton...
-- ❌ ...per use case (i.e. sheathed, unsheathed, left hand, right hand).
+- ❌ ...per use case (e.g. sheathed, unsheathed, left hand, right hand).
 - ❌ Weapons with significantly different proportions require extra sockets.
 
 A workflow that solves these issues is to go back to Blender and set the origin to the hilt of the sword. Again, depending on the project's complexity this will work just fine.
@@ -100,8 +100,6 @@ Great, that worked! But now we have a set of new issues:
 - ❌ Designers need to understand this new system.
 - ❌ Designers have to guesstimate where the correct transform on the mesh should be.
 
-Oh boy, fun!
-
 ## The Socket Way
 
 Maybe you already get where I am going with this. It seems we are trying to solve the wrong problem. What do we *actually* need here?
@@ -110,8 +108,8 @@ That's right! We can declare a relative-to-our-sword transform at design-time! W
 ![Sword offset socket]({{ '/assets/images/posts/static-mesh-sockets/09-sword-offset-socket.png' | relative_url }})
 
 We then use the inverse transform of this socket to apply an appropriate offset.
-Why the *inverse* transform? Since want the offset socket to overlap the parent socket we must offset the entire mesh in the *opposite* direction.
-Hence the naming `Socket.Offset`.
+Why the *inverse* transform? Since we want the offset socket to overlap the parent socket we must offset the entire mesh in the *opposite* direction.
+Hence the naming `Socket.Offset`. Since static mesh sockets are relative to the origin of the mesh (i.e. in component space) we can directly apply their transforms as an offset to the owning mesh component.
 
 ![Blueprint sword attachment offset socket manual]({{ '/assets/images/posts/static-mesh-sockets/10-blueprint-sword-attachment-offset-socket-manual.png' | relative_url }})
 
@@ -127,7 +125,7 @@ Perfect! The sword is attached correctly and our prior worries about mesh origin
 - ✅ Different use cases (e.g. sheathed, unsheathed, left hand, right hand) can be covered by declaring new offset sockets.
 - ✅ Changes to an offset socket only affect one weapon and the socket's use case.
 - ✅ Designers can use familiar tools and a nice UI.
-- ✅ Designers do not have to guesstimate the offsets for each mesh.
+- ✅ Designers don't have to guesstimate the offsets for each mesh.
 
 If we wrap this convention in a few nice C++ functions and expose them to blueprint we won't need to think about much at all when dealing with attachments.
 For blueprint projects we can wrap the previous couple of nodes in a blueprint function library.
@@ -156,8 +154,10 @@ TOptional<FTransform> GetSocketTransform(const USceneComponent* Component, const
     return IsValid(Component) && !Socket.IsNone() && Component->DoesSocketExist(Socket) ? Component->GetSocketTransform(Socket, Space) : TOptional<FTransform>();
 }
 ```
+*Curious about `TOptional` or `EResult`? Check out my post on [Improving Program Flow In UE5 C++ & Blueprint]({% post_url 2025-08-04-improving-program-flow %}).*
+{: .caption}
 
-And voilá, our worries about attachment are a thing of the past. Once exposed to blueprint we get:
+And voilà, our worries about attachment are a thing of the past. Once exposed to blueprint we get:
 
 ![Blueprint sword attachment offset socket automatic]({{ '/assets/images/posts/static-mesh-sockets/12-blueprint-sword-attachment-offset-socket-automatic.png' | relative_url }})
 
@@ -206,7 +206,7 @@ Let's say we wanted to author an animation to throw a prop (e.g. a barrel). We c
 So what do we do with our prop control now? The first step is to make the prop control follow our prop using a *constraint*.
 Select the prop control and constrain it to the barrel. A selection of static mesh sockets pops up.
 It does not really matter in this case but I recommend using an [Offset Socket](#offset-sockets) here, for instance at the bottom of the barrel. No selection (= origin of the mesh) will do just fine though.  
-Make sure you zero out any offsets within the constraint itself by right-clicking on it in the "Constraints" tab. This is another powerful feature of constraints but for our purposes we do not need it.
+Make sure you zero out any offsets within the constraint itself by right-clicking on it in the "Constraints" tab. This is another powerful feature of constraints, but we do not need it for our purposes.
 
 ![Sequencer prop constraint setup]({{ '/assets/images/posts/static-mesh-sockets/15-sequencer-prop-constraint-setup.png' | relative_url }})
 
@@ -233,7 +233,7 @@ The hand IK controls are now constrained to and animate with the gripping positi
 ![Sequencer hand IK constraint]({{ '/assets/images/posts/static-mesh-sockets/17-sequencer-hand-ik-constraint.gif' | relative_url }})
 
 Now we can keyframe the prop & hand IK controls for our throw animation, bake it out to a sequence and simply attach a barrel to our prop bone in-game.
-The hands will continue to accurately follow the gripping positions on the barrel until we need to detach it to enable physics simulation again.
+The hands will continue to accurately follow the gripping positions on the barrel, at least until we need to detach it to enable physics simulation again.
 
 ![Throw animation]({{ '/assets/images/posts/static-mesh-sockets/18-throw-animation.gif' | relative_url }})
 
@@ -261,7 +261,7 @@ We can calculate a *sphere* using 2 sockets: origin and radius.
 We can calculate a *capsule* using 3 sockets: origin, radius and half-height.
 
 If you are familiar with tracing in Unreal Engine you may notice that those are the basic shapes for sweep traces.
-Can you guess where I'm going with this? Did I drive it home yet? We can use sockets to define where our weapons apply damage and then trace that exact shape!
+Can you guess where I'm going with this? We can use sockets to define where our weapons apply damage and then trace that exact shape!
 
 ## Executing the Trace
 
@@ -304,7 +304,7 @@ const FCollisionShape Capsule = FCollisionShape::MakeCapsule(CapsuleRadius, Caps
 GetWorld()->SweepMultiByProfile(Hit, CapsuleOrigin.GetLocation(), CapsuleOrigin.GetLocation(), CapsuleOrigin.GetRotation(), TEXT("SomeTraceProfile"), Capsule);
 ```
 
-Which is similarly easy to implement in blueprint but I would recommend executing frequent hitbox traces in C++ instead.
+Which is similarly easy to implement in blueprint but I would *highly* recommend executing frequent hitbox traces in C++ instead.
 
 ## Final Results
 
@@ -344,8 +344,7 @@ But the list does not end there.
 The term *proxy* means a "stand-in" for something or someone else.
 
 There is a common technique in game development to place *proxy actors* in levels instead of placing actual actors directly.
-By doing so we tell the level: "Something can spawn here but we won't tell you what it is yet".
-At runtime we can use this proxy actor as a - you guessed it - relative-to-the-level transform declared at design-time and spawn any actor at it.
+By doing so we tell the level: "Something can spawn here but we won't tell you what it is yet". In a sense, proxy actors are just sockets on the level itself and we can use them to spawn anything into them at runtime.
 
 Now we won't go into detail why we would want to do this, but here are just a few advantages:
 
@@ -371,7 +370,7 @@ This gives us a small widget in the level e.g. on an actor. We can drag it aroun
 ![Transform widget result]({{ '/assets/images/posts/static-mesh-sockets/21-transform-widget-result.png' | relative_url }})
 
 This utility works nicely with invisible actors that spawn something else, like trigger shapes or indeed our proxy actor.
-Instead of using the transform of the actor directly we specify one or more named transforms to spawn other actors at.
+Instead of using the transform of the actor directly we specify one or more named transforms (or "sockets" if you will) to spawn other actors at.
 This gives us another useful data-driven workflow and more flexibility while designing levels. Neat!
 
 # Final Thoughts
