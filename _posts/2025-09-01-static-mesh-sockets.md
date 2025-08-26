@@ -170,6 +170,7 @@ For example, Unreal Engine uses x-forward and z-up. It can be helpful to orient 
 Depending on the use case we should also consider performance of multiple socket lookups. We are iterating a (small) array of objects multiple times. If we find a significant performance impact we could:
 
 - Cache socket transforms after the first lookup (since they do not change)
+- Manually iterate `UStaticMesh::Sockets` once to find all relevant sockets in O(n)
 - Use `UStaticMesh::GetSocketsByTag` to find all relevant sockets in O(n)
 
 But the old adage applies: *Unmeasured* optimization is the root of all evil.
