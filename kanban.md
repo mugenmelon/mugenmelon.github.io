@@ -30,6 +30,7 @@ kanban
         ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**`"]
         ["`**Composition vs. Inheritance Demystified**`"]
         ["`**Improving Gameplay Abilities with Ability Stages**`"]
+        ["`**The Ways of Initializing GAS AttributeSets**`"]
         ["`**Gameplay Abilities for Players & Ability-Driven AI**`"]
         ["`**Building an Equipment System with Smart Sockets**`"]
         ["`**Mugen Game Architecture**`"]
