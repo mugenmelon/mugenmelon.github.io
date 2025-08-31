@@ -1,5 +1,5 @@
 ---
-title: Why You Should Be Using Static Mesh Sockets
+title: 🔌 Why You Should Be Using Static Mesh Sockets
 tags: gamedev unreal-engine gameplay animation c++ blueprint
 ---
 
