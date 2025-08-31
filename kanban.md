@@ -37,8 +37,11 @@ kanban
     ["`**In Progress**`"]
         ["`**Addendum: Improving Program Flow in UE5 C++ and Blueprint**
             Using {} to construct TOptional.`"]
-        ["`**How to Stabilize Interfaces for C++ and Blueprint**`"]
+        ["`**How to Stabilize C++ Interfaces for Blueprint**
+            A short & simple strategy to avoid the pains of making C++ interfaces Blueprint compatible.`"]
     ["`**Done**`"]
-        ["`**Why You Should Be Using Static Mesh Sockets**`"]
-        ["`**Improving Program Flow in UE5 C++ and Blueprint**`"]
+        ["`**Why You Should Be Using Static Mesh Sockets**
+            An underappreciated feature with various techniques for powerful data-driven workflows.`"]
+        ["`**Improving Program Flow in UE5 C++ and Blueprint**
+            Enhancing your C++ and Blueprint code with simple strategies for readability & maintainability.`"]
 </pre>
