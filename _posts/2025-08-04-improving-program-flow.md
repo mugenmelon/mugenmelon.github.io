@@ -1,11 +1,9 @@
 ---
-title: "Improving Program Flow in UE5 C++ & Blueprint"
+title: 💻 Improving Program Flow in UE5 C++ & Blueprint
 tags: gamedev programming unreal-engine c++ blueprint
-related_tags: programming c++ blueprint
-published: true
 ---
 
-Why you should never `return true;` and what to do instead.
+Why you should never `return true;` and what to do instead. Learn techniques to improve execution flow in UE5 projects using both C++ and Blueprint approaches. This post covers handling success/failure states gracefully, reducing branching complexity, and implementing cleaner program flow patterns. Includes practical examples and comparisons between different implementation methods.
 
 {% include toc.md %}
 
