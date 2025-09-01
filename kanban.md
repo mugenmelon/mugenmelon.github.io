@@ -26,6 +26,7 @@ kanban
         ["`**A Strict Data-Driven Approach to UE5**`"]
         ["`**How to Problem-Solve Like a Programmer**`"]
         ["`**System-Thinking for Game Development**`"]
+        ["`**Using Adoption Patterns for Complexity Management**`"]
         ["`**How MVVM Can Apply to Game Development**`"]
         ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**`"]
         ["`**Composition vs. Inheritance Demystified**`"]
