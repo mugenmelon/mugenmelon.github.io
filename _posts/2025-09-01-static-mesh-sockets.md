@@ -116,15 +116,15 @@ Hence the naming `Socket.Offset`. Since static mesh sockets are relative to the 
 
 Perfect! The sword is attached correctly and our prior worries about mesh origins & offset transforms are resolved:
 
-- ✅ No back-and-forth between Unreal and Blender.
-- ✅ No need to think about where the origin is.
-- ✅ We get the advantages of using the geometric center or center of mass as the origin.
-- ✅ When we rotate the sword mesh it rotates around the geometric center or center of mass.
-- ✅ Different types of weapons with varying proportions can specify where exactly their hilt is on the mesh.
-- ✅ Different use cases (e.g. sheathed, unsheathed, left hand, right hand) can be covered by declaring new offset sockets.
-- ✅ Changes to an offset socket only affect one weapon and the socket's use case.
-- ✅ Designers can use familiar tools and a nice UI.
-- ✅ Designers don't have to guesstimate the offsets for each mesh.
+- ✔️ No back-and-forth between Unreal and Blender.
+- ✔️ No need to think about where the origin is.
+- ✔️ We get the advantages of using the geometric center or center of mass as the origin.
+- ✔️ When we rotate the sword mesh it rotates around the geometric center or center of mass.
+- ✔️ Different types of weapons with varying proportions can specify where exactly their hilt is on the mesh.
+- ✔️ Different use cases (e.g. sheathed, unsheathed, left hand, right hand) can be covered by declaring new offset sockets.
+- ✔️ Changes to an offset socket only affect one weapon and the socket's use case.
+- ✔️ Designers can use familiar tools and a nice UI.
+- ✔️ Designers don't have to guesstimate the offsets for each mesh.
 
 If we wrap this convention in a few nice C++ functions and expose them to blueprint we won't need to think about much at all when dealing with attachments.
 For blueprint projects we can wrap the previous couple of nodes in a blueprint function library.
@@ -239,11 +239,11 @@ The hands will continue to accurately follow the gripping positions on the barre
 
 This brings many advantages:
 
-- ✅ No work per frame required, set up constraints once and they remain active for any chosen frames
-- ✅ Easy to set up sockets once for precise hand positions in all animations
-- ✅ When changing the animation hands adjust automatically
-- ✅ When changing the mesh and proportions of the barrel hands adjust automatically
-- ✅ Can easily bake out dedicated animations for other throwable props
+- ✔️ No work per frame required, set up constraints once and they remain active for any chosen frames
+- ✔️ Easy to set up sockets once for precise hand positions in all animations
+- ✔️ When changing the animation hands adjust automatically
+- ✔️ When changing the mesh and proportions of the barrel hands adjust automatically
+- ✔️ Can easily bake out dedicated animations for other throwable props
 
 # Hitboxes
 
@@ -312,10 +312,10 @@ Now that we have a hitbox tracing system in place we can integrate it into our c
 
 There are multiple advantages we gain from this approach:
 
-- ✅ Data-driven workflow
-- ✅ Accurate hitboxes
-- ✅ Visually define hitboxes directly on the weapon mesh
-- ✅ Each weapon can provide its own unique hitbox
+- ✔️ Data-driven workflow
+- ✔️ Accurate hitboxes
+- ✔️ Visually define hitboxes directly on the weapon mesh
+- ✔️ Each weapon can provide its own unique hitbox
 
 ## Compatibility with TargetingSystem
 
@@ -346,9 +346,9 @@ By doing so we tell the level: "Something can spawn here but we won't tell you w
 
 Now we won't go into detail why we would want to do this, but here are just a few advantages:
 
-- ✅ The actual actor is not loaded into memory until it is needed
-- ✅ We can hotswap which actor gets spawned without touching or changing the level
-- ✅ DLCs and mods can easily modify our levels
+- ✔️ The actual actor is not loaded into memory until it is needed
+- ✔️ We can hotswap which actor gets spawned without touching or changing the level
+- ✔️ DLCs and mods can easily modify our levels
 
 There is much more to it. What I'm trying to say here: A "socket" does not need to look like or be called a "socket". It's transforms all the way down.
 Well, you get it by now. Very useful stuff.
