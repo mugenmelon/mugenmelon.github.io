@@ -1,6 +1,6 @@
 ---
 title: 🔌 Why You Should Be Using Static Mesh Sockets
-tags: gamedev unreal-engine gameplay animation c++ blueprint
+tags: tutorial gamedev unreal-engine gameplay animation c++ blueprint
 ---
 
 Static mesh sockets are one of Unreal Engine’s most overlooked features. While most developers are familiar with skeletal mesh sockets for attachments, static mesh sockets open the door to smarter workflows, cleaner code, and more flexible design tools. In this post, we’ll explore how to use them for attachments, animation, hitboxes, and beyond - turning a simple concept into a powerful data-driven system that makes your game easier to build and more fun to design.
