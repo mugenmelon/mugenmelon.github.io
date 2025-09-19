@@ -9,40 +9,56 @@ diagrams: true
 ---
 config:
     kanban:
-        sectionWidth: 333
+        sectionWidth: 500
 ---
 kanban
     ["`**Backlog**`"]
-        ["`**Bulletproof Your Code with Scoped Structs**`"]
-        ["`**The Spec Pattern: Making Engine Features Editable**`"]
-        ["`**Editor Readability: Creating Complex Title Properties**`"]
-        ["`**Write Better Code Quickly: Using C++ Modules in UE5**`"]
-        ["`**Applying Gameplay Effects Using the Builder Pattern**`"]
-        ["`**Dynamic AI with AIGoals and Perception**`"]
-        ["`**Using StateTree to Drive Core Gameplay Logic**`"]
-        ["`**Supercharge Your Gameplay with Choosers**`"]
+        ["`**Bulletproof Your Code with Scoped Structs**
+            Avoid cleanup errors by letting your C++ code clean itself up.`"]
+        ["`**The Spec Pattern: Making Engine Features Editable**
+            Wrapping engine functionality in a configurable data struct for flexible data-driven workflows.`"]
+        ["`**Editor Readability: Creating Complex Title Properties**
+            Enabling complex title properties (and others!) without writing a single line of editor-module code.`"]
+        ["`**Write Better Code Quickly: Using C++ Modules in UE5**
+            Why to use them, how to use them and *how* to use them.`"]
+        ["`**Applying Gameplay Effects Using the Builder Pattern**
+            Opening the door to intricate effects without the complexity.`"]
+        ["`**Dynamic AI with AIGoals and Perception**
+            Letting AI agents discover the game world in a simple and maintainable way.`"]
+        ["`**Using StateTree to Drive Core Gameplay Logic**
+            Things that will make you think '*Why didn't I do this sooner?*'.`"]
+        ["`**Supercharge Your Gameplay with Choosers**
+            When a TMap just won't cut it.`"]
         
-        ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**`"]
-        ["`**A Strict Data-Driven Approach to UE5**`"]
-        ["`**How to Problem-Solve Like a Programmer**`"]
-        ["`**System-Thinking for Game Development**`"]
-        ["`**Using Adoption Patterns for Complexity Management**`"]
-        ["`**How MVVM Can Apply to Game Development**`"]
-        ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**`"]
-        ["`**Composition vs. Inheritance Demystified**`"]
-        ["`**Improving Gameplay Abilities with Ability Stages**`"]
-        ["`**The Ways of Initializing GAS AttributeSets**`"]
-        ["`**Gameplay Abilities for Players & Ability-Driven AI**`"]
-        ["`**Building an Equipment System with Smart Sockets**`"]
-        ["`**Mugen Game Architecture**`"]
+        ["`**UE5 C++ vs. Blueprint: What Most Developers Miss**
+            A slightly different perspective on the old debate.`"]
+        ["`**A Strict Data-Driven Approach to UE5**
+            How to think about your game data & the ways of modeling it.`"]
+        ["`**How to Problem-Solve Like a Programmer**
+            Techniques for efficient problem-solving for any programmer.`"]
+        ["`**System-Thinking for Game Development**
+            How to think about and create modular systems to improve flexibility, ease of maintenance and emergent design.`"]
+        ["`**Using Adoption Patterns for Complexity Management**
+            How to tame a software beast like Unreal Engine.`"]
+        ["`**How MVVM Can Apply to Game Development**
+            A theoretical discussion on MVVM in game development.`"]
+        ["`**Divide and Conquer: The Art of Problem Decomposition in Game Programming**
+            How to solve any problem quickly, elegantly and pragmatically.`"]
+        ["`**Composition vs. Inheritance Demystified**
+            Clearing up common misconceptions & when to apply what.`"]
+        ["`**Improving Gameplay Abilities with Ability Stages**
+            For complex multi-stage gameplay abilities.`"]
+        ["`**The Ways of Initializing GAS AttributeSets**
+            Which one to choose and why.`"]
+        ["`**Gameplay Abilities for Players & Ability-Driven AI**
+            How to enable your AI agents to do *anything* the player can do.`"]
+        ["`**Building an Equipment System with Smart Sockets**
+            Easily attach things to your actors without needing to think about it.`"]
+        ["`**Mugen Game Architecture**
+            A deep-dive into my protoype's game architecture.`"]
     ["`**In Progress**`"]
-        ["`**Addendum: Improving Program Flow in UE5 C++ and Blueprint**
-            Using {} to construct TOptional.`"]
         ["`**How to Stabilize C++ Interfaces for Blueprint**
             A short & simple strategy to avoid the pains of making C++ interfaces Blueprint compatible.`"]
-    ["`**Done**`"]
-        ["`**Why You Should Be Using Static Mesh Sockets**
-            An underappreciated feature with various techniques for powerful data-driven workflows.`"]
-        ["`**Improving Program Flow in UE5 C++ and Blueprint**
-            Enhancing your C++ and Blueprint code with simple strategies for readability & maintainability.`"]
+        ["`**Dreams of Hypermedia Sheep**
+            An exploration of HATEOAS and hypermedia-driven web applications.`"]
 </pre>

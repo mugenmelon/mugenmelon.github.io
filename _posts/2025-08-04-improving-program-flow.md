@@ -109,7 +109,7 @@ TOptional<float> GetAttackPower(const AActor* OwnerActor)
         return 100.0f;
     }
     // This essentially resolves to an "empty" Optional instance of any type. 
-    // If you prefer you can return "TOptional<float>()".
+    // If you prefer you can return "TOptional<float>()" or "{}".
     return NullOpt;
 }
 

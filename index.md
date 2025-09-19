@@ -11,4 +11,6 @@ I am developing a single-player action RPG prototype in Unreal Engine and post a
 - 🛠️ Advanced and unconventional game programming techniques  
 - 🎮 AI and emergent gameplay system design
 
+I also make occasional posts about programming & software development in general.
+
 {% include final-words.md %}
