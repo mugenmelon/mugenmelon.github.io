@@ -7,6 +7,9 @@ author:
 description: Nil volentibus arduum. Divide et impera.
 
 permalink: none
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
 
 defaults:
   - scope:

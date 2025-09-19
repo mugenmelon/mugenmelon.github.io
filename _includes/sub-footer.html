@@ -1,5 +1,18 @@
-{%- if page.diagrams -%}
-    {%- include mermaid.html -%}
-{%- endif -%}
+{% if page.highlight %}
+<link href="https://unpkg.com/prismjs@1.29.0/themes/prism-tomorrow.css" rel="stylesheet" />
+<script defer src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script defer src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+{% endif %}
 
-{%- include style.html -%}
+{% if page.diagrams %}
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({theme: 'dark'});
+</script>
+
+<style>
+    .mermaid {
+        text-align: center;
+    }
+</style>
+{% endif %}
