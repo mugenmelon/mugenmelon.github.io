@@ -34,7 +34,7 @@ No, I am a full stack developer. I know my "-ends" from the front and the back! 
 That can't be right. This wasn't supposed to happen with *highly maintainable, loosely coupled and independent microservices*! The architecture is sound, we just need a few small additions...
 
 - **JavaScript everywhere!**  
-We use Node.js in the backend and share validation & DTO models. Forget about language agnosticism and team autonomy.
+We use Node.js in the backend and share validation & DTO models. Forget about language agnosticism and team autonomy, we prefer shared business concerns.
 - **GraphQL to the rescue!**  
 Just one more layer of abstraction and I swear our problems will magically disappear.
 - **Code generation from API specs!**  
@@ -44,7 +44,7 @@ Business is thrilled we finally replaced that pesky "Edit" button with a context
 
 ...
 
-Wait, I've been here before. Whenever I had to pile on more complexity I was fixing the wrong problem... more layers, more abstractions, more processes, more standards & bureaucracy... no, it cannot be... is this accidental complexity...?! Arrghh...
+Wait, I've been here before. Whenever I had to pile on more complexity, more layers, more abstractions, more processes, more standards & bureaucracy I was fixing the wrong problem... no, it cannot be... is this accidental complexity...?! Arrghh...
 
 ## Depression
 
