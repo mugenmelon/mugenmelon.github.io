@@ -1,6 +1,7 @@
 ---
 title: 🐑 Dream of Hypermedia Sheep
 tags: essay programming web-development hateoas
+diagrams: true
 ---
 
 {% include toc.md %}
@@ -63,7 +64,7 @@ Well, this is where I am. Having spent a few weeks diving into HATEOAS and libra
 
 I do have a strong suspicion that one source of these problems begins with  **J** and ends with **avaScript**. But before we investigate how we got here, let's first dive into what HATEOAS is.
 
-# What is HATEOAS
+# What is HATEOAS?
 
 When you ask a developer what "Representational State Transfer" (REST) means, you will most likely hear some variation of:
 
@@ -86,9 +87,30 @@ In fact, REST does not constrain itself to any protocol, but for the sake of sim
 
 - **Hypermedia As The Engine Of Application State (HATEOAS)**
 
-Which is about as vague a term as "Representational State Transfer". So let's outline the individual components of the phrase "HATEOAS", starting with...
+Which is about as vague a term as "Representational State Transfer". So let's outline the individual components of the phrase "HATEOAS" in an order that I think makes the most sense.
 
 ## Application State
+
+This part seems obvious at first. This is your server's state i.e. the *resources* in your database, right? Well, yes and no. At least that's not the full picture, because the qualifier *application* bears its own meaning.
+
+*Application* state not only implies the current data in your database, but also *its available transformations*. It tells us two pieces of information for any given resource:
+
+- What is the *current state* of this resource?
+- What can I do with the *current state* of this resource to get to a valid *next state*?
+
+Let's look at a simple example:
+
+<pre class="mermaid">
+stateDiagram-v2
+    direction LR
+
+    [*] --> Draft
+    Draft --> Review: submit
+    Review --> Published: publish
+    Published --> Archived: archive
+    Review --> Draft: edit
+    Published --> Draft: unpublish
+</pre>
 
 ## Hypermedia
 
