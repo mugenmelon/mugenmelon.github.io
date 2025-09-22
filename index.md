@@ -13,4 +13,4 @@ I am developing a single-player action RPG prototype in Unreal Engine and post a
 
 I also make occasional posts about programming & software development in general.
 
-{% include final-words.md %}
+You can check out planned & in-progress posts on the [Kanban](/kanban) page and follow me on [𝕏](https://x.com/mugenmelon){:target="_blank"} for updates.

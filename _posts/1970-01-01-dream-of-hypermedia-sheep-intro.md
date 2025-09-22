@@ -1,7 +1,6 @@
 ---
 title: 🐑 Dream of Hypermedia Sheep - Intro
 tags: essay programming web-development hateoas
-diagrams: true
 series: 🐑 Dream of Hypermedia Sheep
 series_part: 1
 fiction_disclaimer: true

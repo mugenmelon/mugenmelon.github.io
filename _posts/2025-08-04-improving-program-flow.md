@@ -467,5 +467,3 @@ The unconnected `False` pin now automatically returns `Failure`. Nice!
 
 Complexity management and maintainable code is not about what's in your brain but rather what you can leave out of it.  
 The best function is one that *cannot* fail. The second best is one that openly tells you it can.
-
-Thanks for reading! {% include final-words.md %}

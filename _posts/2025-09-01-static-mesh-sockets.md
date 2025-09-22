@@ -376,5 +376,3 @@ This gives us another useful data-driven workflow and more flexibility while des
 
 Video games are hungry for transforms. The more we can define at design-time the less we have to worry about runtime calculations, bespoke management systems & code complexity.
 We are visual creatures, computers are not. These techniques help us bridge the gap.
-
-Thanks for reading! {% include final-words.md %}

@@ -1,1 +1,0 @@
-You can check out planned & in-progress posts on the [Kanban](/kanban) page and follow me on [𝕏](https://x.com/mugenmelon) for updates.
