@@ -39,8 +39,10 @@ layout: base
     {% include anchor_headings.html html=content anchorBody="#" beforeHeading=true %}
   </div>
   <!-- BEGIN CUSTOM -->
+  <hr/>
   {%- include series.html -%}
   {%- include related_tags.html -%}
+  {%- include fiction-disclaimer.html -%}
   <!-- END CUSTOM -->
 
   {%- if site.disqus.shortname -%}

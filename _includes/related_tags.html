@@ -1,4 +1,4 @@
-{%- if page.tags -%}
+{%- if page.related_tags or page.unrelated_tags -%}
   {%- assign related_posts = site.posts | where_exp: "post", "post.url != page.url" -%}
   {%- if page.series -%}
     {%- assign related_posts = related_posts | where_exp: "post", "post.series != page.series" -%}
@@ -6,16 +6,27 @@
   {%- assign filtered_posts = '' | split: '' -%}
   
   {%- for post in related_posts -%}
-    {%- assign tag_match_count = 0 -%}
-    {%- for tag in page.tags -%}
-      {%- if post.tags contains tag -%}
-        {%- assign tag_match_count = tag_match_count | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
+    {%- assign is_related = true -%}
     
-    {%- assign current_tags_match = tag_match_count == page.tags.size -%}
-    {%- assign post_tags_match = tag_match_count == post.tags.size -%}
-    {%- if current_tags_match or post_tags_match -%}
+    {%- if page.related_tags -%}
+      {%- for required_tag in page.related_tags -%}
+        {%- unless post.tags contains required_tag -%}
+          {%- assign is_related = false -%}
+          {%- break -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+    
+    {%- if is_related and page.unrelated_tags -%}
+      {%- for unrelated_tag in page.unrelated_tags -%}
+        {%- if post.tags contains unrelated_tag -%}
+          {%- assign is_related = false -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    
+    {%- if is_related -%}
       {%- assign filtered_posts = filtered_posts | push: post -%}
     {%- endif -%}
   {%- endfor -%}
