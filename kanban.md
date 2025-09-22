@@ -59,4 +59,6 @@ kanban
     ["`**In Progress**`"]
         ["`**How to Stabilize C++ Interfaces for Blueprint**
             A short & simple strategy to avoid the pains of making C++ interfaces Blueprint compatible.`"]
+        ["`**Dreams of Hypermedia Sheep - What is HATEOAS?**
+            An exploration of HATEOAS and hypermedia-driven web applications.`"]
 </pre>
