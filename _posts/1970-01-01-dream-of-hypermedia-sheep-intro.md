@@ -79,7 +79,7 @@ The tech stack looks like this:
 - **HTML, raw CSS and fixi**  
 No external JavaScript dependencies. No packaging or build step. Prefer declarative/semantic CSS over framework noise. Fixi extensions only when absolutely necessary. Must be 100% functional with JavaScript disabled (progressive enhancement).
 - **Python backend (flask, sqlalchemy)**  
-Minimal dependencies. Using jinja2 templates for rendering modular HTML components. Prefer control and clarity over enterprise-grade BS. No pointless abstractions over the fact that we have a SQL database.
+Minimal dependencies. Using jinja2 templates for rendering modular HTML components. Prefer control and clarity over enterprise-grade BS. No pointless abstractions over the fact that we have an SQL database.
 - **SQLite database**  
 For obvious reasons. A few more constraints: No "magic" ORM migrations. Explicit and deliberate SQL migration files with alembic (similar to golang migrate). Database as first-class-citizen and single source of truth rather than an afterthought.
 
