@@ -5,8 +5,6 @@ highlight: true
 related_tags: unreal-engine
 ---
 
-TODO: introduction
-
 {% include toc.md %}
 
 # `UInterface`
@@ -88,11 +86,11 @@ public:
 };
 ```
 
-Now we can add this interface to any blueprint's "Class Settings", which gives us the option to then implement the function `GetEquipmentAsset`.
+Now we can add this interface to any blueprint's class settings, which gives us the option to then implement `GetEquipmentAsset` within that blueprint.
 
 ![Blueprint interface class settings]({{ '/assets/images/posts/future-proofing-interfaces/02-blueprint-interface-class-settings.png' | relative_url }})
 
-There is one important caveat here. If we try to call the function like in [Quick Recap](#quick-recap), we will get an error: `Do not directly call Event functions in Interfaces. Call Execute_GetEquipmentAsset instead`. This is the case with all `BlueprintNativeEvent` and `BlueprintImplementableEvent` functions. They must always be called by using the static `IEquippable::Execute_GetEquipmentAsset` instead.
+There is one important caveat here. If we try to call `GetEquipmentAsset` like in [Quick Recap](#quick-recap), we will get an error: `Do not directly call Event functions in Interfaces. Call Execute_GetEquipmentAsset instead`. This is the case with all `BlueprintNativeEvent` and `BlueprintImplementableEvent` functions. They must always be called by using the static `IEquippable::Execute_GetEquipmentAsset` function.
 
 But that is not all! We also have to make sure this static function is only ever called on objects that *actually implement the interface*. Attempting to call it on anything else results in another error. Here is how we can handle it correctly.
 
@@ -109,17 +107,15 @@ if (SomeObject && SomeObject->Implements<UEquippable>())
 }
 ```
 
-This circumstance makes it a bit "boilerplate-y" to add blueprint support to a `UInterface`, especially when using it in several places. And personally I always try to avoid nesting and `if` clauses where I can to keep functions easy to read.
-
-There is a very simple convention that addresses both of these issues.
+This circumstance makes it a bit "boilerplatey" to add blueprint support to a `UInterface`, especially if we use it in many places. And personally I always try to avoid redundant nesting and `if` clauses to keep functions easy to read. There is a very simple convention that addresses both of these issues.
 
 # Future-Proofing `UInterface`
 
-The idea is straightforward: we want want to call `IEquippable::GetEquipmentAsset` but *the way* we have to call it is in flux. Why not do it in a central, coherent place? For example, in a static function on the interface itself!
+The idea is straightforward: we want to call `GetEquipmentAsset`, but the way we have to call it may change, right? Then how about wrapping those checks and the function call in a central place so we only ever have to change it once? The most cohesive place to do so is in a static function on the interface itself.
 
 ## Static Function Wrapper
 
-For the sake of demonstration, we will go back to our C++ only interface from [Quick Recap](#quick-recap). We write a new static function that wraps the actual function call to the interface.
+For the sake of demonstration, we will go back to our C++ only interface from [Quick Recap](#quick-recap). We write a new static function that wraps the interface function call.
 
 ```cpp
 class IEquippable
@@ -139,9 +135,9 @@ public:
 // Implementation of our static function wrapper.
 const UEquipment* IEquippable::GetEquipmentAsset(const UObject* Target)
 {
-    // Instead of spreading Cast() calls throughout the codebase we only cast here.
+    // Instead of spreading Cast() calls throughout the codebase we cast just once here.
     const IEquippable* Equippable = Cast<IEquippable>(Target);
-    // We return sensible defaults where possible.
+    // Then we return sensible defaults where possible.
     return Equippable ? Equippable->GetEquipmentAsset() : nullptr;
 }
 ```
@@ -159,7 +155,7 @@ if (const UEquipmentAsset* EquipmentAsset = IEquippable::GetEquipmentAsset(SomeO
 
 ## Easy Blueprint Compatibility
 
-In addition to that we get a very clear migration path to support blueprints implementations of this interface.
+In addition to that we get a very clear migration path to support blueprint implementations of this interface.
 
 ```cpp
 class IEquippable
@@ -169,7 +165,7 @@ class IEquippable
 public:
     static const UEquipmentAsset* GetEquipmentAsset(const UObject* Target);
 
-    // We added BlueprintNativeEvent.
+    // We add BlueprintNativeEvent.
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
     const UEquipmentAsset* GetEquipmentAsset() const;
 };
@@ -179,6 +175,7 @@ public:
 // We only have to adjust our static wrapper function.
 const UEquipment* IEquippable::GetEquipmentAsset(const UObject* Target)
 {
+    // Instead of using Cast() we use Implements() and Unreal's generated Execute_GetEquipmentAsset function.
     return IsValid(Target) && Target->Implements<UEquippable>() ? Execute_GetEquipmentAsset(Target) : nullptr;
 }
 ```
