@@ -67,7 +67,7 @@ if (const IEquippable* Equippable = Cast<IEquippable>(SomeObject))
 
 At no point do we get an error here. We are safely checking that `SomeObject` is indeed equippable before getting the asset. This is an important detail when it comes to...
 
-## The Blueprint Question
+## Adding Blueprint Support
 
 Let us take stock: We have an interface that can be *implemented* in C++ and *called* in both C++ and Blueprint. But what if we want to *implement* the interface in Blueprint? To make a `UInterface` implementable in Blueprint, we have to mark the `UINTERFACE` as `BlueprintType` (which we already have) and then mark the `UFUNCTION` as `BlueprintNativeEvent`.
 
@@ -97,7 +97,7 @@ class AEquippableActor : public AActor, public IEquippable
     GENERATED_BODY()
 
 public:
-    // BlueprintNativeEvent requires an overrid of "GetEquipmentAsset_Implementation".
+    // BlueprintNativeEvent requires an override of "GetEquipmentAsset_Implementation".
     // Overriding "GetEquipmentAsset" alone will not work!
     virtual const UEquipmentAsset* GetEquipmentAsset_Implementation() const override;
 };
@@ -107,13 +107,13 @@ We can now add this interface to any Blueprint's class settings, which gives us 
 
 ![Blueprint interface class settings]({{ '/assets/images/posts/future-proofing-interfaces/02-blueprint-interface-class-settings.png' | relative_url }})
 
-But if we try to call `GetEquipmentAsset` like in [Quick Recap](#quick-recap), we will get an error: `Do not directly call Event functions in Interfaces. Call Execute_GetEquipmentAsset instead`. This is the case with all `BlueprintNativeEvent` and `BlueprintImplementableEvent` functions. They must always be called by using the static `IEquippable::Execute_GetEquipmentAsset` function.
+If we call `GetEquipmentAsset` directly like in [Quick Recap](#quick-recap), we will get an error: `Do not directly call Event functions in Interfaces. Call Execute_GetEquipmentAsset instead`. This is the case with all `BlueprintNativeEvent` and `BlueprintImplementableEvent` functions. They must always be called by using the static `IEquippable::Execute_GetEquipmentAsset` function.
 We also have to make sure this static function is only ever called on objects that *actually implement the interface*. Attempting to call it on anything else results in another error. Here is how we can handle it correctly.
 
 ```cpp
 // Instead of Cast() we use Implements().
 // Careful! This must be UEquippable, not IEquippable!
-if (IsValid(SomeObject) && SomeObject->Implements<UEquippable>())
+if (SomeObject && SomeObject->Implements<UEquippable>())
 {
     // Only now is it safe to call Execute_GetEquipmentAsset.
     if (const UEquipmentAsset* EquipmentAsset = IEquippable::Execute_GetEquipmentAsset(SomeObject))
@@ -123,7 +123,7 @@ if (IsValid(SomeObject) && SomeObject->Implements<UEquippable>())
 }
 ```
 
-This circumstance makes it a bit "boilerplatey" to add Blueprint support to a `UInterface`, especially if we use it in many places. And personally I always try to avoid redundant nesting and `if` clauses to keep functions easy to read. There is a very simple convention that addresses both of these issues.
+This makes interface usage a bit boilerplate-heavy, especially if repeated across many places. And personally I always try to avoid redundant nesting and `if` clauses to keep functions easy to read. There is a very simple convention that addresses both of these issues.
 
 # Future-Proofing `UInterface`
 
@@ -152,7 +152,7 @@ public:
 const UEquipmentAsset* IEquippable::GetEquipmentAsset(const UObject* Target)
 {
     // Instead of spreading Cast() calls throughout the codebase we cast just once here.
-    const IEquippable* Equippable = Cast<IEquippable>(GetValid(Target));
+    const IEquippable* Equippable = Cast<IEquippable>(Target);
     // Then we return sensible defaults where possible.
     return Equippable ? Equippable->GetEquipmentAsset() : nullptr;
 }
@@ -192,14 +192,14 @@ public:
 const UEquipmentAsset* IEquippable::GetEquipmentAsset(const UObject* Target)
 {
     // Instead of using Cast() we use Implements() and Unreal's generated Execute_GetEquipmentAsset function.
-    return IsValid(Target) && Target->Implements<UEquippable>() ? Execute_GetEquipmentAsset(Target) : nullptr;
+    return Target && Target->Implements<UEquippable>() ? Execute_GetEquipmentAsset(Target) : nullptr;
 }
 ```
 
 That is all; no other code changes are required anywhere for full Blueprint support! Neat! We gain some nice benefits on the C++ side at the cost of a static function call:
 
 - ✔️ Single point of change for interface calling logic
-- ✔️ Reduced boilerplate (`Cast<IEquippable>()` & `Implements<UEquippable()`)
+- ✔️ Reduced boilerplate (`Cast<IEquippable>()` & `Implements<UEquippable>()`)
 - ✔️ Safe `nullptr` handling
 - ✔️ Less nesting & cognitive load
 
@@ -207,4 +207,4 @@ But you may want to reconsider this pattern if you intend to call *multiple* fun
 
 # Final Thoughts
 
-A short no-brainer this time, but even small improvements can have compounding effects on code readability, cognitive load, and especially our motivation to keep working on our projects!
+A short no-brainer this time, but even small improvements can have compounding effects on code readability, cognitive load, and especially our motivation to keep working on our projects.
