@@ -1,7 +1,8 @@
 ---
-title: 💻 Improving Program Flow in UE5 C++ & Blueprint
+title: 💻 Improving Program Flow in C++ & Blueprint
 tags: tutorial gamedev programming unreal-engine c++ blueprint
 related_tags: unreal-engine
+highlight: true
 ---
 
 Why you should never `return true;` and what to do instead. Learn techniques to improve execution flow in UE5 projects using both C++ and Blueprint approaches. This post covers handling success/failure states gracefully, reducing branching complexity, and implementing cleaner program flow patterns. Includes practical examples and comparisons between different implementation methods.
@@ -12,7 +13,7 @@ Why you should never `return true;` and what to do instead. Learn techniques to 
 
 I have often seen and implemented functions like these:
 
-```cs
+```cpp
 bool GetAttackPower(const AActor* OwnerActor, float& OutAttackPower)
 {
     if (IsValid(OwnerActor))
@@ -26,7 +27,7 @@ bool GetAttackPower(const AActor* OwnerActor, float& OutAttackPower)
 
 At first glance that seems pretty standard and harmless. Here is how we might use it:
 
-```cs
+```cpp
 float AttackPower;
 if (GetAttackPower(OwnerActor, AttackPower))
 {
@@ -41,7 +42,7 @@ Do you see an issue here?
 As a caller of this function we are forced to declare and pass an extra variable to retrieve the `AttackPower`.
 That may not sound like much of an issue aside from the aesthetic aspect. But what is stopping us from doing bad things like this?
 
-```cs
+```cpp
 float AttackPower;
 // I either forgot the if, or I unknowingly decided it is not necessary
 GetAttackPower(OwnerActor, AttackPower);
@@ -58,7 +59,7 @@ Readable code is preferable to less readable code. And part of readability is us
 
 Take another look at our function call:
 
-```cs
+```cpp
 float AttackPower;
 if (GetAttackPower(OwnerActor, AttackPower))
 ```
@@ -66,7 +67,7 @@ if (GetAttackPower(OwnerActor, AttackPower))
 Read it aloud: "If get attack power." The grammar is awkward and makes it harder to follow.
 A better approach is to encode the unreliability of the function in its name:
 
-```cs
+```cpp
 float AttackPower;
 if (TryGetAttackPower(OwnerActor, AttackPower))
 ```
@@ -82,7 +83,7 @@ The function could return `true` if AttackPower > 0, or maybe it indicates physi
 
 Often you can find this information in the function's comment:
 
-```cs
+```cpp
 // Returns true if OwnerActor has AttackPower, else false.
 bool GetAttackPower(const AActor* OwnerActor, float& OutAttackPower)
 ```
@@ -101,7 +102,7 @@ Can we make our return value self-documenting instead?
 Many programming languages have addressed this issue in multiple ways. UE5 does so with `TOptional`.
 Here is how to use it:
 
-```cs
+```cpp
 TOptional<float> GetAttackPower(const AActor* OwnerActor)
 {
     if (IsValid(OwnerActor))
@@ -149,7 +150,7 @@ But what about functions that have no out parameters?
 
 Let's have a look at a naive implementation of the `ApplyDamageToSelf` function:
 
-```cs
+```cpp
 bool ApplyDamageToSelf(const float DamageAmount)
 {
     if (!IsInvincible() && !IsDead())
@@ -164,7 +165,7 @@ bool ApplyDamageToSelf(const float DamageAmount)
 The same semantic problem applies to this function. We don't see at a glance what the returned `bool` represents.
 If we applied `TOptional` here we would get:
 
-```cs
+```cpp
 TOptional<bool> ApplyDamageToSelf(const float DamageAmount)
 {
     // ...
@@ -189,7 +190,7 @@ So how can we make this function self-documenting without `TOptional`?
 
 In my project I declared the following global enum for these exact cases:
 
-```cs
+```cpp
 UENUM()
 enum class EResult
 {
@@ -205,7 +206,7 @@ bool IsSuccess(const EResult Value)
 
 Then I replaced all `bool` return values that represent vague failure semantics with this explicit enum:
 
-```cs
+```cpp
 EResult ApplyDamageToSelf(const float DamageAmount)
 {
     if (!IsInvincible() && !IsDead())
@@ -252,7 +253,7 @@ But I have some good news, too! The solution described in [Result Enum](#result-
 
 First we have to make a few adjustments to the enum:
 
-```cs
+```cpp
 UENUM(BlueprintType)
 enum class EResult
 {
@@ -270,7 +271,7 @@ enum class EResult
 The `UFUNCTION` meta specifier `ExpandEnumAsExec` is incredibly useful for our case.
 We specify it in our `UFUNCTION` as follows:
 
-```cs
+```cpp
 UFUNCTION(BlueprintCallable, meta=(ExpandEnumAsExecs="ReturnValue"))
 static EResult GetAttackPower(const AActor* OwnerActor, float& OutAttackPower)
 {
@@ -320,7 +321,7 @@ EResult SuccessIfTrue(const ValueType Value)
 
 Also useful for converting logical expressions to a result:
 
-```cs
+```cpp
 return SuccessIfTrue(MyArray.Num() > 0);
 ```
 
@@ -331,7 +332,7 @@ One operation I frequently apply is fallback logic: Keep iterating an array as l
 
 Let's take our previous example here. For whatever reason we want to find and apply the damage of only the first valid owner actor:
 
-```cs
+```cpp
 EResult ApplyDamageOfAnyActor(const TArray<AActor*>& OwnerActors)
 {
     EResult Result = EResult::Failure;
@@ -354,7 +355,7 @@ We keep trying each owner actor in order of occurrence until one succeeds to app
 This gives us valuable fallback semantics (if first one doesn't work then try second one, if second one doesn't work try third one...) but the function body does not make this obvious.
 In my project I opted to provide the following utility for these cases:
 
-```cs
+```cpp
 template <typename IterableType, typename CallableType>
 EResult AnySucceed(IterableType&& Iterable, const CallableType& Callable)
 {
@@ -371,7 +372,7 @@ EResult AnySucceed(IterableType&& Iterable, const CallableType& Callable)
 
 Which makes fallback/any semantics readily apparent:
 
-```cs
+```cpp
 EResult ApplyDamageOfAnyActor(const TArray<AActor*>& OwnerActors)
 {
     return AnySucceed(OwnerActors, [this](const AActor* OwnerActor)
@@ -384,7 +385,7 @@ EResult ApplyDamageOfAnyActor(const TArray<AActor*>& OwnerActors)
 
 And the best thing: This works with *any* iterable type, not just `TArray`!
 
-```cs
+```cpp
 EResult DoSomethingWithFirstSuccessfulGameplayTag(const FGameplayTagContainer& Container)
 {
     return AnySucceed(Container, [this](const FGameplayTag Tag)
@@ -401,7 +402,7 @@ supported in Blueprint and that we can instead use `EResult`, `ExpandEnumAsExec`
 
 The following utility function makes it *very easy* to wrap a C++ function returning `TOptional` and convert it into the Blueprint-compatible flow:
 
-```cs
+```cpp
 template <typename ValueType>
 EResult SuccessIfSet(const TOptional<ValueType> Optional, ValueType& OutValue)
 {
@@ -416,7 +417,7 @@ EResult SuccessIfSet(const TOptional<ValueType> Optional, ValueType& OutValue)
 
 Given our prior C++ function:
 
-```cs
+```cpp
 TOptional<float> GetAttackPower(const AActor* OwnerActor)
 {
     return IsValid(OwnerActor) ? 100.0f : TOptional<float>();
@@ -425,7 +426,7 @@ TOptional<float> GetAttackPower(const AActor* OwnerActor)
 
 We can easily wrap it for Blueprint compatibility:
 
-```cs
+```cpp
 UFUNCTION(BlueprintCallable, meta=(ExpandEnumAsExec="ReturnValue"))
 EResult BP_GetAttackPower(const AActor* OwnerActor, float& OutAttackPower)
 {
@@ -448,7 +449,7 @@ And for functions with complex failure handling this adds up into either a lot o
 
 To alleviate this issue we make `Failure` the default instead:
 
-```cs
+```cpp
 UENUM(BlueprintType)
 enum class EResult
 {

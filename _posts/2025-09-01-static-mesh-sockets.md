@@ -2,6 +2,7 @@
 title: 🔌 Why You Should Be Using Static Mesh Sockets
 tags: tutorial gamedev unreal-engine gameplay animation c++ blueprint
 related_tags: unreal-engine
+highlight: true
 ---
 
 Static mesh sockets are one of Unreal Engine’s most overlooked features. While most developers are familiar with skeletal mesh sockets for attachments, static mesh sockets open the door to smarter workflows, cleaner code, and more flexible design tools. In this post, we’ll explore how to use them for attachments, animation, hitboxes, and beyond - turning a simple concept into a powerful data-driven system that makes your game easier to build and more fun to design.
@@ -130,7 +131,7 @@ Perfect! The sword is attached correctly and our prior worries about mesh origin
 If we wrap this convention in a few nice C++ functions and expose them to blueprint we won't need to think about much at all when dealing with attachments.
 For blueprint projects we can wrap the previous couple of nodes in a blueprint function library.
 
-```cs
+```cpp
 EResult Attach(USceneComponent* Child, USceneComponent* Parent, const FName Socket, const FName OffsetSocket, const FAttachmentTransformRules AttachmentRules)
 {
     if (IsValid(Child) && IsValid(Parent))
@@ -273,7 +274,7 @@ Say we wanted to define a hitbox for a greatsword. We can create 3 sockets `Sock
 This workflow allows us to get a very tight fit around the damaging parts of our weapons.
 Using our code from [Offset Sockets](#offset-sockets) we can provide a small C++ utility to get the required distance between our sockets:
 
-```cs
+```cpp
 TOptional<float> GetDistanceBetweenSockets(const USceneComponent* Component, const FName FromSocket, const FName ToSocket)
 {
     if (const auto From = GetSocketTransform(Component, FromSocket))
@@ -289,7 +290,7 @@ TOptional<float> GetDistanceBetweenSockets(const USceneComponent* Component, con
 
 And now we can get the capsule's properties and execute a trace:
 
-```cs
+```cpp
 const FGameplayTag OriginSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.Hitbox.Origin"));
 const FGameplayTag RadiusSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.Hitbox.Radius"));
 const FGameplayTag LengthSocket = FGameplayTag::RequestGameplayTag(TEXT("Socket.Hitbox.Length"));
@@ -358,7 +359,7 @@ Well, you get it by now. Very useful stuff.
 
 Another relevant hidden feature in Unreal Engine is using plain `FTransform` (or `Transform` in blueprint) variables with the `MakeEditWidget` meta attribute.
 
-```cs
+```cpp
 UPROPERTY(EditAnywhere, meta=(MakeEditWidget))
 FTransform MyTransformSocket;
 ```
