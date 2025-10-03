@@ -51,7 +51,7 @@ public:
 };
 ```
 
-Then we can cast any object to `IEquippable` and get the required asset by calling `GetEquipmentAsset`.
+Then we can cast any object to `IEquippable` and get the required asset by calling `GetEquipmentAsset` in both C++ and Blueprint.
 
 ```cpp
 if (const IEquippable* Equippable = Cast<IEquippable>(SomeObject))
@@ -64,6 +64,9 @@ if (const IEquippable* Equippable = Cast<IEquippable>(SomeObject))
 ```
 
 ![Blueprint interface cast]({{ '/assets/images/posts/future-proofing-interfaces/01-blueprint-interface-cast.png' | relative_url }})
+
+*There is actually a much cleaner way to call interface functions in Blueprint using [Message Nodes](#message-nodes).*
+{: .caption}
 
 At no point do we get an error here. We are safely checking that `SomeObject` is indeed equippable before getting the asset. This is an important detail when it comes to...
 
@@ -204,6 +207,16 @@ That is all; no other code changes are required anywhere for full Blueprint supp
 - ✔️ Less nesting & cognitive load
 
 But you may want to reconsider this pattern if you intend to call *multiple* functions from the same interface!
+
+## Message Nodes
+
+This convention is actually inspired by `(Message)` nodes in Blueprint. Message nodes become available when we declare a `BlueprintCallable` interface function.
+Instead of calling the function on an object directly, Unreal Engine generates a node that simply *does nothing* if the object does not implement the interface.
+
+![Blueprint message node]({{ '/assets/images/posts/future-proofing-interfaces/03-blueprint-message-node.png' | relative_url }})
+
+Message nodes can be accessed by right clicking in your Blueprint & searching for your interface or the function name, instead of dragging off of an object.
+Both patterns allow us to implicitly ask the question "*Is this object equippable?*" without an explicit check or cast.
 
 # Final Thoughts
 
