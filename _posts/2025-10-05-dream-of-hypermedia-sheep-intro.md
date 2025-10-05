@@ -4,7 +4,6 @@ tags: essay programming web-development hateoas
 series: 🐑 Dream of Hypermedia Sheep
 series_part: 1
 fiction_disclaimer: true
-published: false
 ---
 
 HTML was abandoned because "it isn't sophisticated enough". We needed to split every web app into JSON APIs and fat JavaScript single-page-apps.
